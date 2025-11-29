@@ -31,11 +31,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
       <div className={cn(
         "container flex items-center justify-between transition-all duration-300",
-        isScrolled ? "h-42" : "h-48"
+        isScrolled ? "h-[168px]" : "h-[192px]"
       )}>
         <Link href="/" className="flex items-center gap-2">
           {/* Full logo on desktop/tablet (768px+) */}
-          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-42 w-auto" />
+          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-[168px] w-auto" />
           {/* Favicon on mobile (below 768px) */}
           <img src="/favicon.png" alt="Intelleges" className="block md:hidden h-28 w-28" />
         </Link>

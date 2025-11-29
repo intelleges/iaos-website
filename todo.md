@@ -432,3 +432,10 @@
 - [x] Increase mobile favicon proportionally to h-28
 - [x] Verify no distortion occurs (w-auto maintains aspect ratio)
 - [x] Test responsive layout remains intact
+
+## Fix Navigation Vertical Alignment
+- [x] Center navigation items vertically within the taller header container
+- [x] Ensure all header elements (logo, nav, certification, buttons) are properly aligned
+- [x] Fix invalid Tailwind classes (h-42, h-48) to use arbitrary values (h-[168px], h-[192px])
+- [x] Verify alignment works at both scrolled and non-scrolled states
+- [x] Test alignment across all breakpoints
