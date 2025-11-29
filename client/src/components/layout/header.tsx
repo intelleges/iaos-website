@@ -31,11 +31,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
       <div className={cn(
         "container flex items-center justify-between transition-all duration-300",
-        isScrolled ? "h-[168px]" : "h-[192px]"
+        isScrolled ? "h-[151px]" : "h-[173px]"
       )}>
         <Link href="/" className="flex items-center gap-2">
           {/* Full logo on desktop/tablet (768px+) */}
-          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-[168px] w-auto" />
+          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-[151px] w-auto" />
           {/* Favicon on mobile (below 768px) */}
           <img src="/favicon.png" alt="Intelleges" className="block md:hidden h-28 w-28" />
         </Link>
@@ -47,14 +47,14 @@ export default function Header() {
               key={item.name} 
               href={item.href}
               className={cn(
-                "relative text-base font-light tracking-wide transition-all duration-300 cursor-pointer whitespace-nowrap group",
+                "relative inline-block text-base font-light tracking-wide transition-all duration-300 cursor-pointer whitespace-nowrap group pb-1",
                 location === item.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {item.name}
               {/* Animated underline */}
               <span className={cn(
-                "absolute left-0 -bottom-1 h-[2px] bg-primary transition-all duration-300 ease-out",
+                "absolute left-0 bottom-0 h-[2px] bg-primary transition-all duration-300 ease-out",
                 location === item.href ? "w-full" : "w-0 group-hover:w-full"
               )} />
             </Link>

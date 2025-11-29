@@ -449,3 +449,16 @@
 - [x] Ensure animations work with existing responsive design
 - [x] Test hover states across all breakpoints
 - [x] Verify accessibility (focus states remain visible)
+
+## Fix Vertical Alignment After Hover Animations
+- [x] Fix navigation items not vertically centered after adding underline animations
+- [x] Added inline-block display and pb-1 padding to navigation links
+- [x] Ensure underline doesn't affect parent container height
+- [x] Verify all header elements (logo, nav, certification, buttons) are properly aligned
+- [x] Test alignment at all breakpoints
+
+## Reduce Logo Size by 10%
+- [x] Calculate new logo size (168px - 10% = 151px)
+- [x] Update logo height from h-[168px] to h-[151px]
+- [x] Update header container heights proportionally (173px non-scrolled, 151px scrolled)
+- [x] Verify alignment with reduced logo size
