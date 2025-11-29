@@ -20,7 +20,7 @@ export default function HeroSection() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/contact">
               <Button size="lg" className="h-12 rounded-full px-8 text-base">
-                Start conversation
+                Start a conversation
               </Button>
             </Link>
             <Link href="/pricing">
