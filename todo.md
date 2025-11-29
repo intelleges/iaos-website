@@ -380,3 +380,8 @@
 - [x] Revert logo size changes - keep logo at original large size at all breakpoints
 - [x] Remove responsive sizing classes that make logo smaller
 - [x] Ensure logo remains prominent and never reduced
+
+## Favicon Size Fix
+- [x] Make favicon the same size as full logo (h-12)
+- [x] Ensure favicon is never reduced in size
+- [x] Maintain consistent logo/favicon prominence across all breakpoints
