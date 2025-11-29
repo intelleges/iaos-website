@@ -206,11 +206,18 @@ export default function COOComplianceCaseStudy() {
           <p className="text-xl text-muted-foreground font-light mb-8">
             See how Intelleges can eliminate spreadsheets and provide audit-ready COO compliance.
           </p>
-          <Link href="/contact">
-            <Button size="lg" className="rounded-full px-8">
-              Schedule a Demo
-            </Button>
-          </Link>
+          <div className="flex gap-4 justify-center">
+            <Link href="/contact">
+              <Button size="lg" className="rounded-full px-8">
+                Schedule a Demo
+              </Button>
+            </Link>
+            <a href="/documents/CountryofOrigin-BuyAmericanAct.pdf" download>
+              <Button size="lg" variant="outline" className="rounded-full px-8">
+                Download Whitepaper
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
     </div>

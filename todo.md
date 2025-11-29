@@ -172,3 +172,8 @@
 - [x] Add both case studies to Case Studies index page
 - [x] Add routes for new case studies in App.tsx
 - [x] Add Counterfeit Parts whitepaper PDF download to case study page
+
+## COO Compliance Whitepaper Download
+- [x] Copy COO whitepaper PDF to public documents directory
+- [x] Add download button to COO Compliance case study page
+- [x] Test download functionality
