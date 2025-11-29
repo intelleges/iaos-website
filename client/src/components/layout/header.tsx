@@ -36,6 +36,11 @@ export default function Header() {
               {item.name}
             </Link>
           ))}
+          <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer">
+            <Button variant="ghost" size="sm" className="rounded-full px-4 text-muted-foreground hover:text-foreground">
+              Client Login
+            </Button>
+          </a>
           <Link href="/contact">
             <Button size="sm" className="rounded-full px-6">Get Started</Button>
           </Link>
@@ -64,6 +69,11 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer" className="w-full">
+              <Button variant="outline" className="w-full rounded-full" onClick={() => setIsMenuOpen(false)}>
+                Client Login
+              </Button>
+            </a>
             <Link href="/contact">
               <Button className="w-full rounded-full mt-2" onClick={() => setIsMenuOpen(false)}>
                 Get Started
