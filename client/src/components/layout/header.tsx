@@ -38,13 +38,13 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-10">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-10">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
+                "text-sm lg:text-sm xl:text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
                 location === item.href ? "text-foreground" : "text-muted-foreground"
               )}
             >

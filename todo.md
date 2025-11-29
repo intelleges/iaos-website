@@ -268,3 +268,10 @@
 - [x] Logo now fits properly within header container (h-20 = 80px)
 - [x] Verified no overlap between logo and navigation items
 - [x] Tested header layout - all elements properly spaced
+
+## Header Navigation Cramping on Smaller Monitors
+- [x] Fix navigation items overlapping with trust markers at lg breakpoint (1024-1280px)
+- [x] Reduce navigation gap from gap-6 to gap-4 at lg breakpoint
+- [x] Reduce font size from text-base (16px) to text-sm (14px) at lg breakpoint
+- [x] Font size and gaps expand back to full size at xl breakpoint (1280px+)
+- [x] Verified proper spacing and no overlap at all breakpoints
