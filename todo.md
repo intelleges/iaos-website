@@ -177,3 +177,8 @@
 - [x] Copy COO whitepaper PDF to public documents directory
 - [x] Add download button to COO Compliance case study page
 - [x] Test download functionality
+
+## Client Login Button Styling
+- [x] Update Client Login button to blue pill design matching logo colors
+- [x] Keep Book a Demo button in black
+- [x] Test button styling in header

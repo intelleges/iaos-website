@@ -46,7 +46,7 @@ export default function Header() {
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
-            <Button variant="ghost" size="sm" className="text-base font-light text-muted-foreground hover:text-foreground">
+            <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6">
               Client Login
             </Button>
           </Link>
@@ -84,7 +84,7 @@ export default function Header() {
               ISO 27001 Certified · Battelle Supplier of the Year
             </div>
             <Link href="/login">
-              <Button variant="ghost" className="w-full rounded-full font-light" onClick={() => setIsMenuOpen(false)}>
+              <Button className="w-full rounded-full font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white" onClick={() => setIsMenuOpen(false)}>
                 Client Login
               </Button>
             </Link>
