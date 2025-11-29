@@ -34,11 +34,14 @@ export default function Header() {
         isScrolled ? "h-16" : "h-20"
       )}>
         <Link href="/" className="flex items-center gap-2">
-          <img src="/logo.png" alt="Intelleges" className="h-8 lg:h-10 xl:h-12 w-auto" />
+          {/* Full logo: visible on md and up (768px+) */}
+          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-8 lg:h-10 xl:h-12 w-auto" />
+          {/* Favicon only: visible on small screens (below 768px) */}
+          <img src="/favicon.png" alt="Intelleges" className="block md:hidden h-10 w-10" />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden xl:flex items-center gap-6 2xl:gap-8">
+        {/* Desktop Navigation - Hidden on smaller screens (below 1024px) */}
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
@@ -53,26 +56,31 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Trust Markers & CTA */}
-        <div className="hidden xl:flex items-center gap-3 2xl:gap-6">
-          <div className="text-xs 2xl:text-sm font-semibold text-primary tracking-wide whitespace-nowrap">
+        {/* Right side: Buttons and optional certification */}
+        <div className="flex items-center gap-2 md:gap-3 2xl:gap-6">
+          {/* Certification labels - Hidden first (below 1280px) */}
+          <div className="hidden xl:block text-xs 2xl:text-sm font-semibold text-primary tracking-wide whitespace-nowrap">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
-          <Link href="/login">
-            <Button size="sm" className="text-sm 2xl:text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-4 2xl:px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
-              Client Login
-            </Button>
-          </Link>
-          <Link href="/contact">
-            <Button size="sm" className="rounded-full px-4 2xl:px-6 text-sm 2xl:text-base font-light transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
-              Book a Demo
-            </Button>
-          </Link>
+          
+          {/* CTA Buttons - Always visible on desktop */}
+          <div className="hidden md:flex items-center gap-2 xl:gap-3">
+            <Link href="/login">
+              <Button size="sm" className="text-sm 2xl:text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-3 xl:px-4 2xl:px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
+                Client Login
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button size="sm" className="rounded-full px-3 xl:px-4 2xl:px-6 text-sm 2xl:text-base font-light transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
+                Book a Demo
+              </Button>
+            </Link>
+          </div>
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Menu Toggle - Visible below lg (1024px) */}
         <button 
-          className="xl:hidden p-2 text-muted-foreground hover:text-foreground"
+          className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
