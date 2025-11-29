@@ -47,11 +47,16 @@ export default function Header() {
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer whitespace-nowrap",
-                location === item.href ? "text-foreground" : "text-muted-foreground"
+                "relative text-base font-light tracking-wide transition-all duration-300 cursor-pointer whitespace-nowrap group",
+                location === item.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {item.name}
+              {/* Animated underline */}
+              <span className={cn(
+                "absolute left-0 -bottom-1 h-[2px] bg-primary transition-all duration-300 ease-out",
+                location === item.href ? "w-full" : "w-0 group-hover:w-full"
+              )} />
             </Link>
           ))}
         </nav>
@@ -97,10 +102,10 @@ export default function Header() {
                 <Link 
                   key={item.name} 
                   href={item.href}
-                  className="flex items-center gap-3 text-base font-light py-3 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide transition-colors"
+                  className="flex items-center gap-3 text-base font-light py-3 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide transition-all duration-300 hover:translate-x-1"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
                   {item.name}
                 </Link>
               );
