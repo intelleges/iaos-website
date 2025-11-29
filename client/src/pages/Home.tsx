@@ -368,6 +368,7 @@ export default function Home() {
           onClose={() => setIsServiceModalOpen(false)}
           downloadUrl={selectedService.pdfPath}
           resourceTitle={selectedService.title}
+          resourceType="service-overview"
         />
       )}
       </div>

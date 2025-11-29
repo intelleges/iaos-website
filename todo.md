@@ -489,3 +489,19 @@
 - [x] Add download icon that appears on hover
 - [x] Add hover indicators (cursor pointer, scale, shadow, border highlight)
 - [x] Test complete download flow (click → email capture → PDF delivery)
+
+## Fix Header Vertical Alignment (CRITICAL - STILL BROKEN)
+- [x] Logo was sitting at top of container while nav/buttons were centered
+- [x] Identified root cause: container height (156px) didn't match logo height (136px)
+- [x] Fixed by matching container height to logo height (136px)
+- [x] Removed scroll-based height variation for consistency
+- [x] All elements now on same vertical centerline
+- [x] Test at all breakpoints
+
+## Fix Service Document Modal Text
+- [x] Modal title shows full service name (acceptable - shows what they're downloading)
+- [x] Button says "Download Case Study" but should say "Download Service Overview" or similar
+- [x] Update EmailCaptureModal to accept resourceType prop ('case-study' | 'service-overview')
+- [x] Pass resourceType="service-overview" for service documents
+- [x] Button now shows "Download Service Overview" for services
+- [x] Success message now says "service overview" instead of "case study"

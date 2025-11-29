@@ -31,7 +31,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
       <div className={cn(
         "container flex items-center justify-between transition-all duration-300",
-        isScrolled ? "h-[136px]" : "h-[156px]"
+        "h-[136px]"
       )}>
         <Link href="/" className="flex items-center gap-2">
           {/* Full logo on desktop/tablet (768px+) */}

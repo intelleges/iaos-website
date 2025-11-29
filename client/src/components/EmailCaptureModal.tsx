@@ -11,9 +11,18 @@ interface EmailCaptureModalProps {
   onClose: () => void;
   downloadUrl: string;
   resourceTitle: string;
+  buttonText?: string; // Optional custom button text
+  resourceType?: 'case-study' | 'service-overview'; // Type of resource
 }
 
-export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resourceTitle }: EmailCaptureModalProps) {
+export default function EmailCaptureModal({ 
+  isOpen, 
+  onClose, 
+  downloadUrl, 
+  resourceTitle,
+  buttonText,
+  resourceType = 'case-study'
+}: EmailCaptureModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -238,7 +247,7 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
                   ) : (
                     <>
                       <Download className="mr-2 h-4 w-4" />
-                      Download Case Study
+                      {buttonText || (resourceType === 'service-overview' ? 'Download Service Overview' : 'Download Case Study')}
                     </>
                   )}
                 </Button>
@@ -258,7 +267,7 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
             </div>
             <DialogTitle className="text-2xl font-light">Success!</DialogTitle>
             <DialogDescription className="text-base space-y-2">
-              <p>Your case study is downloading now. Check your downloads folder.</p>
+              <p>Your {resourceType === 'service-overview' ? 'service overview' : 'case study'} is downloading now. Check your downloads folder.</p>
               <p className="text-green-600 font-medium">📧 We've also sent a copy to your email!</p>
             </DialogDescription>
           </div>
