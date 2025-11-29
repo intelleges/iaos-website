@@ -264,7 +264,7 @@ export default function Pricing() {
             {plans.map((plan, i) => (
               <div key={i} className={`relative p-8 rounded-lg border ${plan.borderColor} bg-gradient-to-br ${plan.color} backdrop-blur-sm flex flex-col`}>
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-normal">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground text-sm font-normal">
                     Most Popular
                   </div>
                 )}
@@ -277,7 +277,7 @@ export default function Pricing() {
                   <div className="pt-4 border-t border-border/20">
                     <div className="text-4xl font-light">{plan.price}</div>
                     <div className="text-base text-muted-foreground font-light">{plan.period}</div>
-                    <div className="text-sm font-normal mt-2">{plan.users}</div>
+                    <div className="text-base font-normal mt-2">{plan.users}</div>
                   </div>
                   <div className="space-y-2 pt-4">
                     {plan.features.map((feature, j) => (
@@ -357,11 +357,11 @@ export default function Pricing() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-border/40">
-                    <th className="text-left p-4 font-normal text-sm">Feature</th>
-                    <th className="text-center p-4 font-normal text-sm">Bronze</th>
-                    <th className="text-center p-4 font-normal text-sm">Silver</th>
-                    <th className="text-center p-4 font-normal text-sm">Gold</th>
-                    <th className="text-center p-4 font-normal text-sm">Platinum</th>
+                    <th className="text-left p-4 font-normal text-base">Feature</th>
+                    <th className="text-center p-4 font-normal text-base">Bronze</th>
+                    <th className="text-center p-4 font-normal text-base">Silver</th>
+                    <th className="text-center p-4 font-normal text-base">Gold</th>
+                    <th className="text-center p-4 font-normal text-base">Platinum</th>
                   </tr>
                 </thead>
                 <tbody>

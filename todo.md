@@ -98,4 +98,12 @@
 - [x] Add WCAG-compliant color variables
 - [x] Set minimum button height to 44px
 - [x] Add max-width utilities for readable content (700px)
-- [ ] Continue fixing remaining pages (Pricing, Protocols, About, Product, Login) for 16px minimum
+- [x] Fix Pricing page for 16px minimum font size
+- [x] Fix Protocols page for 16px minimum font size (already compliant)
+- [x] Fix About page for 16px minimum font size (already compliant)
+- [x] Fix Product page for 16px minimum font size (already compliant)
+- [x] Fix Login page for 16px minimum font size
+- [x] Fix SupplierOnboarding page (already compliant)
+
+## Trust Marker Styling
+- [x] Update header trust markers to use Intelleges blue color for emphasis

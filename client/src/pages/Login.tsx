@@ -124,7 +124,7 @@ export default function Login() {
               {error && (
                 <div className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
                   <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-                  <p className="text-sm text-destructive font-light">{error}</p>
+                  <p className="text-base text-destructive font-light">{error}</p>
                 </div>
               )}
 

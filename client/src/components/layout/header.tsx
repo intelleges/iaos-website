@@ -42,7 +42,7 @@ export default function Header() {
 
         {/* Trust Markers & CTA */}
         <div className="hidden lg:flex items-center gap-8">
-          <div className="text-base font-light text-muted-foreground tracking-wide">
+          <div className="text-base font-light text-primary tracking-wide">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
@@ -80,7 +80,7 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
-            <div className="text-base font-light text-muted-foreground tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
+            <div className="text-base font-light text-primary tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
               ISO 27001 Certified · Battelle Supplier of the Year
             </div>
             <Link href="/login">
