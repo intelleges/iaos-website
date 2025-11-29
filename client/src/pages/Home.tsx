@@ -169,8 +169,11 @@ export default function Home() {
                 "Counterfeit Parts Prevention",
                 "Site Security (C-TPAT / CFATS)"
               ].map((protocol, i) => (
-                <div key={i} className="p-4 rounded-lg border border-border/40 bg-background">
-                  <p className="text-base font-light">{protocol}</p>
+                <div 
+                  key={i} 
+                  className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
+                >
+                  <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
                 </div>
               ))}
             </div>

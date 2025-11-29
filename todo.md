@@ -290,3 +290,12 @@
 - [x] Set appropriate duration (200ms fade-out, 300ms fade-in) for snappy feel
 - [x] Tested transitions between pages (Home → Product)
 - [x] No layout shift or flicker during transitions
+
+## Protocol Cards Hover Animations
+- [x] Apply same hover animations to 16 protocol cards as value proposition items
+- [x] Scale up cards on hover (105%)
+- [x] Increase font size on hover (base → lg)
+- [x] Make text bolder on hover (font-light → font-normal)
+- [x] Add shadow and border highlight effects (shadow-lg, border-primary/30)
+- [x] Add smooth transition effects (300ms)
+- [x] Add cursor pointer for better UX
