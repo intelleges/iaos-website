@@ -7,6 +7,12 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Home() {
   const trustBlock = useScrollAnimation();
@@ -31,7 +37,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <TooltipProvider>
+      <div className="flex flex-col min-h-screen">
       <SEO 
         title="Home" 
         description="Intelleges makes data & document collection simple. Enterprise compliance depends on information. We get it all cleanly, automatically, and on time."
@@ -193,13 +200,22 @@ export default function Home() {
                 "Site Security (C-TPAT / CFATS)",
                 "Sole Source Risk Mitigation"
               ].map((protocol, i) => (
-                <div 
-                  key={i} 
-                  onClick={() => handleProtocolClick(protocol)}
-                  className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
-                >
-                  <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
-                </div>
+                <Tooltip key={i}>
+                  <TooltipTrigger asChild>
+                    <div 
+                      onClick={() => handleProtocolClick(protocol)}
+                      className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
+                    >
+                      <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="flex items-center gap-2">
+                      <Download className="h-4 w-4" />
+                      Download Case Study
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </div>
             
@@ -324,6 +340,7 @@ export default function Home() {
           resourceTitle={selectedProtocol.title}
         />
       )}
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }

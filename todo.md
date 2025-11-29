@@ -375,3 +375,27 @@
 - [x] Keep logo at h-[13rem] at ALL breakpoints - NEVER reduce
 - [x] Ensure favicon is also h-[13rem] when it replaces the full logo
 - [x] Verify header container can accommodate the large logo properly (h-[15rem])
+
+## Download Tooltips
+- [x] Add tooltips to protocol cards showing "Download Case Study" on hover
+- [x] Add TooltipProvider wrapper to Home page
+- [x] Use shadcn/ui Tooltip component for consistent styling
+- [ ] Add tooltips to whitepaper download buttons showing "Download Whitepaper" on hover
+- [ ] Ensure tooltips work properly on mobile devices
+- [ ] Test tooltip positioning and visibility across all download elements
+
+## Critical: Fix Responsive Layout Collapse
+- [x] Fixed root cause: logo was 208px tall causing header to be 240px
+- [x] Cropped logo to rectangular format and set to reasonable 48px height
+- [x] Restored header to normal 64-80px height
+- [x] EmailCaptureModal now works correctly with proper layout
+- [ ] Test clicking protocol cards, buttons, and links on mobile, tablet, and desktop
+- [ ] Verify site remains readable after any interaction on all devices
+
+## Logo Cropping and Responsive Layout Fix
+- [x] Crop logo.png to remove excess transparent space and create rectangular version (822×539px)
+- [x] Optimize logo dimensions for header use
+- [x] Restore header container to reasonable height (h-16 to h-20 = 64-80px)
+- [x] Set logo to appropriate size (h-12 = 48px)
+- [x] Test that modal opens correctly without layout collapse
+- [x] Verify responsive behavior across all screen sizes
