@@ -160,3 +160,8 @@
 - [x] Create FOCI case study page showcasing integrated verification system
 - [x] Add FOCI case study to Case Studies index page (featured first)
 - [x] Add route for FOCI case study in App.tsx
+
+## Federal Capability Statement Download
+- [x] Copy PDF to public directory
+- [x] Add download button to FOCI case study page
+- [x] Test download functionality

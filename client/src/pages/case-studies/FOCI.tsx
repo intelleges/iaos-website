@@ -419,11 +419,18 @@ export default function FOCI() {
           <p className="text-xl text-muted-foreground font-light mb-8">
             See how Intelleges's integrated system can protect your defense contracts.
           </p>
-          <Link href="/contact">
-            <Button size="lg" className="rounded-full px-8">
-              Schedule a Demo
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact">
+              <Button size="lg" className="rounded-full px-8">
+                Schedule a Demo
+              </Button>
+            </Link>
+            <a href="/documents/Intelleges_Federal_Capability_Statement.pdf" download>
+              <Button size="lg" variant="outline" className="rounded-full px-8">
+                Download Capability Statement
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
     </div>
