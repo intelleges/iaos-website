@@ -360,3 +360,12 @@
 - [x] Configure sales team email address(es) via environment variable
 - [x] Test sales team notification delivery
 - [x] Add error handling for notification failures (don't block user experience)
+
+## Proper Responsive Header (Following Readability Rules)
+- [x] Remove responsive logo sizing - keep logo at h-16 at ALL breakpoints (NEVER reduce)
+- [x] Implement progressive hiding: certification labels hide first, then nav items, then switch to favicon
+- [x] Ensure favicon is SAME SIZE as full logo when it replaces it (h-16)
+- [x] All text must be 16px minimum (text-base or larger)
+- [x] Navigation text: 16px (text-base = correct)
+- [x] Button text: 16px (text-base = correct)
+- [x] Test that nothing gets smaller, only elements hide progressively
