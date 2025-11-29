@@ -165,3 +165,10 @@
 - [x] Copy PDF to public directory
 - [x] Add download button to FOCI case study page
 - [x] Test download functionality
+
+## Additional Case Studies
+- [x] Create COO Compliance case study page (Part-Number Level Traceability)
+- [x] Create Counterfeit-Parts Standards case study page (Unified Questionnaire System)
+- [x] Add both case studies to Case Studies index page
+- [x] Add routes for new case studies in App.tsx
+- [x] Add Counterfeit Parts whitepaper PDF download to case study page

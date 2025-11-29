@@ -7,6 +7,34 @@ import { Link } from "wouter";
 
 const caseStudies = [
   {
+    id: "coo-compliance",
+    industry: "Aerospace Manufacturing",
+    client: "Honeywell Aerospace",
+    title: "Country of Origin (COO) Compliance at the Part Number Level",
+    summary: "How Intelleges eliminated hundreds of spreadsheets and enabled part-level COO traceability for Honeywell Aerospace with automated document collection, AI validation, and audit-ready reporting.",
+    metrics: [
+      { label: "Spreadsheets Eliminated", value: "100s" },
+      { label: "COO Traceability", value: "100%" },
+      { label: "Audit Failures", value: "-Significant" }
+    ],
+    image: "/logos/honeywell.jpg",
+    tags: ["COO Compliance", "BAA/TAA", "Part-Level Traceability"]
+  },
+  {
+    id: "counterfeit-parts",
+    industry: "Aerospace & Defense",
+    client: "Multiple Primes",
+    title: "Unified Counterfeit-Parts Standards Integration",
+    summary: "How Intelleges harmonizes AS5553, AS6081, AS6174, AS6171, AS9100, and DoD counterfeit prevention policies into one intelligent questionnaire, eliminating supplier fatigue and ensuring complete standard coverage.",
+    metrics: [
+      { label: "Standards Unified", value: "6+" },
+      { label: "Supplier Fatigue", value: "-Massive" },
+      { label: "Time Savings", value: "Significant" }
+    ],
+    image: "/logos/intelleges-logo.svg",
+    tags: ["AS5553/6081/6174/6171", "DoD 4140.67", "Zero-Tolerance"]
+  },
+  {
     id: "foci",
     industry: "Aerospace & Defense",
     client: "FOCI Compliance",
@@ -147,9 +175,11 @@ export default function CaseStudies() {
                 </div>
 
                 <div className="pt-4">
-                  <Button variant="outline" className="group">
-                    Read Full Case Study <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
+                  <Link href={`/case-studies/${study.id}`}>
+                    <Button variant="outline" className="group">
+                      Read Full Case Study <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
