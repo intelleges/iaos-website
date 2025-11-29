@@ -351,3 +351,12 @@
 - [x] Add success message indicating email has been sent
 - [x] Test email delivery with actual case study PDFs
 - [x] Add error handling for email delivery failures
+
+## Sales Team Notifications
+- [x] Create sales team notification email template
+- [x] Add function to send notification to sales team on new lead
+- [x] Include lead details: name, email, company, protocol/case study
+- [x] Add timestamp and IP address for context
+- [x] Configure sales team email address(es) via environment variable
+- [x] Test sales team notification delivery
+- [x] Add error handling for notification failures (don't block user experience)

@@ -6,7 +6,7 @@ import { z } from "zod";
 import { getDb } from "./db";
 import { leads, downloads } from "../drizzle/schema";
 import { eq, and, gte, count } from "drizzle-orm";
-import { sendCaseStudyEmail } from "./services/emailService";
+import { sendCaseStudyEmail, sendSalesTeamNotification } from "./services/emailService";
 import path from "path";
 
 export const appRouter = router({
@@ -171,6 +171,19 @@ export const appRouter = router({
             };
           }
         }
+
+        // Send notification to sales team (async, don't wait)
+        const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
+        sendSalesTeamNotification({
+          leadName: input.name,
+          leadEmail: input.email,
+          leadCompany: input.company,
+          caseStudyTitle: input.resource || 'Unknown Resource',
+          ipAddress: clientIp,
+          timestamp: new Date(),
+        }).catch(err => {
+          console.error('Sales notification failed (non-blocking):', err);
+        });
 
         return {
           success: true,
