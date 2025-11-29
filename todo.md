@@ -133,3 +133,7 @@
 - [x] Create animated auto-scrolling carousel for client logos
 - [x] Link all "Book a Demo" buttons to /contact page (already linked)
 - [x] Make trust markers bolder and more prominent in header
+
+## Logo Carousel Pause-on-Hover
+- [x] Add pause-on-hover functionality to logo carousel
+- [x] Resume animation when mouse leaves

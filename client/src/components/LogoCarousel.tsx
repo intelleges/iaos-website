@@ -17,6 +17,8 @@ const logos: Logo[] = [
 
 export default function LogoCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isPausedRef = useRef(false);
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
@@ -26,21 +28,35 @@ export default function LogoCarousel() {
     const scrollSpeed = 0.5; // pixels per frame
 
     const scroll = () => {
-      scrollPosition += scrollSpeed;
-      
-      // Reset when we've scrolled through half the content (since we duplicate)
-      if (scrollPosition >= scrollContainer.scrollWidth / 2) {
-        scrollPosition = 0;
+      if (!isPausedRef.current) {
+        scrollPosition += scrollSpeed;
+        
+        // Reset when we've scrolled through half the content (since we duplicate)
+        if (scrollPosition >= scrollContainer.scrollWidth / 2) {
+          scrollPosition = 0;
+        }
+        
+        scrollContainer.scrollLeft = scrollPosition;
       }
-      
-      scrollContainer.scrollLeft = scrollPosition;
-      requestAnimationFrame(scroll);
+      animationFrameRef.current = requestAnimationFrame(scroll);
     };
 
-    const animationFrame = requestAnimationFrame(scroll);
+    animationFrameRef.current = requestAnimationFrame(scroll);
 
-    return () => cancelAnimationFrame(animationFrame);
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, []);
+
+  const handleMouseEnter = () => {
+    isPausedRef.current = true;
+  };
+
+  const handleMouseLeave = () => {
+    isPausedRef.current = false;
+  };
 
   return (
     <div className="mt-16 pt-12 border-t border-border/20">
@@ -51,6 +67,8 @@ export default function LogoCarousel() {
       <div 
         ref={scrollRef}
         className="overflow-hidden relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{ 
           maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
           WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
