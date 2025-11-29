@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ZoomIn, Info } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -105,6 +106,9 @@ export default function SectionSystemMaps() {
               </Card>
             </DialogTrigger>
             <DialogContent className="max-w-5xl w-full p-0 overflow-hidden bg-background/95 backdrop-blur-sm border-none h-[85vh]">
+              <VisuallyHidden>
+                <DialogTitle>{diagram.title}</DialogTitle>
+              </VisuallyHidden>
               <div className="relative w-full h-full flex flex-col">
                 <div className="absolute top-4 left-4 z-20 bg-background/80 backdrop-blur-sm p-2 rounded-md border shadow-sm">
                   <h3 className="font-semibold text-lg">{diagram.title}</h3>
