@@ -155,3 +155,8 @@
 - [x] Make client logos in carousel clickable
 - [x] Link logos to their respective case study pages
 - [x] Add hover effects to indicate clickability
+
+## FOCI Case Study
+- [x] Create FOCI case study page showcasing integrated verification system
+- [x] Add FOCI case study to Case Studies index page (featured first)
+- [x] Add route for FOCI case study in App.tsx

@@ -7,6 +7,20 @@ import { Link } from "wouter";
 
 const caseStudies = [
   {
+    id: "foci",
+    industry: "Aerospace & Defense",
+    client: "FOCI Compliance",
+    title: "Integrated Technology, Expertise & Call Centers for FOCI Verification",
+    summary: "How Intelleges combines automated technology, compliance expertise, and live call center verification to deliver comprehensive FOCI audits and supplier vetting for aerospace and defense clients.",
+    metrics: [
+      { label: "Verification Layers", value: "3" },
+      { label: "Compliance Rate", value: "100%" },
+      { label: "Audit Ready", value: "Always" }
+    ],
+    image: "/logos/intelleges-logo.svg",
+    tags: ["FOCI", "Call Centers", "DFARS/NISPOM"]
+  },
+  {
     id: "honeywell-aerospace",
     industry: "Aerospace & Defense",
     client: "Honeywell Aerospace",

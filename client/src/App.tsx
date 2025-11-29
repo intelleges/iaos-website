@@ -14,6 +14,7 @@ import CaseStudies from "@/pages/CaseStudies";
 import HoneywellAerospace from "@/pages/case-studies/HoneywellAerospace";
 import Battelle from "@/pages/case-studies/Battelle";
 import DepartmentOfDefense from "@/pages/case-studies/DepartmentOfDefense";
+import FOCI from "@/pages/case-studies/FOCI";
 import Resources from "@/pages/Resources";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/not-found";
@@ -35,6 +36,7 @@ function Router() {
           <Route path="/case-studies/honeywell-aerospace" component={HoneywellAerospace} />
           <Route path="/case-studies/battelle" component={Battelle} />
           <Route path="/case-studies/department-of-defense" component={DepartmentOfDefense} />
+          <Route path="/case-studies/foci" component={FOCI} />
           <Route path="/pricing" component={Pricing} />
           <Route path="/resources" component={Resources} />
           <Route path="/contact" component={Contact} />
