@@ -343,7 +343,11 @@ export default function Home() {
               </p>
             </div>
             
-            <Button size="lg" className="rounded-full px-8 font-light">
+            <Button 
+              size="lg" 
+              className="rounded-full px-8 font-light"
+              onClick={() => window.location.href = "/resources"}
+            >
               <Download className="mr-2 h-5 w-5" />
               Download Whitepaper
             </Button>

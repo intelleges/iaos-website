@@ -537,3 +537,50 @@
 - [x] Removed object-top class
 - [x] Added mt-3 (12px margin-top) to push logo DOWN
 - [x] Logo now properly aligned with navigation items
+
+## Migrate from Turso to TiDB Cloud
+- [ ] Remove @libsql/client dependency
+- [ ] Add mysql2 dependency for TiDB Cloud
+- [ ] Update drizzle.config.ts for MySQL dialect
+- [ ] Update server/db.ts to use mysql2 connection
+- [ ] Update DATABASE_URL environment variable
+- [ ] Test database connection
+- [ ] Push schema to TiDB Cloud
+- [ ] Update Railway environment variables documentation
+- [ ] Commit and push changes to GitHub
+- [ ] Redeploy to Railway
+
+## Create Resources/Content Library Page
+- [ ] Convert Executive Summary DOCX to PDF
+- [ ] Convert Full Whitepaper DOCX to PDF
+- [ ] Extract case study topics from index document
+- [ ] Create /resources page route
+- [ ] Design hero section with page title
+- [ ] Create two-column choice cards (Executive Summary vs Full Whitepaper)
+- [ ] Add email capture for Executive Summary (3-page)
+- [ ] Integrate Calendly for Full Whitepaper (15-page) meeting booking
+- [ ] Create case studies teaser grid (17 case studies)
+- [ ] Make case studies filterable by industry
+- [ ] Add "Available in Full Guide" badges to case studies
+- [ ] Update header navigation to include Resources link
+- [ ] Update "Download Whitepaper" button to link to /resources
+- [ ] Test complete user flow for both paths
+- [ ] Ensure responsive design on mobile
+
+## Enhance Resources Page Based on Feedback
+- [ ] Fix EmailCaptureModal import error
+- [ ] Add "Prefer to talk now? Call (917) 818-0225" under Calendly card
+- [ ] Change "qualification meeting" to "discovery call" or "consultation"
+- [ ] Update badge text to "Included with your consultation"
+- [ ] Add industry count pills to case study filter (e.g., "Aerospace (5)")
+- [ ] Plan email nurture sequence for Executive Summary downloaders
+- [ ] Add Day 1, Day 3, Day 7 email sequence documentation
+
+## Final Resources Page Updates
+- [x] Change hero title to "Resource Library"
+- [x] Add Card 3: "Contact Sales Directly" with phone and email CTAs
+- [x] Embed Calendly inline in Card 2 (toggles on button click)
+- [x] Update "What You'll Learn" section with specific bullet points
+- [x] Update industry groupings to match spec (combine Aerospace & Defense)
+- [x] Update homepage "Download Whitepaper" button to link to /resources
+- [x] Install react-calendly package for inline embed
