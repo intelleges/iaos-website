@@ -35,7 +35,7 @@ export default function Header() {
       )}>
         <Link href="/" className="flex items-center gap-2">
           {/* Full logo: visible on md and up (768px+) */}
-          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-8 lg:h-10 xl:h-12 w-auto" />
+          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-12 w-auto" />
           {/* Favicon only: visible on small screens (below 768px) */}
           <img src="/favicon.png" alt="Intelleges" className="block md:hidden h-10 w-10" />
         </Link>
