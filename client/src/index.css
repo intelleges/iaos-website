@@ -4,6 +4,32 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* WCAG-Compliant Font Size Scale */
+  --font-size-body: 17px;
+  --font-size-label: 16px;
+  --font-size-subheader: 22px;
+  --font-size-section: 28px;
+  --font-size-title: 40px;
+  --font-size-hero: 48px;
+  
+  /* Accessibility Spacing Scale */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+  --spacing-2xl: 64px;
+  
+  /* Content Width for Readability */
+  --content-width: 700px;
+  
+  /* Minimum Interactive Target Size */
+  --min-button-height: 44px;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -43,11 +69,11 @@
 }
 
 :root {
-  /* Scandinavian/Japanese Minimal Palette */
-  /* Background: Off-white/Paper (#fafafa) */
-  --background: oklch(0.98 0 0);
-  /* Foreground: Soft Black (#111) */
-  --foreground: oklch(0.15 0 0);
+  /* WCAG-Compliant Enterprise Palette */
+  /* Background: Pure White (#FFFFFF) */
+  --background: oklch(1 0 0);
+  /* Foreground: High Contrast Black (#111111) */
+  --foreground: oklch(0.09 0 0);
   
   /* Card: White */
   --card: oklch(1 0 0);
@@ -57,17 +83,17 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
   
-  /* Primary: Soft Black */
-  --primary: oklch(0.15 0 0);
-  --primary-foreground: oklch(0.98 0 0);
+  /* Primary: Enterprise Blue (#0A3A67) - WCAG AA Compliant */
+  --primary: oklch(0.27 0.08 240);
+  --primary-foreground: oklch(1 0 0);
   
   /* Secondary: Very Light Gray */
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.15 0 0);
   
-  /* Muted: Medium Gray (#777) */
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.55 0 0);
+  /* Muted: Light Background with High Contrast Text */
+  --muted: oklch(0.98 0 0);
+  --muted-foreground: oklch(0.35 0 0);
   
   /* Accent: Very Light Gray */
   --accent: oklch(0.96 0 0);
@@ -164,9 +190,70 @@
     scroll-behavior: smooth;
   }
   
-  /* Typography defaults */
-  h1, h2, h3, h4, h5, h6 {
+  /* Typography defaults with readability rules */
+  body {
+    font-size: 17px; /* 16-18px minimum for body text */
+    line-height: 1.5; /* 1.4-1.6 for body text */
+  }
+  
+  h1 {
     @apply font-medium tracking-tight;
+    font-size: 2.5rem; /* 40px - page titles 36-48px */
+    line-height: 1.2; /* 1.15-1.25 for headings */
+  }
+  
+  h2 {
+    @apply font-medium tracking-tight;
+    font-size: 1.75rem; /* 28px - section headers 22-26px */
+    line-height: 1.2;
+  }
+  
+  h3 {
+    @apply font-medium tracking-tight;
+    font-size: 1.375rem; /* 22px - subtitles 20-22px */
+    line-height: 1.25;
+  }
+  
+  h4, h5, h6 {
+    @apply font-medium tracking-tight;
+    font-size: 1.125rem; /* 18px minimum */
+    line-height: 1.25;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  /* Readable content width */
+  .prose, .content-width {
+    max-width: var(--content-width);
+  }
+  
+  /* Enforce minimum font sizes */
+  .text-body {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-normal);
+  }
+  
+  .text-label {
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-normal);
+  }
+  
+  /* Accessibility-compliant button */
+  button, .btn {
+    min-height: var(--min-button-height);
+    font-size: var(--font-size-label);
+  }
+  
+  /* Section spacing */
+  section {
+    margin-top: 2rem; /* 32px above sections */
+  }
+  
+  section > h2, section > h3 {
+    margin-top: 2rem; /* 32px above headers */
+    margin-bottom: 1rem; /* 16px below headers */
   }
 }
 

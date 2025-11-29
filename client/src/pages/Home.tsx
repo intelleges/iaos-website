@@ -36,7 +36,7 @@ export default function Home() {
               </Button>
             </div>
             
-            <p className="text-sm text-muted-foreground font-light pt-8">
+             <p className="text-base text-muted-foreground font-light pt-8">
               Trusted by organizations in aerospace, defense, healthcare, and manufacturing.
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function Home() {
             
             {/* Client Logos */}
             <div className="mt-16 pt-12 border-t border-border/20">
-              <p className="text-sm text-muted-foreground font-light text-center mb-8">
+              <p className="text-base text-muted-foreground font-light text-center mb-8">
                 Trusted by leading organizations
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
@@ -110,7 +110,7 @@ export default function Home() {
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 p-4 rounded-lg border border-border/40">
                   <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm font-light">{item}</span>
+                  <span className="text-base font-light">{item}</span>
                 </div>
               ))}
             </div>
@@ -156,7 +156,7 @@ export default function Home() {
                 "Site Security (C-TPAT / CFATS)"
               ].map((protocol, i) => (
                 <div key={i} className="p-4 rounded-lg border border-border/40 bg-background">
-                  <p className="text-sm font-light">{protocol}</p>
+                  <p className="text-base font-light">{protocol}</p>
                 </div>
               ))}
             </div>
@@ -222,7 +222,7 @@ export default function Home() {
                   </div>
                   <div className="space-y-2">
                     <h3 className="text-xl font-normal">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                    <p className="text-base text-muted-foreground font-light leading-relaxed">
                       {item.description}
                     </p>
                   </div>

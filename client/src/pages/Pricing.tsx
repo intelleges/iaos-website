@@ -230,7 +230,7 @@ export default function Pricing() {
         <X className="h-5 w-5 text-muted-foreground/30 mx-auto" />
       );
     }
-    return <span className="text-sm font-light">{value}</span>;
+    return <span className="text-base font-light">{value}</span>;
   };
 
   return (
@@ -271,12 +271,12 @@ export default function Pricing() {
                 <div className="space-y-4 flex-1">
                   <div>
                     <h3 className="text-2xl font-normal">{plan.name}</h3>
-                    <p className="text-sm text-muted-foreground font-light">{plan.subtitle}</p>
+                    <p className="text-base text-muted-foreground font-light">{plan.subtitle}</p>
                   </div>
-                  <p className="text-sm font-light leading-relaxed">{plan.description}</p>
+                  <p className="text-base font-light leading-relaxed">{plan.description}</p>
                   <div className="pt-4 border-t border-border/20">
                     <div className="text-4xl font-light">{plan.price}</div>
-                    <div className="text-xs text-muted-foreground font-light">{plan.period}</div>
+                    <div className="text-base text-muted-foreground font-light">{plan.period}</div>
                     <div className="text-sm font-normal mt-2">{plan.users}</div>
                   </div>
                   <div className="space-y-2 pt-4">
@@ -287,14 +287,14 @@ export default function Pricing() {
                         ) : (
                           <X className="h-4 w-4 text-muted-foreground/30 shrink-0 mt-0.5" />
                         )}
-                        <span className={`text-xs font-light ${feature.bold ? 'font-normal' : ''}`}>
+                        <span className={`text-base font-light ${feature.bold ? 'font-normal' : ''}`}>
                           {feature.text}
                         </span>
                       </div>
                     ))}
                   </div>
                   <div className="pt-4 border-t border-border/20">
-                    <p className="text-xs font-light text-muted-foreground leading-relaxed">
+                    <p className="text-base font-light text-muted-foreground leading-relaxed">
                       {plan.summary}
                     </p>
                   </div>
@@ -332,7 +332,7 @@ export default function Pricing() {
                   </div>
                   <ul className="space-y-2">
                     {category.items.map((item, j) => (
-                      <li key={j} className="text-sm font-light text-muted-foreground leading-relaxed pl-7 relative">
+                      <li key={j} className="text-base font-light text-muted-foreground leading-relaxed pl-7 relative">
                         <span className="absolute left-0 top-1.5 h-1 w-1 rounded-full bg-primary"></span>
                         {item}
                       </li>
@@ -367,7 +367,7 @@ export default function Pricing() {
                 <tbody>
                   {comparisonFeatures.map((feature, i) => (
                     <tr key={i} className="border-b border-border/20 hover:bg-background/50 transition-colors">
-                      <td className="p-4 text-sm font-light">{feature.name}</td>
+                      <td className="p-4 text-base font-light">{feature.name}</td>
                       <td className="p-4 text-center">{renderValue(feature.bronze)}</td>
                       <td className="p-4 text-center">{renderValue(feature.silver)}</td>
                       <td className="p-4 text-center">{renderValue(feature.gold)}</td>
@@ -393,7 +393,7 @@ export default function Pricing() {
               {faqs.map((faq, i) => (
                 <div key={i} className="p-6 rounded-lg border border-border/40 bg-background space-y-3">
                   <h3 className="text-lg font-normal">{faq.question}</h3>
-                  <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                  <p className="text-base text-muted-foreground font-light leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>

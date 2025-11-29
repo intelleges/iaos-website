@@ -78,3 +78,24 @@
 - [x] Add FAQ section for plan selection
 - [x] Add comprehensive Add-Ons Library (10 categories)
 - [x] Maintain minimal aesthetic
+
+## Readability & Accessibility Implementation
+- [x] Update global CSS with minimum font sizes (17-18px body, 28-32px section headers, 40-48px page titles)
+- [x] Set proper line height (1.5-1.6 for body, 1.15-1.25 for headings)
+- [x] Ensure max content width of 700px for readable line length
+- [x] Update color system with WCAG-compliant colors (#0A3A67 primary, #111/#222 text)
+- [x] Fix text contrast to meet 4.5:1 minimum ratio
+- [x] Update all button sizes to 44px minimum height with 17px text
+- [x] Add proper spacing (32px above headers, 16px below, 24px between sections)
+- [x] Fix all pages for 16px minimum text (Home, Footer)
+- [x] Fix header and footer text sizes to 16px minimum
+- [ ] Review and ensure short paragraphs (3-5 lines max) across all pages
+
+## Tailwind Config & CSS Variables System
+- [x] Create comprehensive CSS variables enforcing readability rules
+- [x] Add custom font size scale (16px, 17px, 22px, 28px, 40px, 48px)
+- [x] Add custom spacing scale (8px, 16px, 24px, 32px, 48px, 64px)
+- [x] Add WCAG-compliant color variables
+- [x] Set minimum button height to 44px
+- [x] Add max-width utilities for readable content (700px)
+- [ ] Continue fixing remaining pages (Pricing, Protocols, About, Product, Login) for 16px minimum

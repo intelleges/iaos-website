@@ -86,7 +86,7 @@ export default function SupplierOnboarding() {
                 {features.map((feature, i) => (
                   <div key={i} className="flex items-center gap-3 p-4 rounded-lg border border-border/40 bg-background">
                     <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
-                    <span className="text-sm font-light">{feature}</span>
+                    <span className="text-base font-light">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -155,7 +155,7 @@ export default function SupplierOnboarding() {
                 {useCases.map((useCase, i) => (
                   <div key={i} className="flex items-start gap-3 p-4 rounded-lg border border-border/40 bg-background">
                     <CheckSquare className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-sm font-light">{useCase}</span>
+                    <span className="text-base font-light">{useCase}</span>
                   </div>
                 ))}
               </div>

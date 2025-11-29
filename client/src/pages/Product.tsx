@@ -122,7 +122,7 @@ export default function Product() {
                     {capability.items.map((item, j) => (
                       <div key={j} className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                        <span className="text-sm font-light">{item}</span>
+                        <span className="text-base font-light">{item}</span>
                       </div>
                     ))}
                   </div>
@@ -152,7 +152,7 @@ export default function Product() {
                     <feature.icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="text-xl font-normal">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                  <p className="text-base text-muted-foreground font-light leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -162,21 +162,21 @@ export default function Product() {
             <div className="grid md:grid-cols-2 gap-6 pt-4">
               <div className="p-6 rounded-lg border border-border/40">
                 <h3 className="text-lg font-normal mb-2">Extensible Protocol Library</h3>
-                <p className="text-sm text-muted-foreground font-light">
+                <p className="text-base text-muted-foreground font-light">
                   Annual reps & certs, BAA, ESG, ITAR, eSRS, COI, PO delays, conformance, and more.
                 </p>
               </div>
               
               <div className="p-6 rounded-lg border border-border/40">
                 <h3 className="text-lg font-normal mb-2">Global Supplier Vetting</h3>
-                <p className="text-sm text-muted-foreground font-light">
+                <p className="text-base text-muted-foreground font-light">
                   Foreign supplier verification, regional scanning, due diligence support.
                 </p>
               </div>
               
               <div className="p-6 rounded-lg border border-border/40 md:col-span-2">
                 <h3 className="text-lg font-normal mb-2">Enterprise-Ready</h3>
-                <p className="text-sm text-muted-foreground font-light">
+                <p className="text-base text-muted-foreground font-light">
                   Supports 10 to 10,000 suppliers without performance degradation.
                 </p>
               </div>

@@ -148,7 +148,7 @@ export default function Protocols() {
               {features.map((feature, i) => (
                 <div key={i} className="flex items-start gap-3 p-4 rounded-lg border border-border/40">
                   <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm font-light">{feature}</span>
+                  <span className="text-base font-light">{feature}</span>
                 </div>
               ))}
             </div>
@@ -178,7 +178,7 @@ export default function Protocols() {
                     {category.protocols.map((protocol, j) => (
                       <div key={j} className="flex items-start gap-2 p-3 rounded-lg bg-background border border-border/40">
                         <FileCheck className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                        <span className="text-sm font-light">{protocol}</span>
+                        <span className="text-base font-light">{protocol}</span>
                       </div>
                     ))}
                   </div>

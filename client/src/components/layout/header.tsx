@@ -31,7 +31,7 @@ export default function Header() {
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-sm font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
+                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
                 location === item.href ? "text-foreground" : "text-muted-foreground"
               )}
             >
@@ -42,11 +42,11 @@ export default function Header() {
 
         {/* Trust Markers & CTA */}
         <div className="hidden lg:flex items-center gap-8">
-          <div className="text-xs font-light text-muted-foreground tracking-wide">
+          <div className="text-base font-light text-muted-foreground tracking-wide">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
-            <Button variant="ghost" size="sm" className="text-sm font-light text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" className="text-base font-light text-muted-foreground hover:text-foreground">
               Client Login
             </Button>
           </Link>
@@ -74,13 +74,13 @@ export default function Header() {
               <Link 
                 key={item.name} 
                 href={item.href}
-                className="text-sm font-light py-2 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide"
+                className="text-base font-light py-2 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="text-xs font-light text-muted-foreground tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
+            <div className="text-base font-light text-muted-foreground tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
               ISO 27001 Certified · Battelle Supplier of the Year
             </div>
             <Link href="/login">

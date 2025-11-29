@@ -158,7 +158,7 @@ export default function About() {
             <div className="flex flex-wrap items-center justify-center gap-4">
               {industries.map((industry, i) => (
                 <div key={i} className="px-6 py-3 rounded-full border border-border/40 bg-muted/30">
-                  <span className="text-sm font-light">{industry}</span>
+                  <span className="text-base font-light">{industry}</span>
                 </div>
               ))}
             </div>

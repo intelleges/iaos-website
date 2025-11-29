@@ -73,7 +73,7 @@ export default function Login() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-light">
+                <Label htmlFor="email" className="text-base font-light">
                   Email Address
                 </Label>
                 <Input
@@ -91,12 +91,12 @@ export default function Login() {
               {/* Password */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-sm font-light">
+                  <Label htmlFor="password" className="text-base font-light">
                     Password
                   </Label>
                   <button
                     type="button"
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors font-light"
+                    className="text-base text-muted-foreground hover:text-foreground transition-colors font-light"
                   >
                     Forgot password?
                   </button>
@@ -148,7 +148,7 @@ export default function Login() {
             {/* Divider */}
             <div className="relative flex items-center gap-4 py-4">
               <div className="flex-1 h-px bg-border/40" />
-              <span className="text-xs text-muted-foreground font-light">OR</span>
+              <span className="text-base text-muted-foreground font-light">OR</span>
               <div className="flex-1 h-px bg-border/40" />
             </div>
 
@@ -188,13 +188,13 @@ export default function Login() {
 
           {/* Footer Links */}
           <div className="text-center space-y-4">
-            <p className="text-sm text-muted-foreground font-light">
+            <p className="text-base text-muted-foreground font-light">
               Need help?{" "}
               <Link href="/contact" className="text-foreground hover:underline">
                 Contact Support
               </Link>
             </p>
-            <p className="text-xs text-muted-foreground font-light">
+            <p className="text-base text-muted-foreground font-light">
               Protected by reCAPTCHA and Cloudflare
             </p>
           </div>
