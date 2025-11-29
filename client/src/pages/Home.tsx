@@ -1,5 +1,6 @@
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
+import LogoCarousel from "@/components/LogoCarousel";
 import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
 
@@ -66,17 +67,7 @@ export default function Home() {
             </div>
             
             {/* Client Logos */}
-            <div className="mt-16 pt-12 border-t border-border/20">
-              <p className="text-base text-muted-foreground font-light text-center mb-8">
-                Trusted by leading organizations
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-12 lg:gap-16">
-                <img src="/logos/honeywell.jpg" alt="Honeywell Aerospace" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/battelle.png" alt="Battelle" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/celestica.png" alt="Celestica" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/bd.jpg" alt="Becton Dickinson" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
-              </div>
-            </div>
+            <LogoCarousel />
           </div>
         </div>
       </section>

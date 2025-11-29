@@ -127,3 +127,9 @@
 - [x] Verify Intelleges logo size in header (h-[13rem])
 - [x] Adjusted client logos to h-16 for proper proportion
 - [x] Ensure all logos fit on one horizontal line
+
+## Client Logo Carousel & CTA Improvements
+- [x] Search for and add more client logos (DOD, Con Edison, MSK)
+- [x] Create animated auto-scrolling carousel for client logos
+- [x] Link all "Book a Demo" buttons to /contact page (already linked)
+- [x] Make trust markers bolder and more prominent in header
