@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import HeroSection from "@/components/sections/home/hero-section";
+import SectionPillars from "@/components/sections/home/section-pillars";
+import SectionValueProp from "@/components/sections/home/section-value-prop";
+import SectionPlatform from "@/components/sections/home/section-platform";
+import SectionIndustries from "@/components/sections/home/section-industries";
+import SectionFeatures from "@/components/sections/home/section-features";
+import SectionTestimonials from "@/components/sections/home/section-testimonials";
+import SectionCertifications from "@/components/sections/home/section-certifications";
+import SectionSystemMaps from "@/components/sections/home/section-system-maps";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div className="flex flex-col min-h-screen">
+      <HeroSection />
+      <SectionPillars />
+      <SectionValueProp />
+      <SectionPlatform />
+      <SectionIndustries />
+      <SectionFeatures />
+      <SectionSystemMaps />
+      <SectionTestimonials />
+      <SectionCertifications />
     </div>
   );
 }
