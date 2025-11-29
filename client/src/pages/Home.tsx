@@ -71,10 +71,10 @@ export default function Home() {
                 Trusted by leading organizations
               </p>
               <div className="flex flex-wrap items-center justify-center gap-12 lg:gap-16">
-                <img src="/logos/honeywell.jpg" alt="Honeywell Aerospace" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/battelle.png" alt="Battelle" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/celestica.png" alt="Celestica" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/bd.jpg" alt="Becton Dickinson" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/honeywell.jpg" alt="Honeywell Aerospace" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/battelle.png" alt="Battelle" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/celestica.png" alt="Celestica" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/bd.jpg" alt="Becton Dickinson" className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity" />
               </div>
             </div>
           </div>
