@@ -114,9 +114,12 @@ export default function Home() {
                 "Track expirations, risk indicators, and quality data",
                 "Produce audit-ready documentation automatically"
               ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3 p-4 rounded-lg border border-border/40">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-base font-light">{item}</span>
+                <div 
+                  key={i} 
+                  className="flex items-start gap-3 p-4 rounded-lg border border-border/40 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-primary/30 cursor-default group"
+                >
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-all duration-300 group-hover:scale-110" />
+                  <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal">{item}</span>
                 </div>
               ))}
             </div>

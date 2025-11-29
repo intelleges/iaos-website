@@ -199,3 +199,12 @@
 - [x] Create useScrollAnimation hook for fade-in effects
 - [x] Apply fade-in animations to homepage sections (Trust Block, What We Do, Protocols, How It Works, Whitepaper)
 - [ ] Test animations on scroll
+
+## Value Proposition Item Hover Animations
+- [x] Add hover animations to "What Intelleges Does" section items
+- [x] Scale up items on hover (105%)
+- [x] Increase font size on hover (base to lg)
+- [x] Make text bolder on hover (font-light to font-normal)
+- [x] Add smooth transition effects (300ms)
+- [x] Add shadow and border highlight effects
+- [x] Animate checkmark icons
