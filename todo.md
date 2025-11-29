@@ -411,3 +411,17 @@
 - [x] Confirmed: Numbers are browser automation testing artifacts only
 - [x] Verified: User does not see numbers in regular browser
 - [x] No bug exists - site renders cleanly for end users
+
+## Protocol Card Download Tooltips
+- [x] Verify TooltipProvider is properly wrapping the Home page
+- [x] Ensure each protocol card is wrapped with Tooltip component
+- [x] Set tooltip text to "Download Case Study" with download icon
+- [x] Tooltip appears on hover over protocol cards
+- [x] Tooltip positioning is correct and readable
+- [ ] Test tooltip works on both desktop and touch devices (requires user testing)
+
+## Increase Logo Size Further
+- [x] Increase logo from h-20 (80px) to h-32 (128px) for proper prominence
+- [x] Adjust header container height to accommodate larger logo (h-32 to h-36)
+- [x] Ensure logo is clearly visible and prominent
+- [x] Verify layout remains responsive and doesn't break
