@@ -6,18 +6,15 @@ export default function HeroSection() {
     <section className="relative overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
       <div className="container relative z-10">
         <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-6 inline-flex items-center rounded-full border border-border/60 bg-background/50 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur-sm">
-            <span className="mr-2 h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Intelleges Federal Compliance Management System
-          </div>
+
           
           <h1 className="mb-8 text-4xl font-medium tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1]">
             Data is Power. <br className="hidden sm:block" />
-            <span className="text-muted-foreground">Information driving the future.</span>
+            <span className="text-muted-foreground">Information is driving the future.</span>
           </h1>
           
           <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl leading-relaxed">
-            Leverage our experience to save time, money, and headaches. We streamline supplier information collection for compliance, risk management, and supply chain optimization.
+            Leverage our experience to save time, money, and headaches. We streamline information collection for compliance, risk management, and supply chain optimization better than anyone.
           </p>
           
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
