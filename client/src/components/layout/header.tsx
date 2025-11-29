@@ -42,11 +42,11 @@ export default function Header() {
           <div className="text-xs font-light text-muted-foreground tracking-wide">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
-          <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer">
+          <Link href="/login">
             <Button variant="ghost" size="sm" className="text-sm font-light text-muted-foreground hover:text-foreground">
               Client Login
             </Button>
-          </a>
+          </Link>
           <Link href="/contact">
             <Button size="sm" className="rounded-full px-6 font-light">
               Book a Demo
@@ -80,11 +80,11 @@ export default function Header() {
             <div className="text-xs font-light text-muted-foreground tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
               ISO 27001 Certified · Battelle Supplier of the Year
             </div>
-            <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer" className="w-full">
+            <Link href="/login">
               <Button variant="ghost" className="w-full rounded-full font-light" onClick={() => setIsMenuOpen(false)}>
                 Client Login
               </Button>
-            </a>
+            </Link>
             <Link href="/contact">
               <Button className="w-full rounded-full mt-2 font-light" onClick={() => setIsMenuOpen(false)}>
                 Book a Demo

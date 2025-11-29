@@ -18,3 +18,14 @@
 - [ ] Add video content for "Watch 2-Minute Overview" button
 - [ ] Additional case studies or testimonials (if needed)
 - [ ] Blog or resources section (if needed)
+
+## New Features - Client Login Page
+- [x] Create branded client login page matching marketing site aesthetic
+- [x] Implement authentication with john@intelleges.com / 012463.xX
+- [x] Add reCAPTCHA integration for security
+- [x] Add Cloudflare verification notice
+- [x] Redirect to Railway dashboard after successful login
+- [x] Update navigation to link to new login page
+- [x] Add SSO buttons for Google, Microsoft, and Okta
+- [x] Add dark blue gradient background matching mockup
+- [x] Add "Supplier Help" and "Contact Support" links
