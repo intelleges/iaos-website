@@ -15,11 +15,10 @@ export default function SectionValueProp() {
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
         <div>
           <h2 className="text-3xl font-medium tracking-tight sm:text-4xl mb-6 text-foreground">
-            Compliance without the chaos.
+            Eliminate the headache of supplier compliance.
           </h2>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            Replace fragmented spreadsheets, emails, and shared drives with a single source of truth. 
-            Intelleges orchestrates the entire supplier lifecycle from onboarding to audit.
+            Stop wasting time chasing documents and fixing errors. Our platform leverages decades of industry know-how to automate information collection, ensuring you save money and reduce risk from day one.
           </p>
           
           <ul className="grid gap-4 sm:grid-cols-2">

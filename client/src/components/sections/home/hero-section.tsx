@@ -17,7 +17,7 @@ export default function HeroSection() {
           </h1>
           
           <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl leading-relaxed">
-            A universal engine for supplier management, compliance automation, and nearshoring intelligence for healthcare, aerospace, and national labs.
+            Leverage our experience to save time, money, and headaches. We streamline supplier information collection for compliance, risk management, and supply chain optimization.
           </p>
           
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
