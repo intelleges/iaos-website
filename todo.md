@@ -107,3 +107,18 @@
 
 ## Trust Marker Styling
 - [x] Update header trust markers to use Intelleges blue color for emphasis
+
+## Contact Form Development
+- [x] Create Contact page with demo request form
+- [x] Add form fields (name, email, company, phone, message)
+- [x] Implement client-side validation
+- [x] Add accessibility labels and ARIA attributes
+- [x] Add success/error states
+- [x] Integrated with existing Calendly widget (two-tab interface)
+- [ ] Connect form to backend or email service (TODO: API endpoint needed)
+- [ ] Update "Book a Demo" buttons to link to /contact
+
+## Client Logo Sizing Fix
+- [x] Increase client logos to match Intelleges logo size (h-[13rem])
+- [x] Arrange all logos on one line with flexbox
+- [x] Reduced to 4 logos (Honeywell, Battelle, Celestica, BD) for better fit

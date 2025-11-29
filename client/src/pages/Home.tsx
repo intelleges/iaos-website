@@ -70,13 +70,11 @@ export default function Home() {
               <p className="text-base text-muted-foreground font-light text-center mb-8">
                 Trusted by leading organizations
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-                <img src="/logos/honeywell.jpg" alt="Honeywell Aerospace" className="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-                <img src="/logos/battelle.png" alt="Battelle" className="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-                <img src="/logos/celestica.png" alt="Celestica" className="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-                <img src="/logos/conedison.png" alt="Con Edison" className="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-                <img src="/logos/bd.jpg" alt="Becton Dickinson" className="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
-                <img src="/logos/msk.png" alt="Memorial Sloan Kettering" className="h-10 w-auto opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+              <div className="flex flex-wrap items-center justify-center gap-12 lg:gap-16">
+                <img src="/logos/honeywell.jpg" alt="Honeywell Aerospace" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/battelle.png" alt="Battelle" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/celestica.png" alt="Celestica" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/bd.jpg" alt="Becton Dickinson" className="h-[13rem] w-auto opacity-70 hover:opacity-100 transition-opacity" />
               </div>
             </div>
           </div>
