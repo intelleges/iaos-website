@@ -3,8 +3,15 @@ import { Button } from "@/components/ui/button";
 import LogoCarousel from "@/components/LogoCarousel";
 import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function Home() {
+  const trustBlock = useScrollAnimation();
+  const whatWeDo = useScrollAnimation();
+  const protocols = useScrollAnimation();
+  const howItWorks = useScrollAnimation();
+  const whitepaper = useScrollAnimation();
+
   return (
     <div className="flex flex-col min-h-screen">
       <SEO 
@@ -45,7 +52,12 @@ export default function Home() {
       </section>
 
       {/* Trust Block - 25 Years */}
-      <section className="py-20 bg-muted/30">
+      <section 
+        ref={trustBlock.ref}
+        className={`py-20 bg-muted/30 transition-all duration-1000 ${
+          trustBlock.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl md:text-4xl font-light text-center tracking-tight">
@@ -73,7 +85,12 @@ export default function Home() {
       </section>
 
       {/* What Intelleges Does */}
-      <section className="py-20">
+      <section 
+        ref={whatWeDo.ref}
+        className={`py-20 transition-all duration-1000 ${
+          whatWeDo.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container">
           <div className="max-w-5xl mx-auto space-y-12">
             <div className="text-center space-y-6">
@@ -112,8 +129,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Protocols Section */}
-      <section className="py-20 bg-muted/30">
+       {/* Protocols */}
+      <section 
+        ref={protocols.ref}
+        className={`py-20 bg-muted/30 transition-all duration-1000 ${
+          protocols.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container">
           <div className="max-w-5xl mx-auto space-y-12">
             <div className="text-center space-y-6">
@@ -157,8 +179,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How Intelleges Works - 6 Steps */}
-      <section className="py-20">
+      {/* How Intelleges Works */}
+      <section 
+        ref={howItWorks.ref}
+        className={`py-20 transition-all duration-1000 ${
+          howItWorks.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container">
           <div className="max-w-5xl mx-auto space-y-12">
             <div className="text-center space-y-6">
@@ -223,7 +250,12 @@ export default function Home() {
       </section>
 
       {/* Whitepaper CTA */}
-      <section className="py-20 bg-muted/30">
+      <section 
+        ref={whitepaper.ref}
+        className={`py-20 bg-primary/5 transition-all duration-1000 ${
+          whitepaper.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container">
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <div className="flex justify-center">

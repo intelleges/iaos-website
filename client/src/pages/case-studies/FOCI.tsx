@@ -2,8 +2,17 @@ import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowLeft, Shield, Users, Cpu, PhoneCall, CheckCircle2, AlertTriangle } from "lucide-react";
+import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { useState } from "react";
 
 export default function FOCI() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDownloadClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <SEO 
@@ -425,14 +434,24 @@ export default function FOCI() {
                 Schedule a Demo
               </Button>
             </Link>
-            <a href="/documents/Intelleges_Federal_Capability_Statement.pdf" download>
-              <Button size="lg" variant="outline" className="rounded-full px-8">
-                Download Capability Statement
-              </Button>
-            </a>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="rounded-full px-8"
+              onClick={handleDownloadClick}
+            >
+              Download Capability Statement
+            </Button>
           </div>
         </div>
       </section>
+
+      <EmailCaptureModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        downloadUrl="/documents/Intelleges_Federal_Capability_Statement.pdf"
+        resourceTitle="Federal Capability Statement"
+      />
     </div>
   );
 }

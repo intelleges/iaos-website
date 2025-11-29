@@ -182,3 +182,20 @@
 - [x] Update Client Login button to blue pill design matching logo colors
 - [x] Keep Book a Demo button in black
 - [x] Test button styling in header
+
+## Button Hover Animations
+- [x] Add subtle hover animations to Book a Demo button (scale + shadow)
+- [x] Add subtle hover animations to Client Login button (scale + shadow)
+- [ ] Test animations in header (desktop and mobile)
+
+## Email Capture for Whitepaper Downloads
+- [x] Create email capture modal component with form (name, email, company)
+- [x] Add form validation (required fields, email format)
+- [x] Replace direct PDF links with email capture trigger (FOCI, COO, Counterfeit-Parts)
+- [x] Store lead data in localStorage
+- [x] Show success message and trigger download after form submission
+
+## Smooth Scroll Animations
+- [x] Create useScrollAnimation hook for fade-in effects
+- [x] Apply fade-in animations to homepage sections (Trust Block, What We Do, Protocols, How It Works, Whitepaper)
+- [ ] Test animations on scroll

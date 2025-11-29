@@ -46,12 +46,12 @@ export default function Header() {
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
-            <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6">
+            <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg">
               Client Login
             </Button>
           </Link>
           <Link href="/contact">
-            <Button size="sm" className="rounded-full px-6 font-light">
+            <Button size="sm" className="rounded-full px-6 font-light transition-all duration-300 hover:scale-105 hover:shadow-lg">
               Book a Demo
             </Button>
           </Link>
@@ -84,12 +84,12 @@ export default function Header() {
               ISO 27001 Certified · Battelle Supplier of the Year
             </div>
             <Link href="/login">
-              <Button className="w-full rounded-full font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white" onClick={() => setIsMenuOpen(false)}>
+              <Button className="w-full rounded-full font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white transition-all duration-300 hover:scale-105" onClick={() => setIsMenuOpen(false)}>
                 Client Login
               </Button>
             </Link>
             <Link href="/contact">
-              <Button className="w-full rounded-full mt-2 font-light" onClick={() => setIsMenuOpen(false)}>
+              <Button className="w-full rounded-full mt-2 font-light transition-all duration-300 hover:scale-105" onClick={() => setIsMenuOpen(false)}>
                 Book a Demo
               </Button>
             </Link>

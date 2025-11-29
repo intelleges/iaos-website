@@ -1,7 +1,17 @@
-import { Link } from "wouter";
+import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { useState } from "react";
 
 export default function COOComplianceCaseStudy() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDownloadClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -212,14 +222,24 @@ export default function COOComplianceCaseStudy() {
                 Schedule a Demo
               </Button>
             </Link>
-            <a href="/documents/CountryofOrigin-BuyAmericanAct.pdf" download>
-              <Button size="lg" variant="outline" className="rounded-full px-8">
-                Download Whitepaper
-              </Button>
-            </a>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="rounded-full px-8"
+              onClick={handleDownloadClick}
+            >
+              Download Whitepaper
+            </Button>
           </div>
         </div>
       </section>
+
+      <EmailCaptureModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        downloadUrl="/documents/CountryofOrigin-BuyAmericanAct.pdf"
+        resourceTitle="Country of Origin Compliance Whitepaper"
+      />
     </div>
   );
 }
