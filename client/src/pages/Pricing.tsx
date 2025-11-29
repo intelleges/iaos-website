@@ -1,103 +1,173 @@
-import { Button } from "@/components/ui/button";
 import SEO from "@/components/seo";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import { Check } from "lucide-react";
-import ROICalculator from "@/components/sections/pricing/roi-calculator";
-
-const tiers = [
-  {
-    name: "Starter",
-    price: "$999",
-    description: "Essential compliance for small suppliers.",
-    features: [
-      "Single user license",
-      "Basic compliance dashboard",
-      "Document storage (10GB)",
-      "Email support",
-      "Standard reporting"
-    ]
-  },
-  {
-    name: "Professional",
-    price: "$2,499",
-    description: "Advanced tools for growing organizations.",
-    features: [
-      "5 user licenses",
-      "Advanced risk monitoring",
-      "Document storage (100GB)",
-      "Priority support",
-      "Custom reporting",
-      "API access"
-    ],
-    popular: true
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "Full-scale solution for large enterprises.",
-    features: [
-      "Unlimited users",
-      "Full supply chain visibility",
-      "Unlimited storage",
-      "24/7 dedicated support",
-      "Advanced analytics",
-      "Custom integrations",
-      "On-premise deployment option"
-    ]
-  }
-];
 
 export default function Pricing() {
   return (
-    <div className="container py-24">
+    <div className="flex flex-col min-h-screen">
       <SEO 
         title="Pricing" 
-        description="Transparent pricing for federal compliance management. Choose the plan that fits your organization's needs."
+        description="Simple, transparent pricing for enterprise compliance automation. Get started with Intelleges today."
       />
-      <div className="mx-auto max-w-3xl text-center mb-16">
-        <h1 className="text-4xl font-medium tracking-tight mb-4">Simple, transparent pricing</h1>
-        <p className="text-lg text-muted-foreground">
-          Choose the plan that fits your organization's compliance needs.
-          No hidden fees, no surprises.
-        </p>
-      </div>
       
-      <div className="grid gap-8 md:grid-cols-3 mb-24">
-        {tiers.map((tier) => (
-          <Card key={tier.name} className={`flex flex-col ${tier.popular ? 'border-emerald-500 shadow-md relative' : 'border-border/60'}`}>
-            {tier.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-1 text-xs font-medium text-white">
-                Most Popular
+      {/* Hero */}
+      <section className="py-20 md:py-32">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <h1 className="text-5xl md:text-6xl font-light tracking-tight">
+              Simple, Transparent Pricing
+            </h1>
+            <p className="text-xl text-muted-foreground font-light leading-relaxed">
+              Enterprise-grade compliance automation that scales with your organization.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Cards */}
+      <section className="pb-20">
+        <div className="container">
+          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+            {/* Starter */}
+            <div className="rounded-2xl border border-border/40 p-8 space-y-8 bg-background">
+              <div className="space-y-4">
+                <h3 className="text-2xl font-light">Starter</h3>
+                <div className="space-y-2">
+                  <p className="text-4xl font-normal">Custom</p>
+                  <p className="text-sm text-muted-foreground font-light">
+                    Based on supplier volume and workflows
+                  </p>
+                </div>
               </div>
-            )}
-            <CardHeader>
-              <CardTitle className="text-xl">{tier.name}</CardTitle>
-              <CardDescription>{tier.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <div className="mb-6">
-                <span className="text-4xl font-bold">{tier.price}</span>
-                {tier.price !== "Custom" && <span className="text-muted-foreground">/month</span>}
-              </div>
-              <ul className="space-y-3">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                    {feature}
+              
+              <ul className="space-y-4">
+                {[
+                  "Up to 100 suppliers",
+                  "Core compliance workflows",
+                  "Standard templates",
+                  "Email support",
+                  "Basic dashboards"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <span className="text-sm font-light">{feature}</span>
                   </li>
                 ))}
               </ul>
-            </CardContent>
-            <CardFooter>
-              <Button className={`w-full ${tier.popular ? '' : 'variant-outline'}`} variant={tier.popular ? 'default' : 'outline'}>
-                {tier.price === "Custom" ? "Contact Sales" : "Get Started"}
+              
+              <Link href="/contact">
+                <Button variant="outline" className="w-full rounded-full font-light">
+                  Contact Sales
+                </Button>
+              </Link>
+            </div>
+
+            {/* Enterprise */}
+            <div className="rounded-2xl border-2 border-primary p-8 space-y-8 bg-background relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="bg-primary text-primary-foreground text-xs font-light px-4 py-1.5 rounded-full">
+                  Most Popular
+                </span>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-2xl font-light">Enterprise</h3>
+                <div className="space-y-2">
+                  <p className="text-4xl font-normal">Custom</p>
+                  <p className="text-sm text-muted-foreground font-light">
+                    Tailored to your organization's needs
+                  </p>
+                </div>
+              </div>
+              
+              <ul className="space-y-4">
+                {[
+                  "Unlimited suppliers",
+                  "All compliance workflows",
+                  "Custom templates",
+                  "Priority support",
+                  "Advanced analytics",
+                  "API access",
+                  "Dedicated account manager",
+                  "Custom integrations"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <span className="text-sm font-light">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <Link href="/contact">
+                <Button className="w-full rounded-full font-light">
+                  Book a Demo
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 bg-muted/30">
+        <div className="container">
+          <div className="max-w-3xl mx-auto space-y-12">
+            <h2 className="text-3xl font-light text-center">Frequently Asked Questions</h2>
+            
+            <div className="space-y-8">
+              {[
+                {
+                  q: "How is pricing calculated?",
+                  a: "Pricing is based on the number of suppliers you manage and the complexity of your compliance workflows. We'll work with you to create a custom plan that fits your needs and budget."
+                },
+                {
+                  q: "Is there a setup fee?",
+                  a: "No. We include onboarding, training, and template configuration as part of your subscription."
+                },
+                {
+                  q: "Can I change plans later?",
+                  a: "Yes. You can upgrade or adjust your plan at any time as your needs evolve."
+                },
+                {
+                  q: "Do suppliers need to pay or create accounts?",
+                  a: "No. Suppliers access workflows via secure links — no login or payment required."
+                },
+                {
+                  q: "What kind of support do you offer?",
+                  a: "All plans include email support. Enterprise plans include priority support and a dedicated account manager."
+                }
+              ].map((faq, i) => (
+                <div key={i} className="space-y-3">
+                  <h3 className="text-lg font-normal">{faq.q}</h3>
+                  <p className="text-sm font-light text-muted-foreground leading-relaxed">
+                    {faq.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20">
+        <div className="container">
+          <div className="max-w-2xl mx-auto text-center space-y-8">
+            <h2 className="text-4xl font-light tracking-tight">
+              Ready to get started?
+            </h2>
+            <p className="text-lg text-muted-foreground font-light">
+              Book a demo to see how Intelleges can transform your compliance workflows.
+            </p>
+            <Link href="/contact">
+              <Button size="lg" className="rounded-full px-8">
+                Book a Demo
               </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-      
-      <ROICalculator />
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

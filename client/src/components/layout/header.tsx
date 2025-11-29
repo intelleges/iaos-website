@@ -9,10 +9,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Features", href: "/#features" },
-    { name: "Solutions", href: "/#solutions" },
-    { name: "Industries", href: "/#industries" },
-    { name: "Resources", href: "/resources" },
+    { name: "Home", href: "/" },
     { name: "Pricing", href: "/pricing" },
     { name: "Contact", href: "/contact" },
   ];
@@ -51,8 +48,8 @@ export default function Header() {
             </Button>
           </a>
           <Link href="/contact">
-            <Button variant="outline" size="sm" className="rounded-full px-6 font-light border-muted-foreground/30 hover:border-foreground">
-              Get Started
+            <Button size="sm" className="rounded-full px-6 font-light">
+              Book a Demo
             </Button>
           </Link>
         </div>
@@ -89,8 +86,8 @@ export default function Header() {
               </Button>
             </a>
             <Link href="/contact">
-              <Button variant="outline" className="w-full rounded-full mt-2 font-light" onClick={() => setIsMenuOpen(false)}>
-                Get Started
+              <Button className="w-full rounded-full mt-2 font-light" onClick={() => setIsMenuOpen(false)}>
+                Book a Demo
               </Button>
             </Link>
           </div>

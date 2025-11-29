@@ -1,66 +1,73 @@
 import { Link } from "wouter";
-import { Github, Linkedin, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border/40 bg-muted/20">
-      <div className="container py-12 md:py-16">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-4">
+    <footer className="border-t border-border/20 bg-muted/30">
+      <div className="container py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* Logo & Description */}
+          <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Intelleges" className="h-10 w-auto" />
+              <img src="/logo.png" alt="Intelleges" className="h-16 w-auto" />
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              The universal engine for supplier management, compliance automation, and nearshoring intelligence.
+            <p className="text-sm font-light text-muted-foreground max-w-md leading-relaxed">
+              Enterprise compliance depends on information. Intelleges gets it all cleanly, automatically, and on time.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Github className="h-5 w-5" />
-              </a>
-            </div>
           </div>
-          
-          <div>
-            <h3 className="font-medium mb-4">Platform</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/#features" className="hover:text-foreground transition-colors cursor-pointer">Features</Link></li>
-              <li><Link href="/#solutions" className="hover:text-foreground transition-colors cursor-pointer">Solutions</Link></li>
-              <li><Link href="/case-studies" className="hover:text-foreground transition-colors cursor-pointer">Case Studies</Link></li>
-              <li><Link href="/resources" className="hover:text-foreground transition-colors cursor-pointer">Resources</Link></li>
-              <li><Link href="/pricing" className="hover:text-foreground transition-colors cursor-pointer">Pricing</Link></li>
+
+          {/* Product */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-normal">Product</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/#how-it-works" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">
+                  How It Works
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">
+                  Client Login
+                </a>
+              </li>
             </ul>
           </div>
-          
-          <div>
-            <h3 className="font-medium mb-4">Company</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/about" className="hover:text-foreground transition-colors cursor-pointer">About Us</Link></li>
-              <li><Link href="/careers" className="hover:text-foreground transition-colors cursor-pointer">Careers</Link></li>
-              <li><Link href="/blog" className="hover:text-foreground transition-colors cursor-pointer">Blog</Link></li>
-              <li><Link href="/contact" className="hover:text-foreground transition-colors cursor-pointer">Contact</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-medium mb-4">Legal</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/privacy" className="hover:text-foreground transition-colors cursor-pointer">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-foreground transition-colors cursor-pointer">Terms of Service</Link></li>
-              <li><Link href="/security" className="hover:text-foreground transition-colors cursor-pointer">Security</Link></li>
-              <li><Link href="/cookies" className="hover:text-foreground transition-colors cursor-pointer">Cookie Policy</Link></li>
+
+          {/* Company */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-normal">Company</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/contact" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <a href="tel:+19178180225" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">
+                  +1-917-818-0225
+                </a>
+              </li>
             </ul>
           </div>
         </div>
-        
-        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Intelleges.com. All rights reserved.</p>
-          <p>Designed with Scandinavian minimalism.</p>
+
+        {/* Bottom Bar */}
+        <div className="mt-16 pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs font-light text-muted-foreground">
+            © {new Date().getFullYear()} Intelleges. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6">
+            <p className="text-xs font-light text-muted-foreground">
+              ISO 27001 Certified
+            </p>
+            <p className="text-xs font-light text-muted-foreground">
+              Battelle Supplier of the Year
+            </p>
+          </div>
         </div>
       </div>
     </footer>
