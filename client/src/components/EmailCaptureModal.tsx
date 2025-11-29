@@ -74,12 +74,13 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
         return;
       }
 
-      // Step 2: Submit lead information
-      await submitLeadMutation.mutateAsync({
+      // Step 2: Submit lead information and send email
+      const leadResult = await submitLeadMutation.mutateAsync({
         name: formData.name,
         email: formData.email,
         company: formData.company,
         resource: resourceTitle,
+        caseStudyFilename: downloadUrl.split('/').pop() || '',
       });
 
       // Step 3: Record the download
@@ -255,9 +256,10 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
                 <Check className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <DialogTitle className="text-2xl font-light">Download Started!</DialogTitle>
-            <DialogDescription className="text-base">
-              Your case study is downloading now. Check your downloads folder.
+            <DialogTitle className="text-2xl font-light">Success!</DialogTitle>
+            <DialogDescription className="text-base space-y-2">
+              <p>Your case study is downloading now. Check your downloads folder.</p>
+              <p className="text-green-600 font-medium">📧 We've also sent a copy to your email!</p>
             </DialogDescription>
           </div>
         )}

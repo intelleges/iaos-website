@@ -6,6 +6,8 @@ import { z } from "zod";
 import { getDb } from "./db";
 import { leads, downloads } from "../drizzle/schema";
 import { eq, and, gte, count } from "drizzle-orm";
+import { sendCaseStudyEmail } from "./services/emailService";
+import path from "path";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -112,13 +114,14 @@ export const appRouter = router({
 
   // Lead capture endpoints
   leads: router({
-    // Submit a new lead
+    // Submit a new lead and send case study email
     submit: publicProcedure
       .input(z.object({
         name: z.string().min(1),
         email: z.string().email(),
         company: z.string().min(1),
         resource: z.string().optional(),
+        caseStudyFilename: z.string().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
         const db = await getDb();
@@ -126,6 +129,7 @@ export const appRouter = router({
           throw new Error('Database not available');
         }
 
+        // Save lead to database
         await db.insert(leads).values({
           name: input.name,
           email: input.email,
@@ -136,7 +140,42 @@ export const appRouter = router({
           createdAt: new Date(),
         });
 
-        return { success: true };
+        // Send case study email if filename is provided
+        if (input.caseStudyFilename && input.resource) {
+          try {
+            const pdfPath = path.join(
+              process.cwd(),
+              'client',
+              'public',
+              'case-studies',
+              input.caseStudyFilename
+            );
+
+            await sendCaseStudyEmail({
+              toEmail: input.email,
+              toName: input.name,
+              company: input.company,
+              caseStudyTitle: input.resource,
+              pdfFilePath: pdfPath,
+            });
+
+            console.log(`Case study email sent to ${input.email}`);
+          } catch (emailError: any) {
+            // Log error but don't fail the entire request
+            console.error('Failed to send case study email:', emailError.message);
+            // Return success with email warning
+            return {
+              success: true,
+              emailSent: false,
+              emailError: emailError.message,
+            };
+          }
+        }
+
+        return {
+          success: true,
+          emailSent: !!input.caseStudyFilename,
+        };
       }),
   }),
 });

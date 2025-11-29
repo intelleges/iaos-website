@@ -342,3 +342,12 @@
 ## Demo Route Redirect
 - [x] Create /demo route that redirects to /contact page
 - [x] Ensure PDF links to www.intelleges.com/demo work correctly
+
+## Email Delivery System for Case Studies
+- [x] Set up email service integration (using SendGrid)
+- [x] Create email template for case study delivery
+- [x] Add API endpoint to send case study PDF via email
+- [x] Update EmailCaptureModal to trigger email sending after form submission
+- [x] Add success message indicating email has been sent
+- [x] Test email delivery with actual case study PDFs
+- [x] Add error handling for email delivery failures
