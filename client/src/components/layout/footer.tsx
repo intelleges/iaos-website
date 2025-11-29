@@ -7,11 +7,8 @@ export default function Footer() {
       <div className="container py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <Link href="/">
-              <a className="flex items-center gap-2">
-                <img src="/logo.png" alt="Intelleges" className="h-8 w-auto" />
-                <span className="text-xl font-semibold tracking-tight">Intelleges</span>
-              </a>
+            <Link href="/" className="flex items-center gap-2">
+              <img src="/logo.png" alt="Intelleges" className="h-10 w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               The universal engine for supplier management, compliance automation, and nearshoring intelligence.
@@ -32,30 +29,30 @@ export default function Footer() {
           <div>
             <h3 className="font-medium mb-4">Platform</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/#features"><a className="hover:text-foreground transition-colors">Features</a></Link></li>
-              <li><Link href="/#solutions"><a className="hover:text-foreground transition-colors">Solutions</a></Link></li>
-              <li><Link href="/pricing"><a className="hover:text-foreground transition-colors">Pricing</a></Link></li>
-              <li><Link href="/#integrations"><a className="hover:text-foreground transition-colors">Integrations</a></Link></li>
+              <li><Link href="/#features" className="hover:text-foreground transition-colors cursor-pointer">Features</Link></li>
+              <li><Link href="/#solutions" className="hover:text-foreground transition-colors cursor-pointer">Solutions</Link></li>
+              <li><Link href="/pricing" className="hover:text-foreground transition-colors cursor-pointer">Pricing</Link></li>
+              <li><Link href="/#integrations" className="hover:text-foreground transition-colors cursor-pointer">Integrations</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="font-medium mb-4">Company</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/about"><a className="hover:text-foreground transition-colors">About Us</a></Link></li>
-              <li><Link href="/careers"><a className="hover:text-foreground transition-colors">Careers</a></Link></li>
-              <li><Link href="/blog"><a className="hover:text-foreground transition-colors">Blog</a></Link></li>
-              <li><Link href="/contact"><a className="hover:text-foreground transition-colors">Contact</a></Link></li>
+              <li><Link href="/about" className="hover:text-foreground transition-colors cursor-pointer">About Us</Link></li>
+              <li><Link href="/careers" className="hover:text-foreground transition-colors cursor-pointer">Careers</Link></li>
+              <li><Link href="/blog" className="hover:text-foreground transition-colors cursor-pointer">Blog</Link></li>
+              <li><Link href="/contact" className="hover:text-foreground transition-colors cursor-pointer">Contact</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="font-medium mb-4">Legal</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/privacy"><a className="hover:text-foreground transition-colors">Privacy Policy</a></Link></li>
-              <li><Link href="/terms"><a className="hover:text-foreground transition-colors">Terms of Service</a></Link></li>
-              <li><Link href="/security"><a className="hover:text-foreground transition-colors">Security</a></Link></li>
-              <li><Link href="/cookies"><a className="hover:text-foreground transition-colors">Cookie Policy</a></Link></li>
+              <li><Link href="/privacy" className="hover:text-foreground transition-colors cursor-pointer">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-foreground transition-colors cursor-pointer">Terms of Service</Link></li>
+              <li><Link href="/security" className="hover:text-foreground transition-colors cursor-pointer">Security</Link></li>
+              <li><Link href="/cookies" className="hover:text-foreground transition-colors cursor-pointer">Cookie Policy</Link></li>
             </ul>
           </div>
         </div>

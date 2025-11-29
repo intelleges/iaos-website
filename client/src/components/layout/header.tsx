@@ -18,23 +18,22 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/">
-          <a className="flex items-center gap-2">
-            <img src="/logo.png" alt="Intelleges" className="h-8 w-auto" />
-            <span className="text-xl font-semibold tracking-tight hidden sm:inline-block">Intelleges</span>
-          </a>
+        <Link href="/" className="flex items-center gap-2">
+          <img src="/logo.png" alt="Intelleges" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {navItems.map((item) => (
-            <Link key={item.name} href={item.href}>
-              <a className={cn(
-                "text-sm font-medium transition-colors hover:text-foreground",
+            <Link 
+              key={item.name} 
+              href={item.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-foreground cursor-pointer",
                 location === item.href ? "text-foreground" : "text-muted-foreground"
-              )}>
-                {item.name}
-              </a>
+              )}
+            >
+              {item.name}
             </Link>
           ))}
           <Link href="/contact">
@@ -56,13 +55,13 @@ export default function Header() {
         <div className="md:hidden border-t border-border/40 bg-background">
           <div className="container py-4 flex flex-col gap-4">
             {navItems.map((item) => (
-              <Link key={item.name} href={item.href}>
-                <a 
-                  className="text-sm font-medium py-2 text-muted-foreground hover:text-foreground"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
+              <Link 
+                key={item.name} 
+                href={item.href}
+                className="text-sm font-medium py-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
               </Link>
             ))}
             <Link href="/contact">
