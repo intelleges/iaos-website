@@ -36,3 +36,7 @@
 - [x] Use light background matching homepage
 - [x] Simplify to text-focused design
 - [x] Maintain Scandinavian/Japanese minimal style
+
+## Logo Consistency Fixes
+- [x] Remove logo from footer completely
+- [x] Ensure logo size is h-[13rem] consistently across all pages

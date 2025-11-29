@@ -5,11 +5,8 @@ export default function Footer() {
     <footer className="border-t border-border/20 bg-muted/30">
       <div className="container py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Logo & Description */}
+          {/* Description */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Intelleges" className="h-16 w-auto" />
-            </Link>
             <p className="text-sm font-light text-muted-foreground max-w-md leading-relaxed">
               Enterprise compliance depends on information. Intelleges gets it all cleanly, automatically, and on time.
             </p>
