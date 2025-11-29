@@ -34,7 +34,7 @@ export default function Header() {
         isScrolled ? "h-16" : "h-20"
       )}>
         <Link href="/" className="flex items-center gap-2">
-          <img src="/logo.png" alt="Intelleges" className="h-12 w-auto" />
+          <img src="/logo.png" alt="Intelleges" className="h-8 lg:h-10 xl:h-12 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
