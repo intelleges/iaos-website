@@ -1,25 +1,38 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, Home as HomeIcon, Package, FileText, Info, DollarSign, Mail } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Header() {
   const [location] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Product", href: "/product" },
-    { name: "Protocols", href: "/protocols" },
-    { name: "About", href: "/about" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Contact", href: "/contact" },
+    { name: "Home", href: "/", icon: HomeIcon },
+    { name: "Product", href: "/product", icon: Package },
+    { name: "Protocols", href: "/protocols", icon: FileText },
+    { name: "About", href: "/about", icon: Info },
+    { name: "Pricing", href: "/pricing", icon: DollarSign },
+    { name: "Contact", href: "/contact", icon: Mail },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
-      <div className="container flex h-20 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
+      <div className={cn(
+        "container flex items-center justify-between transition-all duration-300",
+        isScrolled ? "h-16" : "h-20"
+      )}>
         <Link href="/" className="flex items-center gap-2">
           <img src="/logo.png" alt="Intelleges" className="h-[13rem] w-auto" />
         </Link>
@@ -68,18 +81,22 @@ export default function Header() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="lg:hidden border-t border-border/20 bg-background">
+        <div className="lg:hidden border-t border-border/20 bg-background animate-in slide-in-from-top-4 duration-300">
           <div className="container py-6 flex flex-col gap-4">
-            {navItems.map((item) => (
-              <Link 
-                key={item.name} 
-                href={item.href}
-                className="text-base font-light py-2 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link 
+                  key={item.name} 
+                  href={item.href}
+                  className="flex items-center gap-3 text-base font-light py-3 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Icon className="h-5 w-5" />
+                  {item.name}
+                </Link>
+              );
+            })}
             <div className="text-base font-semibold text-primary tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
               ISO 27001 Certified · Battelle Supplier of the Year
             </div>

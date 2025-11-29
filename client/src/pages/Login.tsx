@@ -56,14 +56,14 @@ export default function Login() {
         description="Access your Intelleges compliance management dashboard."
       />
       
-      <div className="flex-1 flex items-center justify-center py-20 px-4">
-        <div className="w-full max-w-md space-y-12">
+      <div className="flex-1 flex items-center justify-center py-12 md:py-20 px-4">
+        <div className="w-full max-w-md mx-auto space-y-8 md:space-y-12">
           {/* Header */}
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+          <div className="text-center space-y-3 md:space-y-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight">
               Client Login
             </h1>
-            <p className="text-lg text-muted-foreground font-light leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground font-light leading-relaxed max-w-sm mx-auto">
               Access your compliance workflows and dashboards.
             </p>
           </div>
