@@ -137,3 +137,21 @@
 ## Logo Carousel Pause-on-Hover
 - [x] Add pause-on-hover functionality to logo carousel
 - [x] Resume animation when mouse leaves
+
+## Case Study Pages
+- [x] Create Honeywell Aerospace case study page (Reference/Shadow system)
+- [x] Create Battelle case study page (Microchip sourcing)
+- [x] Create DOD case study page (zCode CMMC implementation)
+- [x] Update Case Studies index page with real client stories
+- [x] Add routes for case study pages in App.tsx
+
+## Scroll Animations
+- [ ] Create scroll animation component/hook
+- [ ] Add fade-in animations to homepage sections
+- [ ] Add slide-up animations for key content blocks
+- [ ] Implement intersection observer for performance
+
+## Logo Click-Through Links
+- [x] Make client logos in carousel clickable
+- [x] Link logos to their respective case study pages
+- [x] Add hover effects to indicate clickability

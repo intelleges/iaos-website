@@ -11,6 +11,9 @@ import SupplierOnboarding from "@/pages/SupplierOnboarding";
 import Pricing from "@/pages/Pricing";
 import Contact from "@/pages/Contact";
 import CaseStudies from "@/pages/CaseStudies";
+import HoneywellAerospace from "@/pages/case-studies/HoneywellAerospace";
+import Battelle from "@/pages/case-studies/Battelle";
+import DepartmentOfDefense from "@/pages/case-studies/DepartmentOfDefense";
 import Resources from "@/pages/Resources";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/not-found";
@@ -29,6 +32,9 @@ function Router() {
           <Route path="/product" component={Product} />
           <Route path="/supplier-onboarding" component={SupplierOnboarding} />
           <Route path="/case-studies" component={CaseStudies} />
+          <Route path="/case-studies/honeywell-aerospace" component={HoneywellAerospace} />
+          <Route path="/case-studies/battelle" component={Battelle} />
+          <Route path="/case-studies/department-of-defense" component={DepartmentOfDefense} />
           <Route path="/pricing" component={Pricing} />
           <Route path="/resources" component={Resources} />
           <Route path="/contact" component={Contact} />

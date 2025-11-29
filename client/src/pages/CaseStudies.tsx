@@ -7,46 +7,46 @@ import { Link } from "wouter";
 
 const caseStudies = [
   {
-    id: "aerospace-defense",
+    id: "honeywell-aerospace",
     industry: "Aerospace & Defense",
-    client: "Major Defense Contractor",
-    title: "Streamlining CMMC Compliance for a Tier-1 Supplier",
-    summary: "How a leading defense contractor reduced audit preparation time by 65% and achieved perfect CMMC readiness scores using Intelleges' automated compliance engine.",
+    client: "Honeywell Aerospace",
+    title: "Unifying Supplier Compliance Across 400 Global Locations",
+    summary: "How Honeywell solved multi-site supplier management challenges with Intelleges's proprietary Reference/Shadow system, eliminating duplicate compliance requests while maintaining ERP autonomy across 400 locations.",
     metrics: [
-      { label: "Audit Prep Time", value: "-65%" },
-      { label: "Compliance Score", value: "100%" },
-      { label: "Vendor Onboarding", value: "2x Faster" }
+      { label: "Duplicate Requests", value: "-85%" },
+      { label: "Enterprise Visibility", value: "100%" },
+      { label: "Processing Speed", value: "+60%" }
     ],
-    image: "https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?q=80&w=2080&auto=format&fit=crop",
-    tags: ["CMMC 2.0", "Supply Chain Risk", "Automation"]
+    image: "/logos/honeywell.jpg",
+    tags: ["Reference/Shadow System", "Multi-Site Management", "FAR Compliance"]
   },
   {
-    id: "healthcare-logistics",
-    industry: "Healthcare Logistics",
-    client: "Global Medical Device Manufacturer",
-    title: "Securing the Medical Supply Chain Against Counterfeits",
-    summary: "Implementing end-to-end traceability for critical medical components, ensuring 100% verification of origin and regulatory adherence across 40+ countries.",
+    id: "battelle",
+    industry: "Research & Development",
+    client: "Battelle",
+    title: "Sourcing Critical Components in a Supply Chain Crisis",
+    summary: "Leveraging Intelleges's extensive supplier network to source critical microchips with a 52-week backorder, saving a multi-million dollar project through upfront purchasing and logistics management.",
     metrics: [
-      { label: "Risk Reduction", value: "90%" },
-      { label: "Traceability", value: "100%" },
-      { label: "Cost Savings", value: "$2.4M" }
+      { label: "Backorder Overcome", value: "52 Weeks" },
+      { label: "Delivery", value: "On Time" },
+      { label: "Project Value", value: "$M+ Saved" }
     ],
-    image: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?q=80&w=2032&auto=format&fit=crop",
-    tags: ["FDA Compliance", "Traceability", "Risk Management"]
+    image: "/logos/battelle.png",
+    tags: ["Supply Chain", "Supplier Network", "Crisis Management"]
   },
   {
-    id: "energy-infrastructure",
-    industry: "Energy Infrastructure",
-    client: "National Grid Operator",
-    title: "Modernizing Vendor Risk Management for Critical Infrastructure",
-    summary: "Replacing legacy spreadsheet-based processes with a dynamic, real-time vendor risk management platform to protect national energy assets.",
+    id: "department-of-defense",
+    industry: "Defense & Government",
+    client: "U.S. Department of Defense",
+    title: "Modernizing Supplier Vetting with zCode for CMMC Compliance",
+    summary: "Implementing Intelleges's proprietary zCode system based on binary mathematics to track thousands of suppliers with detailed granularity across legacy mainframes and modern cloud platforms.",
     metrics: [
-      { label: "Process Efficiency", value: "+80%" },
-      { label: "Data Accuracy", value: "99.9%" },
-      { label: "Team Productivity", value: "+40%" }
+      { label: "Suppliers Tracked", value: "1000s" },
+      { label: "System Compatibility", value: "100%" },
+      { label: "Granularity", value: "1 Decimal" }
     ],
-    image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070&auto=format&fit=crop",
-    tags: ["Critical Infrastructure", "VRM", "Digital Transformation"]
+    image: "/logos/dod.svg",
+    tags: ["zCode", "CMMC", "Legacy Integration"]
   }
 ];
 
@@ -85,12 +85,11 @@ export default function CaseStudies() {
             <div key={study.id} className={`flex flex-col lg:flex-row gap-12 items-center ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
               {/* Image Side */}
               <div className="w-full lg:w-1/2">
-                <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3] group">
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500" />
+                <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3] group bg-muted/20 flex items-center justify-center p-12">
                   <img 
                     src={study.image} 
                     alt={study.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-32 w-auto object-contain transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-background/90 text-foreground backdrop-blur-md border-none shadow-sm">

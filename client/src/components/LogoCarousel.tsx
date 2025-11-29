@@ -1,18 +1,20 @@
 import { useEffect, useRef } from "react";
+import { Link } from "wouter";
 
 interface Logo {
   src: string;
   alt: string;
+  link: string;
 }
 
 const logos: Logo[] = [
-  { src: "/logos/honeywell.jpg", alt: "Honeywell Aerospace" },
-  { src: "/logos/battelle.png", alt: "Battelle" },
-  { src: "/logos/dod.png", alt: "U.S. Department of Defense" },
-  { src: "/logos/celestica.png", alt: "Celestica" },
-  { src: "/logos/conedison-new.png", alt: "Con Edison" },
-  { src: "/logos/bd.jpg", alt: "Becton Dickinson" },
-  { src: "/logos/msk-new.png", alt: "Memorial Sloan Kettering" },
+  { src: "/logos/honeywell.jpg", alt: "Honeywell Aerospace", link: "/case-studies/honeywell-aerospace" },
+  { src: "/logos/battelle.png", alt: "Battelle", link: "/case-studies/battelle" },
+  { src: "/logos/dod.svg", alt: "U.S. Department of Defense", link: "/case-studies/department-of-defense" },
+  { src: "/logos/celestica.png", alt: "Celestica", link: "/case-studies" },
+  { src: "/logos/conedison-new.png", alt: "Con Edison", link: "/case-studies" },
+  { src: "/logos/bd.jpg", alt: "Becton Dickinson", link: "/case-studies" },
+  { src: "/logos/msk-new.png", alt: "Memorial Sloan Kettering", link: "/case-studies" },
 ];
 
 export default function LogoCarousel() {
@@ -74,24 +76,26 @@ export default function LogoCarousel() {
           WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
         }}
       >
-        <div className="flex items-center gap-16 w-max">
+        <div className="flex gap-16 animate-scroll">
           {/* First set of logos */}
           {logos.map((logo, index) => (
-            <img
-              key={`logo-1-${index}`}
-              src={logo.src}
-              alt={logo.alt}
-              className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
-            />
+            <Link key={`logo-${index}`} href={logo.link} className="flex-shrink-0">
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                className="h-16 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+              />
+            </Link>
           ))}
           {/* Duplicate set for seamless loop */}
           {logos.map((logo, index) => (
-            <img
-              key={`logo-2-${index}`}
-              src={logo.src}
-              alt={logo.alt}
-              className="h-16 w-auto opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
-            />
+            <Link key={`logo-duplicate-${index}`} href={logo.link} className="flex-shrink-0">
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                className="h-16 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+              />
+            </Link>
           ))}
         </div>
       </div>
