@@ -38,13 +38,13 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden xl:flex items-center gap-10">
+        <nav className="hidden xl:flex items-center gap-6 2xl:gap-8">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
+                "text-sm 2xl:text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer whitespace-nowrap",
                 location === item.href ? "text-foreground" : "text-muted-foreground"
               )}
             >
@@ -54,17 +54,17 @@ export default function Header() {
         </nav>
 
         {/* Trust Markers & CTA */}
-        <div className="hidden xl:flex items-center gap-8">
-          <div className="text-base font-semibold text-primary tracking-wide whitespace-nowrap">
+        <div className="hidden xl:flex items-center gap-3 2xl:gap-6">
+          <div className="text-xs 2xl:text-sm font-semibold text-primary tracking-wide whitespace-nowrap">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
-            <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <Button size="sm" className="text-sm 2xl:text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-4 2xl:px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
               Client Login
             </Button>
           </Link>
           <Link href="/contact">
-            <Button size="sm" className="rounded-full px-6 font-light transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <Button size="sm" className="rounded-full px-4 2xl:px-6 text-sm 2xl:text-base font-light transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
               Book a Demo
             </Button>
           </Link>
