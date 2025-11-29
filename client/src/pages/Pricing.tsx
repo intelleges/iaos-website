@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import SEO from "@/components/seo";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import ROICalculator from "@/components/sections/pricing/roi-calculator";
@@ -49,6 +50,10 @@ const tiers = [
 export default function Pricing() {
   return (
     <div className="container py-24">
+      <SEO 
+        title="Pricing" 
+        description="Transparent pricing for federal compliance management. Choose the plan that fits your organization's needs."
+      />
       <div className="mx-auto max-w-3xl text-center mb-16">
         <h1 className="text-4xl font-medium tracking-tight mb-4">Simple, transparent pricing</h1>
         <p className="text-lg text-muted-foreground">

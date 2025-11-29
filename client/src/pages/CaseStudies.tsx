@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import SEO from "@/components/seo";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { ArrowRight, BarChart3, CheckCircle2, Clock, ShieldCheck } from "lucide-react";
 import { Link } from "wouter";
@@ -52,6 +53,10 @@ const caseStudies = [
 export default function CaseStudies() {
   return (
     <div className="flex flex-col min-h-screen">
+      <SEO 
+        title="Case Studies" 
+        description="See how Intelleges helps aerospace, healthcare, and energy companies achieve compliance and optimize their supply chains."
+      />
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden bg-muted/30">
         <div className="container relative z-10">
