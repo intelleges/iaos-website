@@ -462,3 +462,12 @@
 - [x] Update logo height from h-[168px] to h-[151px]
 - [x] Update header container heights proportionally (173px non-scrolled, 151px scrolled)
 - [x] Verify alignment with reduced logo size
+
+## Reduce Logo Another 10% and Fix Vertical Alignment
+- [x] Calculate new logo size (151px - 10% = 136px)
+- [x] Update logo height to h-[136px]
+- [x] Update header container heights proportionally (156px non-scrolled, 136px scrolled)
+- [x] Fix vertical alignment - navigation items sitting too low
+- [x] Changed from inline-block with pb-1 to inline-flex items-center
+- [x] Ensure all elements (logo, nav, certification, buttons) are truly centered
+- [x] Test alignment at all breakpoints
