@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "46264581-fb65-43cb-8358-8972da5d878d",
+  "id": "9049a7f4-4c9a-4395-aa7d-79b33910b71f",
   "prevId": "04d430de-5dd3-4dc0-85a9-287b6c03aeae",
   "tables": {
     "downloads": {

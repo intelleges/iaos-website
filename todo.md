@@ -324,3 +324,21 @@
 - [ ] Show clear error messages when limits are reached
 - [ ] Update EmailCaptureModal to handle verification flow
 - [ ] Test download protection with multiple scenarios
+
+## YouTube Video Integration
+- [x] Add YouTube video link (https://www.youtube.com/watch?v=7BstopG9qbU) to homepage
+- [x] Update "Watch 2-Minute Overview" button to open video in new tab
+- [x] Embed video player on homepage or link to YouTube
+
+## Case Study PDF Conversion and Download Protection
+- [x] Convert all 17 case study DOCX files to PDF (including new Case Study 17: Sole Source Risk Mitigation)
+- [x] Add 17th protocol card to homepage (Sole Source Risk Mitigation)
+- [x] Create API endpoints for download validation and tracking
+- [x] Update EmailCaptureModal with sales-focused rate limit message
+- [x] Add "Schedule a Meeting" button for rate-limited users
+- [x] Make protocol cards clickable to trigger download flow
+- [x] Test complete download protection system
+
+## Demo Route Redirect
+- [x] Create /demo route that redirects to /contact page
+- [x] Ensure PDF links to www.intelleges.com/demo work correctly

@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Download, Check } from "lucide-react";
+import { Download, Check, Calendar } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
 interface EmailCaptureModalProps {
   isOpen: boolean;
@@ -21,6 +22,14 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rateLimitError, setRateLimitError] = useState<string | null>(null);
+
+  const validateDownloadQuery = trpc.downloads.validate.useQuery(
+    { email: formData.email, resource: resourceTitle },
+    { enabled: false } // Don't auto-fetch, we'll trigger manually
+  );
+  const recordDownloadMutation = trpc.downloads.record.useMutation();
+  const submitLeadMutation = trpc.leads.submit.useMutation();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -51,38 +60,60 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
     }
 
     setIsSubmitting(true);
+    setRateLimitError(null);
 
-    // Store lead data in localStorage (backend integration can be added later)
-    const leadData = {
-      ...formData,
-      resource: resourceTitle,
-      timestamp: new Date().toISOString(),
-    };
+    try {
+      // Step 1: Check if user can download (rate limit validation)
+      const validationResult = await validateDownloadQuery.refetch();
 
-    const existingLeads = JSON.parse(localStorage.getItem("whitepaper_leads") || "[]");
-    existingLeads.push(leadData);
-    localStorage.setItem("whitepaper_leads", JSON.stringify(existingLeads));
+      if (!validationResult.data?.allowed) {
+        setRateLimitError(
+          "You seem interested in our products. It is best for you to set up a meeting with one of our sales people to ensure that we can fully address your questions and help you with additional downloads."
+        );
+        setIsSubmitting(false);
+        return;
+      }
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+      // Step 2: Submit lead information
+      await submitLeadMutation.mutateAsync({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        resource: resourceTitle,
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      // Step 3: Record the download
+      await recordDownloadMutation.mutateAsync({
+        email: formData.email,
+        resource: resourceTitle,
+      });
 
-    // Trigger download
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = downloadUrl.split("/").pop() || "download.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      // Step 4: Trigger the actual file download
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = downloadUrl.split("/").pop() || "download.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-    // Close modal after 2 seconds
-    setTimeout(() => {
-      onClose();
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", company: "" });
-    }, 2000);
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        onClose();
+        setIsSubmitted(false);
+        setFormData({ name: "", email: "", company: "" });
+        setRateLimitError(null);
+      }, 2000);
+
+    } catch (error: any) {
+      console.error("Download error:", error);
+      setRateLimitError(
+        error.message || "An error occurred. Please try again or contact support."
+      );
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -91,6 +122,14 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
+    // Clear rate limit error when user changes email
+    if (field === "email" && rateLimitError) {
+      setRateLimitError(null);
+    }
+  };
+
+  const handleScheduleMeeting = () => {
+    window.location.href = '/contact';
   };
 
   return (
@@ -105,89 +144,109 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-base">
-                  Full Name *
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => handleChange("name", e.target.value)}
-                  className={`text-base ${errors.name ? "border-red-500" : ""}`}
-                  placeholder="John Smith"
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? "name-error" : undefined}
-                />
-                {errors.name && (
-                  <p id="name-error" className="text-sm text-red-500">
-                    {errors.name}
-                  </p>
-                )}
+            {rateLimitError && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <Calendar className="h-6 w-6 text-[#0A3A67] flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-base text-gray-800 font-normal leading-relaxed">{rateLimitError}</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={handleScheduleMeeting}
+                  className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105 bg-[#0A3A67] hover:bg-[#0A3A67]/90"
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Schedule a Meeting
+                </Button>
               </div>
+            )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-base">
-                  Email Address *
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  className={`text-base ${errors.email ? "border-red-500" : ""}`}
-                  placeholder="john@company.com"
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "email-error" : undefined}
-                />
-                {errors.email && (
-                  <p id="email-error" className="text-sm text-red-500">
-                    {errors.email}
-                  </p>
-                )}
-              </div>
+            {!rateLimitError && (
+              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-base">
+                    Full Name *
+                  </Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => handleChange("name", e.target.value)}
+                    className={`text-base ${errors.name ? "border-red-500" : ""}`}
+                    placeholder="John Smith"
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                  />
+                  {errors.name && (
+                    <p id="name-error" className="text-sm text-red-500">
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="company" className="text-base">
-                  Company Name *
-                </Label>
-                <Input
-                  id="company"
-                  type="text"
-                  value={formData.company}
-                  onChange={(e) => handleChange("company", e.target.value)}
-                  className={`text-base ${errors.company ? "border-red-500" : ""}`}
-                  placeholder="Acme Corporation"
-                  aria-invalid={!!errors.company}
-                  aria-describedby={errors.company ? "company-error" : undefined}
-                />
-                {errors.company && (
-                  <p id="company-error" className="text-sm text-red-500">
-                    {errors.company}
-                  </p>
-                )}
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-base">
+                    Email Address *
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleChange("email", e.target.value)}
+                    className={`text-base ${errors.email ? "border-red-500" : ""}`}
+                    placeholder="john@company.com"
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                  />
+                  {errors.email && (
+                    <p id="email-error" className="text-sm text-red-500">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
 
-              <Button
-                type="submit"
-                className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  "Processing..."
-                ) : (
-                  <>
-                    <Download className="mr-2 h-4 w-4" />
-                    Download Whitepaper
-                  </>
-                )}
-              </Button>
+                <div className="space-y-2">
+                  <Label htmlFor="company" className="text-base">
+                    Company Name *
+                  </Label>
+                  <Input
+                    id="company"
+                    type="text"
+                    value={formData.company}
+                    onChange={(e) => handleChange("company", e.target.value)}
+                    className={`text-base ${errors.company ? "border-red-500" : ""}`}
+                    placeholder="Acme Corporation"
+                    aria-invalid={!!errors.company}
+                    aria-describedby={errors.company ? "company-error" : undefined}
+                  />
+                  {errors.company && (
+                    <p id="company-error" className="text-sm text-red-500">
+                      {errors.company}
+                    </p>
+                  )}
+                </div>
 
-              <p className="text-sm text-muted-foreground text-center">
-                By downloading, you agree to receive occasional updates from Intelleges about compliance solutions.
-              </p>
-            </form>
+                <Button
+                  type="submit"
+                  className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    "Processing..."
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Case Study
+                    </>
+                  )}
+                </Button>
+
+                <p className="text-sm text-muted-foreground text-center">
+                  By downloading, you agree to receive occasional updates from Intelleges about compliance solutions.
+                </p>
+              </form>
+            )}
           </>
         ) : (
           <div className="py-8 text-center space-y-4">
@@ -198,7 +257,7 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
             </div>
             <DialogTitle className="text-2xl font-light">Download Started!</DialogTitle>
             <DialogDescription className="text-base">
-              Your whitepaper is downloading now. Check your downloads folder.
+              Your case study is downloading now. Check your downloads folder.
             </DialogDescription>
           </div>
         )}
