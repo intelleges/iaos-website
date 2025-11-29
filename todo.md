@@ -62,3 +62,19 @@
 - [x] Search for client company logos
 - [x] Add logo grid to Trust Block section on homepage
 - [x] Ensure logos are grayscale/minimal to match aesthetic
+
+## Interactive Protocol Demos
+- [x] Create protocol demo component with modal/dialog
+- [x] Add sample Annual Reps & Certs questionnaire flow
+- [x] Add sample ITAR/EAR compliance questionnaire
+- [x] Add sample ESG questionnaire
+- [x] Show validation rules and required fields
+- [x] Display PDF output preview
+- [x] Add interactive elements (form fields, skip logic demo)
+
+## Pricing Page Update
+- [x] Rebuild pricing page with 4-tier structure (Bronze, Silver, Gold, Platinum)
+- [x] Add comprehensive comparison table
+- [x] Add FAQ section for plan selection
+- [x] Add comprehensive Add-Ons Library (10 categories)
+- [x] Maintain minimal aesthetic

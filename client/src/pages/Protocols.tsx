@@ -2,6 +2,7 @@ import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Check, FileCheck } from "lucide-react";
+import ProtocolDemo from "@/components/ProtocolDemo";
 
 export default function Protocols() {
   const protocolCategories = [
@@ -188,8 +189,47 @@ export default function Protocols() {
         </div>
       </section>
 
-      {/* Why Different */}
+      {/* Interactive Demos */}
       <section className="py-20">
+        <div className="container">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+                Try Interactive Protocol Demos
+              </h2>
+              <p className="text-lg text-muted-foreground font-light">
+                Click any protocol below to see how Intelleges collects, validates, and verifies supplier data.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              <ProtocolDemo
+                title="Annual Reps & Certs"
+                description="Collect annual representations and certifications required for government contracting"
+                category="Regulatory & Government Contracting"
+              />
+              <ProtocolDemo
+                title="ITAR/EAR Export Control"
+                description="Verify export control compliance for defense and dual-use items"
+                category="Regulatory & Government Contracting"
+              />
+              <ProtocolDemo
+                title="ESG & Sustainability"
+                description="Document environmental, social, and governance practices"
+                category="Risk, Security & Environmental"
+              />
+              <ProtocolDemo
+                title="ISO Quality Systems"
+                description="Verify supplier quality management system certifications"
+                category="Quality & Operational"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Different */}
+      <section className="py-20 bg-muted/30">
         <div className="container">
           <div className="max-w-4xl mx-auto space-y-12">
             <h2 className="text-3xl md:text-4xl font-light text-center tracking-tight">
