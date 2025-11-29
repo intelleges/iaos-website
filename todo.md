@@ -252,3 +252,11 @@
 - [x] Document common responsive issues and solutions
 - [x] Include accessibility considerations
 - [x] Add browser DevTools testing instructions
+
+## Client Login Page Layout Issues
+- [x] Investigate current login page layout problems
+- [x] Identified description text wrapping awkwardly (each word on separate line)
+- [x] Increased form container width from max-w-md to max-w-lg (448px → 512px)
+- [x] Added minimum width min-w-[320px] to prevent extreme narrowing
+- [x] Simplified description text to "Access your compliance dashboard."
+- [x] Verified clean layout at all screen sizes
