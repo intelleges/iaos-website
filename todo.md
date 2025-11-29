@@ -519,3 +519,14 @@
 - [x] Created short titles for all 9 services (e.g., "Supplier Data Collection")
 - [x] Updated modal to use shortTitle instead of full description
 - [x] Modal now shows clean titles like "Supplier Data Collection" instead of full descriptions
+
+## CRITICAL: Logo Sitting Lower Than Navigation
+- [x] Logo was appearing below the vertical centerline of navigation
+- [x] Found logo image file has massive whitespace below graphic (822x539px with content only in top portion)
+- [x] Added object-top class to shift logo content to top of container
+- [x] Logo now properly aligned with navigation items
+
+## Remove "Download" from Modal Title
+- [x] Modal title was showing "Download Supplier Data Collection"
+- [x] Now shows just "Supplier Data Collection"
+- [x] Updated EmailCaptureModal DialogTitle to remove "Download" prefix

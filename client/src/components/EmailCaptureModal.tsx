@@ -148,7 +148,7 @@ export default function EmailCaptureModal({
         {!isSubmitted ? (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-light">Download {resourceTitle}</DialogTitle>
+              <DialogTitle className="text-2xl font-light">{resourceTitle}</DialogTitle>
               <DialogDescription className="text-base">
                 Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.
               </DialogDescription>
