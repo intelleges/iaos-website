@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Download, Calendar, Mail, Phone } from "lucide-react";
 import { Link } from "wouter";
-import { InlineWidget } from "react-calendly";
 
 export default function ThankYou() {
   return (
@@ -79,17 +78,22 @@ export default function ThankYou() {
             </p>
           </div>
 
-          <Card className="border-2 shadow-lg overflow-hidden">
-            <CardContent className="p-0">
-              <InlineWidget
-                url="https://calendly.com/intelleges/discovery-call"
-                styles={{
-                  height: "700px",
-                  minWidth: "100%",
-                }}
-              />
-            </CardContent>
-          </Card>
+          <div className="flex justify-center">
+            <Button
+              size="lg"
+              className="text-lg px-8 py-6 h-auto"
+              asChild
+            >
+              <a
+                href="https://calendly.com/intelleges/discovery-call"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Schedule Your Free 30-Minute Consultation
+              </a>
+            </Button>
+          </div>
         </div>
       </section>
 

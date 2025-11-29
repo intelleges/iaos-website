@@ -603,3 +603,10 @@
 - [x] Ensure all body text meets 16px minimum (fixed 19 instances of text-sm and text-xs)
 - [x] Verify line height is 1.4-1.6 for body text (already set in global CSS)
 - [x] Check spacing between sections (24-32px) (already compliant)
+
+## Replace Calendly Inline Embed with Simple Link
+- [x] Remove InlineWidget component from Thank You page
+- [x] Replace with simple button that links to Calendly URL
+- [x] Keep "30 minutes free of charge" messaging
+- [x] Remove react-calendly import
+- [x] Test button link opens Calendly in new tab
