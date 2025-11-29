@@ -39,10 +39,26 @@ export default function Contact() {
                 <MapPin className="h-5 w-5 text-foreground" />
               </div>
               <div>
-                <h3 className="font-medium">Office</h3>
+                <h3 className="font-medium">Intelleges Headquarters</h3>
                 <p className="text-muted-foreground">
-                  123 Compliance Way<br />
-                  Washington, DC 20001
+                  3755 River Road<br />
+                  Lumberville, PA 18933<br />
+                  USA
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted">
+                <MapPin className="h-5 w-5 text-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium">Global Office</h3>
+                <p className="text-muted-foreground">
+                  Hyatt Residences Andares<br />
+                  Puerta de Hierro 5065, Piso 33, Depto. 3304<br />
+                  Zapopan, Jalisco, C.P. 45116<br />
+                  MEXICO
                 </p>
               </div>
             </div>
