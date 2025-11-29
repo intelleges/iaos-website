@@ -11,46 +11,55 @@ export default function Header() {
   const navItems = [
     { name: "Features", href: "/#features" },
     { name: "Solutions", href: "/#solutions" },
-    { name: "Case Studies", href: "/case-studies" },
+    { name: "Industries", href: "/#industries" },
     { name: "Resources", href: "/resources" },
     { name: "Pricing", href: "/pricing" },
     { name: "Contact", href: "/contact" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
+      <div className="container flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <img src="/logo.png" alt="Intelleges" className="h-[13rem] w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden lg:flex items-center gap-10">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-foreground cursor-pointer",
+                "text-sm font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
                 location === item.href ? "text-foreground" : "text-muted-foreground"
               )}
             >
               {item.name}
             </Link>
           ))}
+        </nav>
+
+        {/* Trust Markers & CTA */}
+        <div className="hidden lg:flex items-center gap-8">
+          <div className="text-xs font-light text-muted-foreground tracking-wide">
+            ISO 27001 Certified · Battelle Supplier of the Year
+          </div>
           <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer">
-            <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" className="text-sm font-light text-muted-foreground hover:text-foreground">
               Client Login
             </Button>
           </a>
           <Link href="/contact">
-            <Button size="sm" className="rounded-full px-6">Get Started</Button>
+            <Button variant="outline" size="sm" className="rounded-full px-6 font-light border-muted-foreground/30 hover:border-foreground">
+              Get Started
+            </Button>
           </Link>
-        </nav>
+        </div>
 
         {/* Mobile Menu Toggle */}
         <button 
-          className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+          className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -59,25 +68,28 @@ export default function Header() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-border/40 bg-background">
-          <div className="container py-4 flex flex-col gap-4">
+        <div className="lg:hidden border-t border-border/20 bg-background">
+          <div className="container py-6 flex flex-col gap-4">
             {navItems.map((item) => (
               <Link 
                 key={item.name} 
                 href={item.href}
-                className="text-sm font-medium py-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                className="text-sm font-light py-2 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
+            <div className="text-xs font-light text-muted-foreground tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
+              ISO 27001 Certified · Battelle Supplier of the Year
+            </div>
             <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer" className="w-full">
-              <Button variant="outline" className="w-full rounded-full" onClick={() => setIsMenuOpen(false)}>
+              <Button variant="ghost" className="w-full rounded-full font-light" onClick={() => setIsMenuOpen(false)}>
                 Client Login
               </Button>
             </a>
             <Link href="/contact">
-              <Button className="w-full rounded-full mt-2" onClick={() => setIsMenuOpen(false)}>
+              <Button variant="outline" className="w-full rounded-full mt-2 font-light" onClick={() => setIsMenuOpen(false)}>
                 Get Started
               </Button>
             </Link>

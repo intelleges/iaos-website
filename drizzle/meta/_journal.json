@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1764398203636,
+      "tag": "0000_same_black_knight",
+      "breakpoints": true
+    }
+  ]
+}

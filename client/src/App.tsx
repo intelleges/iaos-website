@@ -11,8 +11,8 @@ import Resources from "@/pages/Resources";
 import NotFound from "@/pages/not-found";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans antialiased">
       <Header />
