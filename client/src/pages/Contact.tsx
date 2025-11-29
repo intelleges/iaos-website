@@ -1,9 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { InlineWidget } from "react-calendly";
 
 export default function Contact() {
   return (
@@ -52,49 +49,20 @@ export default function Contact() {
           </div>
         </div>
         
-        <Card className="border-border/60 shadow-sm">
+        <Card className="border-border/60 shadow-sm overflow-hidden">
           <CardHeader>
-            <CardTitle>Send us a message</CardTitle>
+            <CardTitle>Book a Demo</CardTitle>
             <CardDescription>
-              Fill out the form below and we'll get back to you within 24 hours.
+              Schedule a 30-minute call with our compliance experts.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form className="space-y-6">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="first-name">First name</Label>
-                  <Input id="first-name" placeholder="Jane" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="last-name">Last name</Label>
-                  <Input id="last-name" placeholder="Doe" />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="jane@company.com" />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
-                <Input id="company" placeholder="Acme Inc." />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="message">Message</Label>
-                <Textarea 
-                  id="message" 
-                  placeholder="Tell us about your compliance needs..." 
-                  className="min-h-[120px]"
-                />
-              </div>
-              
-              <Button type="submit" className="w-full">
-                Send Message
-              </Button>
-            </form>
+          <CardContent className="p-0">
+            <div className="h-[600px] w-full">
+              <InlineWidget 
+                url="https://calendly.com/app/scheduling/meeting_types/user/me" 
+                styles={{ height: '100%', width: '100%' }}
+              />
+            </div>
           </CardContent>
         </Card>
       </div>
