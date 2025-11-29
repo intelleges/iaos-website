@@ -31,8 +31,8 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/#features" className="hover:text-foreground transition-colors cursor-pointer">Features</Link></li>
               <li><Link href="/#solutions" className="hover:text-foreground transition-colors cursor-pointer">Solutions</Link></li>
+              <li><Link href="/case-studies" className="hover:text-foreground transition-colors cursor-pointer">Case Studies</Link></li>
               <li><Link href="/pricing" className="hover:text-foreground transition-colors cursor-pointer">Pricing</Link></li>
-              <li><Link href="/#integrations" className="hover:text-foreground transition-colors cursor-pointer">Integrations</Link></li>
             </ul>
           </div>
           
