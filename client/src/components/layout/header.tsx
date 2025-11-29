@@ -35,7 +35,7 @@ export default function Header() {
       )}>
         <Link href="/" className="flex items-center gap-2">
           {/* Full logo on desktop/tablet (768px+) */}
-          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-[136px] w-auto" />
+          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-[136px] w-auto self-center" />
           {/* Favicon on mobile (below 768px) */}
           <img src="/favicon.png" alt="Intelleges" className="block md:hidden h-28 w-28" />
         </Link>

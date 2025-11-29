@@ -6,6 +6,7 @@ import { Check, FileText, Download } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
+import { serviceDocuments, getServiceDocumentByTitle } from "@/config/serviceDocuments";
 import { useState } from "react";
 import {
   Tooltip,
@@ -23,12 +24,23 @@ export default function Home() {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; filename: string } | null>(null);
+  
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<{ title: string; pdfPath: string; fileName: string } | null>(null);
 
   const handleProtocolClick = (protocolName: string) => {
     const caseStudy = protocolCaseStudies[protocolName];
     if (caseStudy) {
       setSelectedProtocol(caseStudy);
       setIsModalOpen(true);
+    }
+  };
+
+  const handleServiceClick = (serviceTitle: string) => {
+    const serviceDoc = getServiceDocumentByTitle(serviceTitle);
+    if (serviceDoc) {
+      setSelectedService(serviceDoc);
+      setIsServiceModalOpen(true);
     }
   };
 
@@ -144,13 +156,21 @@ export default function Home() {
                 "Track expirations, risk indicators, and quality data",
                 "Produce audit-ready documentation automatically"
               ].map((item, i) => (
-                <div 
-                  key={i} 
-                  className="flex items-start gap-3 p-4 rounded-lg border border-border/40 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-primary/30 cursor-default group"
-                >
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-all duration-300 group-hover:scale-110" />
-                  <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal">{item}</span>
-                </div>
+                <Tooltip key={i}>
+                  <TooltipTrigger asChild>
+                    <div 
+                      onClick={() => handleServiceClick(item)}
+                      className="flex items-start gap-3 p-4 rounded-lg border border-border/40 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-primary/30 cursor-pointer group"
+                    >
+                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-all duration-300 group-hover:scale-110" />
+                      <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal flex-1">{item}</span>
+                      <Download className="h-4 w-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Click to download service overview</p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </div>
             
@@ -331,13 +351,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Email Capture Modal */}
+      {/* Email Capture Modal for Protocols */}
       {selectedProtocol && (
         <EmailCaptureModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           downloadUrl={`/case-studies/${selectedProtocol.filename}`}
           resourceTitle={selectedProtocol.title}
+        />
+      )}
+
+      {/* Email Capture Modal for Service Documents */}
+      {selectedService && (
+        <EmailCaptureModal
+          isOpen={isServiceModalOpen}
+          onClose={() => setIsServiceModalOpen(false)}
+          downloadUrl={selectedService.pdfPath}
+          resourceTitle={selectedService.title}
         />
       )}
       </div>

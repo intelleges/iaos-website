@@ -471,3 +471,21 @@
 - [x] Changed from inline-block with pb-1 to inline-flex items-center
 - [x] Ensure all elements (logo, nav, certification, buttons) are truly centered
 - [x] Test alignment at all breakpoints
+
+## Fix Header Vertical Alignment (Critical)
+- [x] Investigate why logo and navigation are not vertically centered
+- [x] Added self-center class to logo image
+- [x] Ensure logo is vertically centered in container
+- [x] Ensure navigation items are vertically centered in container
+- [x] Test alignment at all breakpoints
+
+## Add Service Document Downloads
+- [x] Convert 9 service DOCX files to PDF format
+- [x] Organize PDFs in /client/public/service-documents/ directory
+- [x] Create service-to-document mapping configuration (serviceDocuments.ts)
+- [x] Add tooltips to "What Intelleges Does" service items
+- [x] Make service items clickable to trigger email capture
+- [x] Integrate with existing EmailCaptureModal component
+- [x] Add download icon that appears on hover
+- [x] Add hover indicators (cursor pointer, scale, shadow, border highlight)
+- [x] Test complete download flow (click → email capture → PDF delivery)
