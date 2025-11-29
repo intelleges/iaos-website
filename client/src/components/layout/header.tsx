@@ -38,13 +38,13 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-4 xl:gap-10">
+        <nav className="hidden xl:flex items-center gap-10">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-sm lg:text-sm xl:text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
+                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
                 location === item.href ? "text-foreground" : "text-muted-foreground"
               )}
             >
@@ -54,8 +54,8 @@ export default function Header() {
         </nav>
 
         {/* Trust Markers & CTA */}
-        <div className="hidden lg:flex items-center gap-3 xl:gap-8">
-          <div className="hidden xl:block text-base font-semibold text-primary tracking-wide whitespace-nowrap">
+        <div className="hidden xl:flex items-center gap-8">
+          <div className="text-base font-semibold text-primary tracking-wide whitespace-nowrap">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
@@ -72,7 +72,7 @@ export default function Header() {
 
         {/* Mobile Menu Toggle */}
         <button 
-          className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
+          className="xl:hidden p-2 text-muted-foreground hover:text-foreground"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

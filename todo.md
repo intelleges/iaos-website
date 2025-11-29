@@ -299,3 +299,28 @@
 - [x] Add shadow and border highlight effects (shadow-lg, border-primary/30)
 - [x] Add smooth transition effects (300ms)
 - [x] Add cursor pointer for better UX
+
+## Header Layout Bug - Logo Disappearing and Overlap
+- [x] Fix logo disappearing at certain breakpoints
+- [x] Changed breakpoint strategy: hamburger menu shows below xl (< 1280px)
+- [x] Desktop navigation only shows at xl (≥ 1280px) with trust markers
+- [x] Logo scales appropriately: h-8 (mobile) → h-10 (lg) → h-12 (xl)
+- [x] Verified no overlap between any header elements at all breakpoints
+
+## Case Study PDFs Organization
+- [x] Extract 16 case study PDFs from ZIP file
+- [x] Convert DOCX files to PDF format using LibreOffice
+- [x] Organize PDFs in /client/public/case-studies/ directory (1.6MB total)
+- [x] Create protocol-to-case-study mapping configuration (protocolCaseStudies.ts)
+- [ ] Update protocol cards with hyperlinks to case studies
+- [ ] Integrate with email capture modal for protected downloads
+
+## Download Protection System
+- [ ] Create database schema for download tracking (email, IP, timestamp, resource)
+- [ ] Implement email verification before downloads
+- [ ] Add rate limiting: max 3 downloads per email address
+- [ ] Add rate limiting: max 3 downloads per IP address
+- [ ] Store download records in database for persistent tracking
+- [ ] Show clear error messages when limits are reached
+- [ ] Update EmailCaptureModal to handle verification flow
+- [ ] Test download protection with multiple scenarios
