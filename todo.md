@@ -425,3 +425,10 @@
 - [x] Adjust header container height to accommodate larger logo (h-32 to h-36)
 - [x] Ensure logo is clearly visible and prominent
 - [x] Verify layout remains responsive and doesn't break
+
+## Increase Logo by 30%
+- [x] Increase logo from h-32 (128px) to h-42 (168px) - 30% larger
+- [x] Adjust header container to h-42 to h-48 to accommodate larger logo
+- [x] Increase mobile favicon proportionally to h-28
+- [x] Verify no distortion occurs (w-auto maintains aspect ratio)
+- [x] Test responsive layout remains intact
