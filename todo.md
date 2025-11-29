@@ -595,3 +595,11 @@
 - [x] Add "Back to Resource Library" link
 - [x] Update EmailCaptureModal to redirect to /thank-you after Executive Summary download
 - [x] Test complete user flow from Resources → Email Capture → Thank You → Calendly
+
+## Fix Readability Issues on Resources and Thank You Pages
+- [x] Fix "What You'll Learn" section text from text-sm (14px) to text-base (16px)
+- [x] Audit all card text sizes on Resources page
+- [x] Audit all text sizes on Thank You page
+- [x] Ensure all body text meets 16px minimum (fixed 19 instances of text-sm and text-xs)
+- [x] Verify line height is 1.4-1.6 for body text (already set in global CSS)
+- [x] Check spacing between sections (24-32px) (already compliant)

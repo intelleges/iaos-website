@@ -58,15 +58,15 @@ export default function Resources() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold mb-2">Executive Summary</h2>
-                <p className="text-sm text-muted-foreground">3 pages • 5 minute read</p>
+                <p className="text-base text-muted-foreground">3 pages • 5 minute read</p>
               </div>
             </div>
 
-            <p className="text-muted-foreground mb-4 text-sm">
+            <p className="text-muted-foreground mb-4 text-base">
               Quick Overview for Busy Executives
             </p>
 
-            <ul className="space-y-2 mb-6 text-sm text-muted-foreground flex-1">
+            <ul className="space-y-2 mb-6 text-base text-muted-foreground flex-1">
               <li>• Fast explanation of what Intelleges does</li>
               <li>• High-level workflow diagrams</li>
               <li>• Top 10 value points for compliance teams</li>
@@ -84,7 +84,7 @@ export default function Resources() {
 
           {/* Card 2: Full Whitepaper with Calendly */}
           <Card className="p-8 hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/50 relative overflow-hidden flex flex-col">
-            <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+            <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-base font-semibold px-3 py-1 rounded-full">
               PREMIUM
             </div>
 
@@ -94,15 +94,15 @@ export default function Resources() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold mb-2">Full Whitepaper</h2>
-                <p className="text-sm text-muted-foreground">15 pages • Complete guide</p>
+                <p className="text-base text-muted-foreground">15 pages • Complete guide</p>
               </div>
             </div>
 
-            <p className="text-muted-foreground mb-4 text-sm">
+            <p className="text-muted-foreground mb-4 text-base">
               Complete Platform Architecture Guide & Case Studies
             </p>
 
-            <ul className="space-y-2 mb-6 text-sm text-muted-foreground flex-1">
+            <ul className="space-y-2 mb-6 text-base text-muted-foreground flex-1">
               <li>• Full explanation of modules & capabilities</li>
               <li>• Architecture overview</li>
               <li>• All 17 case studies included</li>
@@ -120,7 +120,7 @@ export default function Resources() {
                   <Calendar className="mr-2 h-5 w-5" />
                   Get Full Guide & Book Discovery Call
                 </Button>
-                <p className="text-sm text-muted-foreground mt-4 text-center">
+                <p className="text-base text-muted-foreground mt-4 text-center">
                   Prefer to talk now? Call{" "}
                   <a href="tel:+19178180225" className="text-primary hover:underline font-semibold">
                     (917) 818-0225
@@ -145,15 +145,15 @@ export default function Resources() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold mb-2">Contact Sales</h2>
-                <p className="text-sm text-muted-foreground">Talk with an expert</p>
+                <p className="text-base text-muted-foreground">Talk with an expert</p>
               </div>
             </div>
 
-            <p className="text-muted-foreground mb-4 text-sm">
+            <p className="text-muted-foreground mb-4 text-base">
               Talk with an Intelleges Expert
             </p>
 
-            <ul className="space-y-2 mb-6 text-sm text-muted-foreground flex-1">
+            <ul className="space-y-2 mb-6 text-base text-muted-foreground flex-1">
               <li>• For enterprise buyers who dislike scheduling apps</li>
               <li>• For urgent compliance or audit needs</li>
               <li>• For onboarding procurement teams</li>
@@ -196,7 +196,7 @@ export default function Resources() {
           <Card className="p-6">
             <div className="flex items-start gap-3">
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-              <p className="text-sm">
+              <p className="text-base">
                 How to structure supplier compliance workflows
               </p>
             </div>
@@ -204,7 +204,7 @@ export default function Resources() {
           <Card className="p-6">
             <div className="flex items-start gap-3">
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-              <p className="text-sm">
+              <p className="text-base">
                 How Intelleges supports FOIC, eSRS, CMMC, and audit readiness
               </p>
             </div>
@@ -212,7 +212,7 @@ export default function Resources() {
           <Card className="p-6">
             <div className="flex items-start gap-3">
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-              <p className="text-sm">
+              <p className="text-base">
                 How procurement uses Intelleges for buyer training
               </p>
             </div>
@@ -220,7 +220,7 @@ export default function Resources() {
           <Card className="p-6">
             <div className="flex items-start gap-3">
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-              <p className="text-sm">
+              <p className="text-base">
                 How compliance teams reduce risk and documentation errors
               </p>
             </div>
@@ -228,7 +228,7 @@ export default function Resources() {
           <Card className="p-6">
             <div className="flex items-start gap-3">
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-              <p className="text-sm">
+              <p className="text-base">
                 How national labs & aerospace manufacturers operationalize supplier oversight
               </p>
             </div>
@@ -236,7 +236,7 @@ export default function Resources() {
           <Card className="p-6">
             <div className="flex items-start gap-3">
               <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-              <p className="text-sm">
+              <p className="text-base">
                 How case studies map to your industry
               </p>
             </div>
@@ -248,7 +248,7 @@ export default function Resources() {
       <section className="container pb-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-base font-semibold mb-4">
               <Lock className="h-4 w-4" />
               Included with your consultation
             </div>
@@ -290,19 +290,19 @@ export default function Resources() {
                   <Lock className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-semibold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-semibold text-base">
                     {String(caseStudy.number).padStart(2, '0')}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm mb-1 line-clamp-2">
+                    <h3 className="font-semibold text-base mb-1 line-clamp-2">
                       {caseStudy.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-base text-muted-foreground">
                       {caseStudy.industry}
                     </p>
                   </div>
                 </div>
-                <div className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">
+                <div className="text-base text-muted-foreground bg-muted/50 px-2 py-1 rounded">
                   Included with your consultation
                 </div>
               </Card>
