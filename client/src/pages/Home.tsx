@@ -26,7 +26,7 @@ export default function Home() {
   const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; filename: string } | null>(null);
   
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<{ title: string; pdfPath: string; fileName: string } | null>(null);
+  const [selectedService, setSelectedService] = useState<{ title: string; shortTitle: string; pdfPath: string; fileName: string } | null>(null);
 
   const handleProtocolClick = (protocolName: string) => {
     const caseStudy = protocolCaseStudies[protocolName];
@@ -367,7 +367,7 @@ export default function Home() {
           isOpen={isServiceModalOpen}
           onClose={() => setIsServiceModalOpen(false)}
           downloadUrl={selectedService.pdfPath}
-          resourceTitle={selectedService.title}
+          resourceTitle={selectedService.shortTitle}
           resourceType="service-overview"
         />
       )}

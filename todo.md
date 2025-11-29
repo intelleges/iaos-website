@@ -505,3 +505,17 @@
 - [x] Pass resourceType="service-overview" for service documents
 - [x] Button now shows "Download Service Overview" for services
 - [x] Success message now says "service overview" instead of "case study"
+
+## CRITICAL: Fix Header Vertical Alignment (STILL BROKEN)
+- [x] Logo was sitting HIGHER than navigation/buttons/certification text
+- [x] Root cause: Fixed height (h-[136px]) prevented proper flex centering
+- [x] Solution: Removed fixed height, used py-4 padding instead
+- [x] Reduced logo from 136px to 120px for better proportions
+- [x] All elements now on exact same vertical centerline
+
+## Fix Service Modal Title
+- [x] Title was showing "Download Collect supplier data and documentation" (too long)
+- [x] Added shortTitle field to ServiceDocument interface
+- [x] Created short titles for all 9 services (e.g., "Supplier Data Collection")
+- [x] Updated modal to use shortTitle instead of full description
+- [x] Modal now shows clean titles like "Supplier Data Collection" instead of full descriptions
