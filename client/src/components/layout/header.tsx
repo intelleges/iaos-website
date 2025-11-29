@@ -25,7 +25,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-10">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-10">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
@@ -41,8 +41,8 @@ export default function Header() {
         </nav>
 
         {/* Trust Markers & CTA */}
-        <div className="hidden lg:flex items-center gap-8">
-          <div className="text-base font-semibold text-primary tracking-wide">
+        <div className="hidden lg:flex items-center gap-3 xl:gap-8">
+          <div className="hidden xl:block text-base font-semibold text-primary tracking-wide whitespace-nowrap">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
           <Link href="/login">
