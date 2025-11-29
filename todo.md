@@ -530,3 +530,10 @@
 - [x] Modal title was showing "Download Supplier Data Collection"
 - [x] Now shows just "Supplier Data Collection"
 - [x] Updated EmailCaptureModal DialogTitle to remove "Download" prefix
+
+## CRITICAL: Logo STILL Not Aligned (object-top made it WORSE)
+- [x] Logo was sitting HIGHER than navigation in preview
+- [x] object-top pushed logo content to top, making misalignment worse
+- [x] Removed object-top class
+- [x] Added mt-3 (12px margin-top) to push logo DOWN
+- [x] Logo now properly aligned with navigation items
