@@ -37,8 +37,8 @@ export default function Header() {
               {item.name}
             </Link>
           ))}
-          <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer">
-            <Button variant="ghost" size="sm" className="rounded-full px-4 text-muted-foreground hover:text-foreground">
+          <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer">
+            <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-foreground">
               Client Login
             </Button>
           </a>
@@ -70,7 +70,7 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
-            <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer" className="w-full">
+            <a href="https://iaos-compliance-platform-production.up.railway.app/" target="_blank" rel="noopener noreferrer" className="w-full">
               <Button variant="outline" className="w-full rounded-full" onClick={() => setIsMenuOpen(false)}>
                 Client Login
               </Button>

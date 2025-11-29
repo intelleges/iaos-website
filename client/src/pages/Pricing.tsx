@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import ROICalculator from "@/components/sections/pricing/roi-calculator";
 
 const tiers = [
   {
@@ -56,7 +57,7 @@ export default function Pricing() {
         </p>
       </div>
       
-      <div className="grid gap-8 md:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-3 mb-24">
         {tiers.map((tier) => (
           <Card key={tier.name} className={`flex flex-col ${tier.popular ? 'border-emerald-500 shadow-md relative' : 'border-border/60'}`}>
             {tier.popular && (
@@ -90,6 +91,8 @@ export default function Pricing() {
           </Card>
         ))}
       </div>
+      
+      <ROICalculator />
     </div>
   );
 }
