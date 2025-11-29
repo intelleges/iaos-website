@@ -29,3 +29,10 @@
 - [x] Add SSO buttons for Google, Microsoft, and Okta
 - [x] Add dark blue gradient background matching mockup
 - [x] Add "Supplier Help" and "Contact Support" links
+
+## Login Page Redesign
+- [x] Redesign login page to match homepage minimal aesthetic
+- [x] Remove duplicate logo (keep only header logo)
+- [x] Use light background matching homepage
+- [x] Simplify to text-focused design
+- [x] Maintain Scandinavian/Japanese minimal style
