@@ -369,3 +369,9 @@
 - [x] Navigation text: 16px (text-base = correct)
 - [x] Button text: 16px (text-base = correct)
 - [x] Test that nothing gets smaller, only elements hide progressively
+
+## Restore Original Logo Size
+- [x] Change logo from h-16 (64px) back to h-[13rem] (208px) - the ORIGINAL size
+- [x] Keep logo at h-[13rem] at ALL breakpoints - NEVER reduce
+- [x] Ensure favicon is also h-[13rem] when it replaces the full logo
+- [x] Verify header container can accommodate the large logo properly (h-[15rem])
