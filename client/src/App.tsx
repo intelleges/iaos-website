@@ -4,6 +4,10 @@ import { HelmetProvider } from "react-helmet-async";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
+import Protocols from "@/pages/Protocols";
+import About from "@/pages/About";
+import Product from "@/pages/Product";
+import SupplierOnboarding from "@/pages/SupplierOnboarding";
 import Pricing from "@/pages/Pricing";
 import Contact from "@/pages/Contact";
 import CaseStudies from "@/pages/CaseStudies";
@@ -20,6 +24,10 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/protocols" component={Protocols} />
+          <Route path="/about" component={About} />
+          <Route path="/product" component={Product} />
+          <Route path="/supplier-onboarding" component={SupplierOnboarding} />
           <Route path="/case-studies" component={CaseStudies} />
           <Route path="/pricing" component={Pricing} />
           <Route path="/resources" component={Resources} />
