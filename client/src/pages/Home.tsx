@@ -1,6 +1,7 @@
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { Check, FileText, Download } from "lucide-react";
 
 export default function Home() {
   return (
@@ -13,25 +14,24 @@ export default function Home() {
       {/* Hero Section */}
       <section className="py-20 md:py-32">
         <div className="container">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h1 className="text-5xl md:text-7xl font-light tracking-tight">
-              Intelleges makes data & document collection{" "}
-              <span className="font-normal">simple.</span>
-              <br />
+          <div className="max-w-5xl mx-auto text-center space-y-8">
+            <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-tight">
+              Intelleges makes data &<br />
+              document collection simple.<br />
               <span className="text-muted-foreground">Easy. A no-brainer.</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-4xl mx-auto">
               Enterprise compliance depends on information. Intelleges gets it all cleanly, automatically, and on time — without email chains, spreadsheets, or chasing suppliers.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Link href="/contact">
-                <Button size="lg" className="rounded-full px-8 text-base">
+                <Button size="lg" className="rounded-full px-8 font-light">
                   Book a Demo
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="rounded-full px-8 text-base font-light">
+              <Button size="lg" variant="outline" className="rounded-full px-8 font-light">
                 Watch 2-Minute Overview
               </Button>
             </div>
@@ -43,149 +43,174 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5-Step Process Section */}
+      {/* Trust Block - 25 Years */}
       <section className="py-20 bg-muted/30">
         <div className="container">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center space-y-4 mb-16">
-              <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-                How Intelleges Works
-              </h2>
-              <p className="text-xl text-muted-foreground font-light">
-                A five-step process designed for speed, clarity, and zero frustration.
-              </p>
-            </div>
+          <div className="max-w-4xl mx-auto space-y-8">
+            <h2 className="text-3xl md:text-4xl font-light text-center tracking-tight">
+              25 Years of Expertise
+            </h2>
             
-            <div className="rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src="/5-step-process.png" 
-                alt="5-Step Process: Pick the Protocol, Load Your Suppliers, Use Our Compliant Templates, Collect Automatically, Track & Monitor Compliance" 
-                className="w-full h-auto"
-              />
+            <div className="space-y-6 text-center">
+              <p className="text-lg text-muted-foreground font-light leading-relaxed">
+                For 25 years, Intelleges has helped the world's most demanding organizations build and maintain their enterprise compliance systems.
+              </p>
+              
+              <p className="text-base text-muted-foreground font-light leading-relaxed">
+                We've supported programs for: <strong className="font-normal text-foreground">Honeywell Aerospace, Battelle, Celestica, Con Edison, Becton Dickinson, Memorial Sloan Kettering, Sanofi-Aventis, Hoffmann-La Roche, JP Morgan Chase, and the U.S. Department of Defense.</strong>
+              </p>
+              
+              <p className="text-base text-muted-foreground font-light leading-relaxed">
+                Intelleges is <strong className="font-normal text-foreground">ISO 27001 certified</strong> and was named <strong className="font-normal text-foreground">Battelle Supplier of the Year</strong> for excellence in national security–related compliance systems.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Data Collection is Broken */}
+      {/* What Intelleges Does */}
       <section className="py-20">
         <div className="container">
-          <div className="max-w-4xl mx-auto text-center space-y-12">
-            <div className="space-y-4">
-              <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-                Why Data Collection is Broken
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-6">
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+                What Intelleges Does
               </h2>
-              <p className="text-2xl text-muted-foreground font-light">
-                Data is power — but collecting it is pain.
+              <p className="text-xl text-muted-foreground font-light leading-relaxed max-w-3xl mx-auto">
+                Intelleges is the unified platform enterprises use to collect, validate, and analyze the information they need to make confident, compliant, and risk-aware decisions.
               </p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-left">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                "Suppliers ignore emails",
-                "Employees miss deadlines",
-                "Documents expire without warning",
-                "Data is incomplete or inconsistent",
-                "Information is scattered",
-                "Spreadsheets multiply",
-                "Audits become fire drills",
-                "No one knows what's missing"
-              ].map((problem, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="w-2 h-2 rounded-full bg-destructive/60" />
-                  <p className="text-sm font-light text-muted-foreground">{problem}</p>
+                "Collect supplier data and documentation",
+                "Validate and verify information",
+                "Manage compliance workflows",
+                "Vet domestic and foreign suppliers",
+                "Support offshoring, nearshoring, and re-shoring transitions",
+                "Conduct investigations & due diligence",
+                "Perform environmental scans & regional assessments",
+                "Track expirations, risk indicators, and quality data",
+                "Produce audit-ready documentation automatically"
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3 p-4 rounded-lg border border-border/40">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-sm font-light">{item}</span>
                 </div>
               ))}
             </div>
             
-            <p className="text-xl font-light pt-8">
-              Intelleges eliminates the bottleneck at the source — the collection process itself.
-            </p>
+            <div className="text-center space-y-2 pt-8">
+              <p className="text-2xl font-light">One platform. Every requirement.</p>
+              <p className="text-xl text-muted-foreground font-light">Collect. Validate. Decide.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* What You Can Collect */}
+      {/* Protocols Section */}
       <section className="py-20 bg-muted/30">
         <div className="container">
           <div className="max-w-5xl mx-auto space-y-12">
-            <div className="text-center space-y-4">
-              <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-                The Simplest Way to Collect Data & Documents
+            <div className="text-center space-y-6">
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+                Protocols
               </h2>
-              <p className="text-xl text-muted-foreground font-light">
-                Intelleges is the modern platform enterprises use to collect:
+              <p className="text-lg text-muted-foreground font-light leading-relaxed max-w-3xl mx-auto">
+                Intelleges provides a library of always-up-to-date, audit-ready protocols that evolve automatically with changes to Executive Orders, FAR/DFARS, USMCA, BAA, ITAR/EAR, eSRS, ESG, and other regulatory frameworks.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                "Annual Reps & Certs",
-                "Buy America Act documentation",
-                "ESG disclosures & sustainability data",
-                "eSRS reporting information",
-                "ITAR/EAR regulatory declarations",
-                "Certificates of Insurance (COI)",
+                "Annual Reps & Certifications",
+                "Buy America Act",
+                "ESG & Sustainability",
+                "eSRS Reporting",
+                "ITAR/EAR",
+                "Certificates of Insurance",
+                "Product Conformance",
                 "Purchase Order Delays & Delivery Forecasts",
-                "Product Conformance documentation",
-                "Supplier safety, quality, and environmental data",
-                "Subcontractor & 2nd/3rd-tier attestations",
-                "Risk, compliance, and audit evidence"
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3 p-4 rounded-lg bg-background/50">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
-                  <p className="text-sm font-light">{item}</p>
+                "Foreign Supplier Verification",
+                "Offshoring / Nearshoring Transitions",
+                "Investigations & Due Diligence",
+                "Environmental Scans & Regional Profiling",
+                "Quality Systems (ISO, AS9100, GMP)",
+                "Conflict Minerals",
+                "Counterfeit Parts Prevention",
+                "Site Security (C-TPAT / CFATS)"
+              ].map((protocol, i) => (
+                <div key={i} className="p-4 rounded-lg border border-border/40 bg-background">
+                  <p className="text-sm font-light">{protocol}</p>
                 </div>
               ))}
             </div>
             
-            <p className="text-center text-muted-foreground font-light">
-              …and much more — all in one clean, automated workflow.
-            </p>
+            <div className="text-center pt-8">
+              <p className="text-xl font-light">Just pick a protocol — Intelleges handles the rest.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Why Intelleges */}
+      {/* How Intelleges Works - 6 Steps */}
       <section className="py-20">
         <div className="container">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-light tracking-tight text-center mb-16">
-              Why Intelleges
-            </h2>
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-6">
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+                How Intelleges Works
+              </h2>
+              <p className="text-xl text-muted-foreground font-light">
+                Simple. Reliable. Audit-ready.
+              </p>
+            </div>
             
-            <div className="grid md:grid-cols-3 gap-12">
+            <div className="space-y-8">
               {[
                 {
-                  title: "Simple",
-                  description: "One platform. One workflow. One source of truth."
+                  step: "Step 1",
+                  title: "Pick a Protocol",
+                  description: "Choose from our library of compliance, supplier vetting, regional, and due-diligence protocols."
                 },
                 {
-                  title: "Fast",
-                  description: "Collect everything in days — not months."
+                  step: "Step 2",
+                  title: "Use Our Audit-Proof Templates",
+                  description: "Intelleges provides secure, electronic, regulatory-compliant templates with built-in data validation, skip logic, conditional branching, required document rules, expiration tracking, and regulatory references. Templates update automatically as regulations change."
                 },
                 {
-                  title: "Reliable",
-                  description: "Audit-ready. Secure. Regulatory-aware."
+                  step: "Step 3",
+                  title: "Add Suppliers, Buyers & Reviewers",
+                  description: "Upload suppliers via spreadsheet, ERP sync, or manual entry. Assign internal compliance personnel in minutes."
                 },
                 {
-                  title: "Enterprise-Friendly",
-                  description: "Built for aerospace, defense, healthcare, manufacturing, government contractors, and complex supply chains."
+                  step: "Step 4",
+                  title: "Automated Invitations, Reminders & Confirmations",
+                  description: "Intelleges sends everything automatically — invitations, reminders, follow-ups, and confirmations — for 10 suppliers or 10,000."
                 },
                 {
-                  title: "Supplier-Friendly",
-                  description: "No login required. No confusion. No friction."
+                  step: "Step 5",
+                  title: "Track Global Responses in Real Time",
+                  description: "Monitor responses, non-responses, bounced emails, missing items, expirations, risk indicators, supplier scores, and delivery performance from a single dashboard."
                 },
                 {
-                  title: "Always Current",
-                  description: "Templates updated with regulatory changes automatically."
+                  step: "Step 6",
+                  title: "Generate Audit-Ready PDF Packages",
+                  description: "Every completed protocol produces a fully time-stamped, signature-verified, audit-proof PDF containing all responses and documentation."
                 }
-              ].map((benefit, i) => (
-                <div key={i} className="space-y-3">
-                  <h3 className="text-xl font-normal">{benefit.title}</h3>
-                  <p className="text-sm font-light text-muted-foreground leading-relaxed">
-                    {benefit.description}
-                  </p>
+              ].map((item, i) => (
+                <div key={i} className="flex gap-6 p-6 rounded-lg border border-border/40">
+                  <div className="shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-lg font-light text-primary">{i + 1}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-normal">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -193,29 +218,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* Whitepaper CTA */}
       <section className="py-20 bg-muted/30">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-              Make data & document collection{" "}
-              <span className="font-normal">simple.</span>
-              <br />
-              <span className="text-muted-foreground">Easy. A no-brainer.</span>
-            </h2>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link href="/contact">
-                <Button size="lg" className="rounded-full px-8">
-                  Book a Demo
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button size="lg" variant="outline" className="rounded-full px-8 font-light">
-                  Talk to Sales
-                </Button>
-              </Link>
+            <div className="flex justify-center">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <FileText className="h-8 w-8 text-primary" />
+              </div>
             </div>
+            
+            <div className="space-y-4">
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+                Download the Free Whitepaper
+              </h2>
+              <p className="text-xl font-normal">
+                "The Hidden Cost of Supplier Compliance — And How Automation Fixes It."
+              </p>
+              <p className="text-lg text-muted-foreground font-light leading-relaxed">
+                Learn how leading enterprises streamline compliance, reduce risk, and eliminate manual data collection.
+              </p>
+            </div>
+            
+            <Button size="lg" className="rounded-full px-8 font-light">
+              <Download className="mr-2 h-5 w-5" />
+              Download Whitepaper
+            </Button>
           </div>
         </div>
       </section>

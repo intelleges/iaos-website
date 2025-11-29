@@ -40,3 +40,12 @@
 ## Logo Consistency Fixes
 - [x] Remove logo from footer completely
 - [x] Ensure logo size is h-[13rem] consistently across all pages
+
+## Homepage Rebuild with New Content
+- [x] Rebuild hero section with updated messaging
+- [x] Add Trust Block section (25 years of expertise)
+- [x] Add What Intelleges Does section (value props)
+- [x] Add Protocols section (Intelleges wheel)
+- [x] Add How Intelleges Works section (6-step process)
+- [x] Add Whitepaper CTA section
+- [x] Maintain Scandinavian/Japanese minimal aesthetic
