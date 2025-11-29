@@ -584,3 +584,14 @@
 - [x] Update industry groupings to match spec (combine Aerospace & Defense)
 - [x] Update homepage "Download Whitepaper" button to link to /resources
 - [x] Install react-calendly package for inline embed
+
+## Thank You Page for Executive Summary Downloads
+- [x] Create dedicated /thank-you page route
+- [x] Add Thank You page component with success message
+- [x] Add "What's Next?" section with 3-step process cards
+- [x] Integrate Calendly inline embed with free 30-minute consultation messaging
+- [x] Add social proof section with client logos and key stats
+- [x] Add contact options section (phone/email)
+- [x] Add "Back to Resource Library" link
+- [x] Update EmailCaptureModal to redirect to /thank-you after Executive Summary download
+- [x] Test complete user flow from Resources → Email Capture → Thank You → Calendly

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Download, Check, Calendar } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { useLocation } from "wouter";
 
 interface EmailCaptureModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export default function EmailCaptureModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rateLimitError, setRateLimitError] = useState<string | null>(null);
 
+  const [, setLocation] = useLocation();
   const validateDownloadQuery = trpc.downloads.validate.useQuery(
     { email: formData.email, resource: resourceTitle },
     { enabled: false } // Don't auto-fetch, we'll trigger manually
@@ -109,13 +111,24 @@ export default function EmailCaptureModal({
       setIsSubmitting(false);
       setIsSubmitted(true);
 
-      // Close modal after 2 seconds
-      setTimeout(() => {
-        onClose();
-        setIsSubmitted(false);
-        setFormData({ name: "", email: "", company: "" });
-        setRateLimitError(null);
-      }, 2000);
+      // For Executive Summary, redirect to Thank You page after brief delay
+      // For other resources, just close the modal
+      if (resourceTitle === "Executive Summary") {
+        setTimeout(() => {
+          onClose();
+          setIsSubmitted(false);
+          setFormData({ name: "", email: "", company: "" });
+          setRateLimitError(null);
+          setLocation("/thank-you");
+        }, 1500);
+      } else {
+        setTimeout(() => {
+          onClose();
+          setIsSubmitted(false);
+          setFormData({ name: "", email: "", company: "" });
+          setRateLimitError(null);
+        }, 2000);
+      }
 
     } catch (error: any) {
       console.error("Download error:", error);
