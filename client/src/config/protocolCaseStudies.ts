@@ -1,8 +1,10 @@
+import type { ProtocolCaseStudiesMap } from "@/types/protocol";
+
 /**
  * Mapping of protocol names to their corresponding case study PDFs in S3
  * Each entry has s3Key (path to PDF in S3) and title (display name)
  */
-export const protocolCaseStudies: Record<string, { s3Key: string; title: string }> = {
+export const protocolCaseStudies: ProtocolCaseStudiesMap = {
   "Annual Reps & Certifications": {
     s3Key: "pdfs/case-studies/Case_Study_01_Annual_Representations_Certifications_Defense_Contracting.pdf",
     title: "Annual Representations & Certifications - Defense Contracting"

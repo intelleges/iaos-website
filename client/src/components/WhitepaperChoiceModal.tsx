@@ -1,6 +1,6 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { SimpleModal } from "./SimpleModal";
 import { FileText, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type WhitepaperChoiceModalProps = {
   isOpen: boolean;
@@ -16,16 +16,18 @@ export function WhitepaperChoiceModal({
   onChooseFullWhitepaper,
 }: WhitepaperChoiceModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="!max-w-2xl max-h-[90vh] overflow-y-auto w-full">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-light">Choose Your Download</DialogTitle>
-          <DialogDescription className="text-base">
-            Select the version that best fits your needs
-          </DialogDescription>
-        </DialogHeader>
+    <SimpleModal 
+      isOpen={isOpen} 
+      onClose={onClose}
+      title="Choose Your Download"
+      maxWidth="42rem"
+    >
+      <div className="p-6">
+        <p className="text-base text-muted-foreground mb-6">
+          Select the version that best fits your needs
+        </p>
 
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4">
           {/* Executive Summary Option */}
           <div className="flex flex-col gap-4 p-6 rounded-lg border border-border/40 bg-background hover:border-primary/30 transition-all">
             <div className="flex items-start gap-4">
@@ -88,10 +90,10 @@ export function WhitepaperChoiceModal({
           </div>
         </div>
 
-        <div className="text-xs text-center text-muted-foreground font-light">
+        <div className="text-xs text-center text-muted-foreground font-light mt-6">
           Both options are completely free. No credit card required.
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </SimpleModal>
   );
 }

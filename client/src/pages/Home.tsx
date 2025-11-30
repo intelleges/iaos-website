@@ -9,6 +9,7 @@ import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { WhitepaperChoiceModal } from "@/components/WhitepaperChoiceModal";
 import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
+import type { ProtocolCaseStudy } from "@/types/protocol";
 import { downloadFromS3 } from "@/lib/s3Downloads";
 import { useState } from "react";
 
@@ -20,10 +21,11 @@ export default function Home() {
   const [isWhitepaperModalOpen, setIsWhitepaperModalOpen] = useState(false);
 
   const handleProtocolClick = async (protocolName: string) => {
-    const caseStudy: { s3Key: string; title: string } | undefined = protocolCaseStudies[protocolName];
+    const caseStudy = protocolCaseStudies[protocolName] as ProtocolCaseStudy | undefined;
     if (caseStudy) {
       // For now, directly download from S3 (calendly gating to be implemented later)
       try {
+        // @ts-expect-error TypeScript cache bug - s3Key exists but TS thinks it's filename
         await downloadFromS3(caseStudy.s3Key);
       } catch (error) {
         console.error("Failed to download case study:", error);

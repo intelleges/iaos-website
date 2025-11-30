@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { SimpleModal } from "./SimpleModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -133,16 +133,16 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+    <SimpleModal isOpen={isOpen} onClose={onClose} maxWidth="28rem">
         {!isSubmitted ? (
           <>
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-light">Download {resourceTitle}</DialogTitle>
-              <DialogDescription className="text-base">
+            <div className="p-6 border-b">
+              <h2 className="text-2xl font-light mb-2">Download {resourceTitle}</h2>
+              <p className="text-base text-muted-foreground">
                 Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.
-              </DialogDescription>
-            </DialogHeader>
+              </p>
+            </div>
+            <div className="p-6">
 
             {rateLimitError && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 space-y-4">
@@ -247,21 +247,22 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
                 </p>
               </form>
             )}
+          </div>
           </>
+
         ) : (
-          <div className="py-8 text-center space-y-4">
+          <div className="p-6 py-8 text-center space-y-4">
             <div className="flex justify-center">
               <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
                 <Check className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <DialogTitle className="text-2xl font-light">Download Started!</DialogTitle>
-            <DialogDescription className="text-base">
+            <h2 className="text-2xl font-light">Download Started!</h2>
+            <p className="text-base text-muted-foreground">
               Your case study is downloading now. Check your downloads folder.
-            </DialogDescription>
+            </p>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+    </SimpleModal>
   );
 }
