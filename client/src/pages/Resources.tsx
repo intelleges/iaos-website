@@ -245,7 +245,7 @@ export default function Resources() {
       </section>
 
       {/* Case Studies Teaser Section */}
-      <section className="container pb-20">
+      <section className="container pb-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-base font-semibold mb-4">
@@ -253,7 +253,7 @@ export default function Resources() {
               Included with your consultation
             </div>
             <h2 className="text-3xl font-bold mb-4">17 Industry Case Studies</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-4xl mx-auto">
               Real-world examples of how organizations use Intelleges to solve complex compliance challenges across industries
             </p>
           </div>
@@ -312,10 +312,10 @@ export default function Resources() {
       </section>
 
       {/* CTA Section */}
-      <section className="container pb-20">
+      <section className="container pb-20 px-4">
         <Card className="max-w-4xl mx-auto p-12 text-center bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
           <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Compliance Operations?</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground mb-8 max-w-4xl mx-auto px-4">
             Whether you need a quick overview or want to dive deep into best practices, we have the right resource for you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

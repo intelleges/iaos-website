@@ -610,3 +610,10 @@
 - [x] Keep "30 minutes free of charge" messaging
 - [x] Remove react-calendly import
 - [x] Test button link opens Calendly in new tab
+
+## Fix Text Wrapping Issues on Resources Page
+- [x] Investigate narrow container causing one-word-per-line wrapping (found .flex { min-width: 0 } causing collapse)
+- [x] Fix "17 Industry Case Studies" description text wrapping (removed min-width: 0 from .flex)
+- [x] Fix "Ready to Transform Your Compliance Operations?" description text wrapping (increased max-w to max-w-4xl)
+- [x] Ensure proper min-width or remove max-width constraints (removed problematic CSS rule)
+- [x] Test all sections for proper text flow
