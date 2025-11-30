@@ -20,7 +20,7 @@ export default function Home() {
   const [isWhitepaperModalOpen, setIsWhitepaperModalOpen] = useState(false);
 
   const handleProtocolClick = async (protocolName: string) => {
-    const caseStudy = protocolCaseStudies[protocolName];
+    const caseStudy: { s3Key: string; title: string } | undefined = protocolCaseStudies[protocolName];
     if (caseStudy) {
       // For now, directly download from S3 (calendly gating to be implemented later)
       try {

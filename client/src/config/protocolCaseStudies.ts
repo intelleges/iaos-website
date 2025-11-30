@@ -1,5 +1,6 @@
 /**
  * Mapping of protocol names to their corresponding case study PDFs in S3
+ * Each entry has s3Key (path to PDF in S3) and title (display name)
  */
 export const protocolCaseStudies: Record<string, { s3Key: string; title: string }> = {
   "Annual Reps & Certifications": {
