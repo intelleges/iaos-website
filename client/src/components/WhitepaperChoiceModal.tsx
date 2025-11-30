@@ -19,7 +19,7 @@ export function WhitepaperChoiceModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         className="max-h-[90vh] overflow-y-auto"
-        style={{ width: '90vw', maxWidth: '672px' }}
+        style={{ maxWidth: '672px' }}
       >
         <DialogHeader>
           <DialogTitle className="text-2xl font-light">Choose Your Download</DialogTitle>
