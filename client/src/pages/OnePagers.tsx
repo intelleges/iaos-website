@@ -9,11 +9,13 @@ import {
 import { serviceDownloads } from "@/config/downloadMappings";
 import { downloadFromS3 } from "@/lib/s3Downloads";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { DownloadLimitReachedModal } from "@/components/DownloadLimitReachedModal";
 
 type ServiceKey = keyof typeof serviceDownloads;
 
 export default function OnePagers() {
   const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [limitModalOpen, setLimitModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<{
     s3Key: string;
     serviceKey: string;
@@ -122,8 +124,18 @@ export default function OnePagers() {
           }}
           downloadUrl={selectedService.s3Key}
           resourceTitle={selectedService.title}
+          documentType="capability"
+          onLimitReached={() => {
+            setLimitModalOpen(true);
+          }}
         />
       )}
+
+      {/* Download Limit Reached Modal */}
+      <DownloadLimitReachedModal
+        isOpen={limitModalOpen}
+        onClose={() => setLimitModalOpen(false)}
+      />
     </div>
   );
 }

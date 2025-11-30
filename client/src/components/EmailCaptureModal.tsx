@@ -5,15 +5,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Download, Check, Calendar } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 interface EmailCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   downloadUrl: string;
   resourceTitle: string;
+  documentType?: 'capability' | 'protocol' | 'whitepaper';
+  onLimitReached?: () => void;
 }
 
-export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resourceTitle }: EmailCaptureModalProps) {
+export default function EmailCaptureModal({ 
+  isOpen, 
+  onClose, 
+  downloadUrl, 
+  resourceTitle,
+  documentType = 'capability',
+  onLimitReached
+}: EmailCaptureModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,14 +32,6 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [rateLimitError, setRateLimitError] = useState<string | null>(null);
-
-  const validateDownloadQuery = trpc.downloads.validate.useQuery(
-    { email: formData.email, resource: resourceTitle },
-    { enabled: false } // Don't auto-fetch, we'll trigger manually
-  );
-  const recordDownloadMutation = trpc.downloads.record.useMutation();
-  const submitLeadMutation = trpc.leads.submit.useMutation();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -60,35 +62,33 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
     }
 
     setIsSubmitting(true);
-    setRateLimitError(null);
 
     try {
-      // Step 1: Check if user can download (rate limit validation)
-      const validationResult = await validateDownloadQuery.refetch();
+      // Check download limit first
+      const limitCheck = await trpc.documentDownloads.checkLimit.query({
+        email: formData.email,
+      });
 
-      if (!validationResult.data?.allowed) {
-        setRateLimitError(
-          "You seem interested in our products. It is best for you to set up a meeting with one of our sales people to ensure that we can fully address your questions and help you with additional downloads."
-        );
-        setIsSubmitting(false);
+      if (limitCheck.limitReached) {
+        // Close email capture modal and show limit reached modal
+        onClose();
+        if (onLimitReached) {
+          onLimitReached();
+        }
         return;
       }
 
-      // Step 2: Submit lead information
-      await submitLeadMutation.mutateAsync({
+      // Record the download
+      await trpc.documentDownloads.recordDownload.mutate({
+        email: formData.email,
         name: formData.name,
-        email: formData.email,
-        company: formData.company,
-        resource: resourceTitle,
+        company: formData.company || undefined,
+        documentTitle: resourceTitle,
+        documentUrl: downloadUrl,
+        documentType: documentType,
       });
 
-      // Step 3: Record the download
-      await recordDownloadMutation.mutateAsync({
-        email: formData.email,
-        resource: resourceTitle,
-      });
-
-      // Step 4: Trigger the actual file download
+      // Trigger the actual file download
       const link = document.createElement("a");
       link.href = downloadUrl;
       link.download = downloadUrl.split("/").pop() || "download.pdf";
@@ -99,19 +99,19 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
       setIsSubmitting(false);
       setIsSubmitted(true);
 
+      // Show success toast
+      toast.success(`Download started! Check your email in 2 hours for a follow-up message.`);
+
       // Close modal after 2 seconds
       setTimeout(() => {
         onClose();
         setIsSubmitted(false);
         setFormData({ name: "", email: "", company: "" });
-        setRateLimitError(null);
       }, 2000);
 
     } catch (error: any) {
       console.error("Download error:", error);
-      setRateLimitError(
-        error.message || "An error occurred. Please try again or contact support."
-      );
+      toast.error(error.message || "An error occurred. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -122,14 +122,6 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
-    // Clear rate limit error when user changes email
-    if (field === "email" && rateLimitError) {
-      setRateLimitError(null);
-    }
-  };
-
-  const handleScheduleMeeting = () => {
-    window.location.href = '/contact';
   };
 
   return (
@@ -143,26 +135,6 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
               </p>
             </div>
             <div className="p-6">
-
-            {rateLimitError && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 space-y-4">
-                <div className="flex items-start gap-3">
-                  <Calendar className="h-6 w-6 text-[#0A3A67] flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-base text-gray-800 font-normal leading-relaxed">{rateLimitError}</p>
-                  </div>
-                </div>
-                <Button
-                  onClick={handleScheduleMeeting}
-                  className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105 bg-[#0A3A67] hover:bg-[#0A3A67]/90"
-                >
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Schedule a Meeting
-                </Button>
-              </div>
-            )}
-
-            {!rateLimitError && (
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-base">
@@ -237,7 +209,7 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
                   ) : (
                     <>
                       <Download className="mr-2 h-4 w-4" />
-                      Download Case Study
+                      Download Document
                     </>
                   )}
                 </Button>
@@ -246,7 +218,6 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
                   By downloading, you agree to receive occasional updates from Intelleges about compliance solutions.
                 </p>
               </form>
-            )}
           </div>
           </>
 
@@ -259,7 +230,7 @@ export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resour
             </div>
             <h2 className="text-2xl font-light">Download Started!</h2>
             <p className="text-base text-muted-foreground">
-              Your case study is downloading now. Check your downloads folder.
+              Your document is downloading now. Check your email in 2 hours for a personalized follow-up.
             </p>
           </div>
         )}

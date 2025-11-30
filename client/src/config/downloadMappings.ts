@@ -314,6 +314,22 @@ export const serviceDownloads = {
     tooltip: "Download Environmental & COI Service Overview",
     gating: "email" as GatingType,
     description: "ESG and certificate of insurance tracking service"
+  },
+  "compliance-maturity-model": {
+    title: "Compliance Maturity Model",
+    filename: "Compliance_Maturity_Model.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/TBD1.pdf",
+    tooltip: "Download Compliance Maturity Model Framework",
+    gating: "email" as GatingType,
+    description: "Framework for assessing and improving organizational compliance maturity"
+  },
+  "current-compliance-landscape": {
+    title: "Current Compliance Landscape",
+    filename: "Current_Compliance_Landscape.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/TBD2.pdf",
+    tooltip: "Download Current Compliance Landscape Report",
+    gating: "email" as GatingType,
+    description: "Overview of current regulatory compliance requirements and trends"
   }
 } as const;
 

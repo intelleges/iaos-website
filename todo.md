@@ -493,3 +493,27 @@
 - [x] Update downloadMappings.ts with S3 URLs for 8 service documents
 - [ ] Add 2 new one-pagers (Compliance Maturity Model, Current Compliance Landscape) to website
 - [ ] Test all document downloads (hover, tooltips, download flow)
+
+## Test Document Downloads on Live Site
+- [x] Test hover tooltips on all 8 service document cards
+- [x] Test email capture modal triggering
+- [x] Verify S3 CDN URLs download correctly
+- [x] Test download flow end-to-end for each document
+
+## Integrate 2 New One-Pagers to Website
+- [x] Add Compliance Maturity Model to downloadMappings.ts
+- [x] Add Current Compliance Landscape to downloadMappings.ts
+- [x] Update downloadMappings.ts with new document entries
+- [x] Documents now available on One-Pagers page
+
+## Complete Email Automation Frontend Integration
+- [x] Update EmailCaptureModal to check download limits before showing form
+- [x] Integrate DownloadLimitReachedModal when limit exceeded
+- [x] Connect to documentDownloads API for 3-document limit
+- [x] Implement 2-hour delayed email scheduling in download API
+
+## Implement Background Email Processor
+- [x] Create emailProcessor.ts worker script
+- [x] Add cron job configuration documentation (CRON_SETUP.md)
+- [ ] Deploy cron job to production server
+- [ ] Test automated email sending for scheduled follow-ups
