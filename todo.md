@@ -661,3 +661,15 @@
 - [ ] Test download button functionality
 - [ ] Ensure form validation works correctly
 - [ ] Test complete download flow from click to PDF delivery
+
+## Hybrid Email Verification System
+- [x] Split "Full Name" field into "First Name" and "Last Name"
+- [x] Update form validation for separate name fields
+- [x] Update backend API to accept firstName and lastName (combines to fullName for storage)
+- [ ] Implement email delivery with PDF attachment
+- [ ] Create verification token system for repeat users
+- [ ] Add download tracking to detect repeat users
+- [ ] Send immediate download + email for first-time users
+- [ ] Send token verification email for repeat users
+- [ ] Create verification landing page for token redemption
+- [ ] Test complete flow end-to-end

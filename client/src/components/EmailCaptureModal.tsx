@@ -25,7 +25,8 @@ export default function EmailCaptureModal({
   resourceType = 'case-study'
 }: EmailCaptureModalProps) {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     company: "",
   });
@@ -45,8 +46,12 @@ export default function EmailCaptureModal({
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
     }
 
     if (!formData.email.trim()) {
@@ -87,7 +92,8 @@ export default function EmailCaptureModal({
 
       // Step 2: Submit lead information and send email
       const leadResult = await submitLeadMutation.mutateAsync({
-        name: formData.name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
         company: formData.company,
         resource: resourceTitle,
@@ -117,7 +123,7 @@ export default function EmailCaptureModal({
         setTimeout(() => {
           onClose();
           setIsSubmitted(false);
-          setFormData({ name: "", email: "", company: "" });
+          setFormData({ firstName: "", lastName: "", email: "", company: "" });
           setRateLimitError(null);
           setLocation("/thank-you");
         }, 1500);
@@ -125,7 +131,7 @@ export default function EmailCaptureModal({
         setTimeout(() => {
           onClose();
           setIsSubmitted(false);
-          setFormData({ name: "", email: "", company: "" });
+          setFormData({ firstName: "", lastName: "", email: "", company: "" });
           setRateLimitError(null);
         }, 2000);
       }
@@ -187,25 +193,48 @@ export default function EmailCaptureModal({
 
             {!rateLimitError && (
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-base">
-                    Full Name *
-                  </Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => handleChange("name", e.target.value)}
-                    className={`text-base ${errors.name ? "border-red-500" : ""}`}
-                    placeholder="John Smith"
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                  />
-                  {errors.name && (
-                    <p id="name-error" className="text-sm text-red-500">
-                      {errors.name}
-                    </p>
-                  )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-base">
+                      First Name *
+                    </Label>
+                    <Input
+                      id="firstName"
+                      type="text"
+                      value={formData.firstName}
+                      onChange={(e) => handleChange("firstName", e.target.value)}
+                      className={`text-base ${errors.firstName ? "border-red-500" : ""}`}
+                      placeholder="John"
+                      aria-invalid={!!errors.firstName}
+                      aria-describedby={errors.firstName ? "firstName-error" : undefined}
+                    />
+                    {errors.firstName && (
+                      <p id="firstName-error" className="text-sm text-red-500">
+                        {errors.firstName}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-base">
+                      Last Name *
+                    </Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      value={formData.lastName}
+                      onChange={(e) => handleChange("lastName", e.target.value)}
+                      className={`text-base ${errors.lastName ? "border-red-500" : ""}`}
+                      placeholder="Smith"
+                      aria-invalid={!!errors.lastName}
+                      aria-describedby={errors.lastName ? "lastName-error" : undefined}
+                    />
+                    {errors.lastName && (
+                      <p id="lastName-error" className="text-sm text-red-500">
+                        {errors.lastName}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">

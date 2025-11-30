@@ -117,7 +117,8 @@ export const appRouter = router({
     // Submit a new lead and send case study email
     submit: publicProcedure
       .input(z.object({
-        name: z.string().min(1),
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
         email: z.string().email(),
         company: z.string().min(1),
         resource: z.string().optional(),
@@ -130,8 +131,9 @@ export const appRouter = router({
         }
 
         // Save lead to database
+        const fullName = `${input.firstName} ${input.lastName}`;
         await db.insert(leads).values({
-          name: input.name,
+          name: fullName,
           email: input.email,
           company: input.company,
           emailVerified: 0,
@@ -153,7 +155,7 @@ export const appRouter = router({
 
             await sendCaseStudyEmail({
               toEmail: input.email,
-              toName: input.name,
+              toName: fullName,
               company: input.company,
               caseStudyTitle: input.resource,
               pdfFilePath: pdfPath,
@@ -175,7 +177,7 @@ export const appRouter = router({
         // Send notification to sales team (async, don't wait)
         const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
         sendSalesTeamNotification({
-          leadName: input.name,
+          leadName: fullName,
           leadEmail: input.email,
           leadCompany: input.company,
           caseStudyTitle: input.resource || 'Unknown Resource',
