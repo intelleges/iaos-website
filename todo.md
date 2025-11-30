@@ -362,3 +362,14 @@
 - [x] Update Home.tsx to use config keys instead of hardcoded download slugs
 - [x] Ensure tooltips come from config file
 - [x] Test gated vs public download flows
+
+## Complete 47-Asset Download System
+- [x] Update downloadMappings.ts with correct capability PDF filenames
+- [x] Add 17 case study PDFs to config
+- [x] Add 9 service one-pager PDFs to config
+- [x] Add 3 core marketing documents to config
+- [x] Implement three-tier gating system (public/email/calendly)
+- [x] Update CapabilityCard to support all gating types
+- [x] Test public downloads (direct window.open)
+- [x] Test email-gated downloads (modal → email → download)
+- [x] Test calendly-gated downloads (modal → meeting → email link)

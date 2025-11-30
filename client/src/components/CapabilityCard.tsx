@@ -16,20 +16,26 @@ export function CapabilityCard({
   onGatedDownload,
 }: CapabilityCardProps) {
   const config = capabilityDownloads[capabilityKey];
-  const { title, pdf, tooltip, gating } = config;
+  const { title, filename, tooltip, gating } = config;
+  const pdf = `/pdfs/${filename}`;
 
   const handleClick = () => {
-    if (gating) {
-      // Gated download - trigger email capture modal
+    if (gating === "public") {
+      // Public download - open PDF directly
+      window.open(pdf, "_blank");
+    } else if (gating === "email") {
+      // Email-gated download - trigger email capture modal
       if (onGatedDownload) {
         onGatedDownload(pdf, capabilityKey);
       } else {
         // Fallback: navigate to download page
         window.location.href = `/downloads/${capabilityKey}`;
       }
-    } else {
-      // Public download - open PDF directly
-      window.open(pdf, "_blank");
+    } else if (gating === "calendly") {
+      // Calendly-gated download - open Calendly modal
+      // TODO: Implement Calendly modal integration
+      console.log("Calendly gating not yet implemented for:", capabilityKey);
+      window.location.href = `/schedule-demo?download=${capabilityKey}`;
     }
   };
 
