@@ -176,6 +176,12 @@
 }
 
 @layer base {
+  /* Reset inline SVG baseline issues */
+  img,
+  svg {
+    vertical-align: middle;
+  }
+  
   * {
     @apply border-border outline-ring/50;
   }

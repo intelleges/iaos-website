@@ -19,7 +19,6 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "/", icon: HomeIcon },
     { name: "Product", href: "/product", icon: Package },
     { name: "Protocols", href: "/protocols", icon: FileText },
     { name: "About", href: "/about", icon: Info },
@@ -29,23 +28,22 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
-      <div className={cn(
-        "container flex items-center justify-between transition-all duration-300",
-        isScrolled ? "h-16" : "h-20"
-      )}>
-        <Link href="/" className="flex items-center gap-2">
-          <img src="/logo.png" alt="Intelleges" className="h-8 lg:h-10 xl:h-12 w-auto" />
+      <div className="container flex items-center justify-between h-[72px] px-8">
+        <Link href="/" className="logo-wrapper flex items-center h-full">
+          <img src="/logo.png" alt="Intelleges" className="block h-10 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden xl:flex items-center gap-10">
+        <nav className="hidden xl:flex items-center gap-8">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.href}
               className={cn(
-                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
-                location === item.href ? "text-foreground" : "text-muted-foreground"
+                "text-base font-light tracking-wide transition-all duration-300 cursor-pointer relative",
+                "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-foreground after:transition-all after:duration-300",
+                "hover:after:w-full",
+                location === item.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {item.name}
