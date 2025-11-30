@@ -194,8 +194,18 @@ export default function Resources() {
                 size="sm" 
                 className="gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                 onClick={() => {
+                  // Map resource.id to serviceDownloads key
+                  const downloadKey = resource.id === 'cmmc-guide' ? 'cybersecurity' : 
+                                     resource.id === 'supply-chain-risk' ? 'supplier-risk' :
+                                     resource.id === 'platform-overview' ? 'reps-certs-service' :
+                                     resource.id === 'audit-prep' ? 'quality-systems-service' :
+                                     resource.id === 'compliance-roadmap' ? 'compliance-maturity-model' :
+                                     resource.id === 'vendor-management' ? 'current-compliance-landscape' : null;
+                  
+                  const downloadConfig = downloadKey ? serviceDownloads[downloadKey as keyof typeof serviceDownloads] : null;
+                  
                   setSelectedDocument({
-                    url: `https://files.manuscdn.com/placeholder-${resource.id}.pdf`,
+                    url: downloadConfig?.cdnUrl || `https://files.manuscdn.com/placeholder-${resource.id}.pdf`,
                     title: resource.title,
                   });
                   setEmailModalOpen(true);

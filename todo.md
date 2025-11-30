@@ -726,6 +726,9 @@
 - [x] Generate comprehensive database audit report (DATABASE_AUDIT_REPORT.md)
 
 ## P1: Code Cleanup (Before/After Launch)
-- [ ] Rename duplicate downloads router to downloadProtection
-- [ ] Fix resourceUrl logging to use actual CDN path
-- [ ] Parse x-forwarded-for header correctly for IP logging
+- [x] Rename duplicate downloads router to downloadProtection in server/routers.ts
+- [x] Update TRPC client calls to use downloadProtection.checkLimit and downloadProtection.recordDownload
+- [x] Fix IP address parsing to handle comma-separated x-forwarded-for values (applied to both validate and record endpoints)
+- [x] Fix console logging to show actual documentUrl instead of placeholder
+- [x] Replace placeholder URLs in Resources.tsx with real CDN URLs from downloadMappings.ts
+- [x] Test all P1 fixes end-to-end

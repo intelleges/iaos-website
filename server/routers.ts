@@ -32,8 +32,8 @@ export const appRouter = router({
     }),
   }),
 
-  // Download protection endpoints
-  downloads: router({
+  // Download protection endpoints (rate limiting for case studies)
+  downloadProtection: router({
     // Validate if user can download (check rate limits)
     validate: publicProcedure
       .input(z.object({
@@ -41,7 +41,8 @@ export const appRouter = router({
         resource: z.string().min(1),
       }))
       .query(async ({ input, ctx }) => {
-        const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
+        const forwarded = ctx.req.headers['x-forwarded-for'];
+        const clientIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : ctx.req.socket.remoteAddress || 'unknown';
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const db = await getDb();
         if (!db) {
@@ -103,7 +104,8 @@ export const appRouter = router({
         resource: z.string().min(1),
       }))
       .mutation(async ({ input, ctx }) => {
-        const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
+        const forwarded = ctx.req.headers['x-forwarded-for'];
+        const clientIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : ctx.req.socket.remoteAddress || 'unknown';
         const db = await getDb();
         if (!db) {
           throw new Error('Database not available');
@@ -211,6 +213,7 @@ export const appRouter = router({
         }
 
         // Record download
+        console.log(`[Download] ${input.documentTitle} → ${input.documentUrl} for ${normalizedEmail}`);
         await db.insert(documentDownloads).values({
           email: normalizedEmail,
           name: input.name,
