@@ -441,3 +441,14 @@
 - [x] Replace current pricing page with new design
 - [x] Highlight Gold tier as "Most Popular"
 - [x] Test pricing page rendering
+
+## Pricing-to-Contact Form Integration
+- [x] Update PricingSection buttons to link to contact with plan parameter
+- [x] Modify Contact page to read plan parameter from URL
+- [x] Pre-fill contact form with selected plan information
+- [ ] Test pricing-to-contact flow for all tiers
+
+## Pricing Page Layout Bug
+- [x] Fix narrow column layout issue on pricing page
+- [x] Ensure pricing cards display in proper grid layout
+- [ ] Test responsive behavior across breakpoints

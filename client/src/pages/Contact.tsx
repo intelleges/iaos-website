@@ -5,11 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { CheckCircle2, AlertCircle, Phone, Mail, MapPin, Calendar } from "lucide-react";
 import { InlineWidget } from "react-calendly";
 
 export default function Contact() {
+  const [, setLocation] = useLocation();
+  
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,8 +20,22 @@ export default function Contact() {
     company: "",
     phone: "",
     role: "",
+    plan: "",
     message: "",
   });
+  
+  // Read plan parameter from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const planParam = params.get('plan');
+    if (planParam) {
+      setFormData(prev => ({
+        ...prev,
+        plan: planParam,
+        message: `I'm interested in the ${planParam} plan. `
+      }));
+    }
+  }, []);
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -84,6 +101,7 @@ export default function Contact() {
         company: "",
         phone: "",
         role: "",
+        plan: "",
         message: "",
       });
     } catch (error) {
@@ -365,6 +383,24 @@ export default function Contact() {
                           className="text-base"
                         />
                       </div>
+                      
+                      {/* Plan (pre-filled from pricing page) */}
+                      {formData.plan && (
+                        <div className="space-y-2">
+                          <Label htmlFor="plan" className="text-base font-normal">
+                            Interested Plan
+                          </Label>
+                          <Input
+                            id="plan"
+                            type="text"
+                            value={formData.plan}
+                            onChange={(e) => handleChange("plan", e.target.value)}
+                            className="text-base bg-muted/50"
+                            readOnly
+                          />
+                          <p className="text-sm text-muted-foreground">Selected from pricing page</p>
+                        </div>
+                      )}
                       
                       {/* Message */}
                       <div className="space-y-2">
