@@ -9,14 +9,14 @@ export default function ThankYou() {
       {/* Hero Section */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50 to-white">
         <div className="container max-w-4xl mx-auto px-4">
-          <div className="text-center">
+          <div className="text-center w-full">
             <div className="flex justify-center mb-6">
               <CheckCircle2 className="h-16 w-16 text-green-600" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-6">
+            <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-6 w-full">
               Thank You for Downloading
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto px-4" style={{display: 'block', width: '100%', maxWidth: '42rem'}}>
               Your Executive Summary has been sent to your email and should arrive within the next few minutes.
             </p>
           </div>
@@ -138,9 +138,9 @@ export default function ThankYou() {
       {/* Calendly Section */}
       <section className="py-16 bg-blue-50">
         <div className="container max-w-5xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-light mb-4">Schedule Your Free Consultation</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <div className="text-center mb-8 w-full">
+            <h2 className="text-3xl font-light mb-4 w-full">Schedule Your Free Consultation</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto px-4" style={{display: 'block', width: '100%', maxWidth: '48rem'}}>
               We're happy to spend <strong>30 minutes with you free of charge</strong> answering any question you or your team might have about federal compliance, supplier management, or how Intelleges can streamline your operations.
             </p>
           </div>
