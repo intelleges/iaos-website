@@ -355,3 +355,10 @@
 - [x] Add TooltipProvider to App.tsx layout
 - [x] Update "What Intelleges Does" section to use CapabilityCard
 - [x] Test tooltip hover behavior
+
+## Centralized Download Mapping System
+- [x] Create /config/downloadMappings.ts with master capability→PDF mapping table
+- [x] Update CapabilityCard to use centralized config instead of props
+- [x] Update Home.tsx to use config keys instead of hardcoded download slugs
+- [x] Ensure tooltips come from config file
+- [x] Test gated vs public download flows

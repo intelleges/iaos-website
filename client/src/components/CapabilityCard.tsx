@@ -4,18 +4,35 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { capabilityDownloads, type CapabilityKey } from "@/config/downloadMappings";
 
 type CapabilityCardProps = {
-  title: string;
-  description?: string;
-  downloadSlug?: string; // e.g. "collect-supplier-data"
+  capabilityKey: CapabilityKey;
+  onGatedDownload?: (pdf: string, capabilityKey: string) => void;
 };
 
 export function CapabilityCard({
-  title,
-  description,
-  downloadSlug,
+  capabilityKey,
+  onGatedDownload,
 }: CapabilityCardProps) {
+  const config = capabilityDownloads[capabilityKey];
+  const { title, pdf, tooltip, gating } = config;
+
+  const handleClick = () => {
+    if (gating) {
+      // Gated download - trigger email capture modal
+      if (onGatedDownload) {
+        onGatedDownload(pdf, capabilityKey);
+      } else {
+        // Fallback: navigate to download page
+        window.location.href = `/downloads/${capabilityKey}`;
+      }
+    } else {
+      // Public download - open PDF directly
+      window.open(pdf, "_blank");
+    }
+  };
+
   const card = (
     <button
       type="button"
@@ -29,27 +46,16 @@ export function CapabilityCard({
         focus-visible:ring-primary
         cursor-pointer
       "
-      onClick={() => {
-        if (!downloadSlug) return;
-        // Trigger download flow - navigate to downloads page or open modal
-        window.location.href = `/downloads/${downloadSlug}`;
-      }}
+      onClick={handleClick}
     >
       <span className="mr-3 text-lg text-primary">✓</span>
       <div className="flex flex-col gap-1">
         <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal">
           {title}
         </span>
-        {description && (
-          <span className="text-sm text-muted-foreground">
-            {description}
-          </span>
-        )}
       </div>
     </button>
   );
-
-  if (!downloadSlug) return card;
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -58,9 +64,7 @@ export function CapabilityCard({
           {card}
         </TooltipTrigger>
         <TooltipContent>
-          <p className="text-xs">
-            Click to download the related PDF case study.
-          </p>
+          <p className="text-xs">{tooltip}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

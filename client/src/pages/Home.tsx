@@ -113,42 +113,15 @@ export default function Home() {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <CapabilityCard
-                title="Collect supplier data and documentation"
-                downloadSlug="collect-supplier-data"
-              />
-              <CapabilityCard
-                title="Validate and verify information"
-                downloadSlug="validate-verify"
-              />
-              <CapabilityCard
-                title="Manage compliance workflows"
-                downloadSlug="manage-workflows"
-              />
-              <CapabilityCard
-                title="Vet domestic and foreign suppliers"
-                downloadSlug="vet-suppliers"
-              />
-              <CapabilityCard
-                title="Support offshoring, nearshoring, and re-shoring transitions"
-                downloadSlug="supply-chain-transitions"
-              />
-              <CapabilityCard
-                title="Conduct investigations & due diligence"
-                downloadSlug="investigations-due-diligence"
-              />
-              <CapabilityCard
-                title="Perform environmental scans & regional assessments"
-                downloadSlug="environmental-scans"
-              />
-              <CapabilityCard
-                title="Track expirations, risk indicators, and quality data"
-                downloadSlug="track-quality-data"
-              />
-              <CapabilityCard
-                title="Produce audit-ready documentation automatically"
-                downloadSlug="audit-documentation"
-              />
+              <CapabilityCard capabilityKey="collect-supplier-data" />
+              <CapabilityCard capabilityKey="validate-verify" />
+              <CapabilityCard capabilityKey="manage-workflows" />
+              <CapabilityCard capabilityKey="vet-suppliers" />
+              <CapabilityCard capabilityKey="supply-chain-transitions" />
+              <CapabilityCard capabilityKey="investigations-due-diligence" />
+              <CapabilityCard capabilityKey="environmental-scans" />
+              <CapabilityCard capabilityKey="track-quality-data" />
+              <CapabilityCard capabilityKey="audit-documentation" />
             </div>
             
             <div className="text-center space-y-2 pt-8">
