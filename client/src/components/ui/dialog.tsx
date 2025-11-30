@@ -123,24 +123,10 @@ function DialogContent({
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '90vw',
-          maxWidth: '32rem',
-          zIndex: 50,
-          display: 'grid',
-          gap: '1rem',
-          borderRadius: '0.5rem',
-          border: '1px solid hsl(var(--border))',
-          padding: '1.5rem',
-          backgroundColor: 'hsl(var(--background))',
-          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-          ...props.style
-        }}
-        className={className}
+        className={cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-[90vw] max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200",
+          className
+        )}
         onEscapeKeyDown={handleEscapeKeyDown}
         {...props}
       >
