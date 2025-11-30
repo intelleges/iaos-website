@@ -190,11 +190,6 @@
     scroll-behavior: smooth;
   }
   
-  /* Reset baseline alignment for images (prevents flex alignment issues) */
-  img {
-    vertical-align: middle;
-  }
-  
   /* Typography defaults with readability rules */
   body {
     font-size: 17px; /* 16-18px minimum for body text */
