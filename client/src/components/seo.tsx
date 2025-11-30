@@ -7,7 +7,7 @@ interface SEOProps {
 }
 
 export default function SEO({ title, description, canonical }: SEOProps) {
-  const siteTitle = "Intelleges";
+  const siteTitle = "Intelleges - Federal Compliance Management System";
   const fullTitle = title === "Home" ? siteTitle : `${title} | Intelleges`;
 
   return (
