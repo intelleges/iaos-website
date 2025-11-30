@@ -485,3 +485,11 @@
 - [ ] Integrate limit check in EmailCaptureModal
 - [ ] Show limit modal when user attempts 4th download
 - [ ] Test download limit enforcement across all document types
+
+## Upload One-Pager and Service Documents to S3
+- [x] Convert 10 DOCX files to PDF format
+- [x] Upload 2 one-pager PDFs to S3
+- [x] Upload 8 service document PDFs to S3
+- [x] Update downloadMappings.ts with S3 URLs for 8 service documents
+- [ ] Add 2 new one-pagers (Compliance Maturity Model, Current Compliance Landscape) to website
+- [ ] Test all document downloads (hover, tooltips, download flow)
