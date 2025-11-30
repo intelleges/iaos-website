@@ -715,3 +715,17 @@
 - [x] Add Award/Certificate icon to Comply card (top-right corner)
 - [x] Update FlowCard component to accept icon prop
 - [x] Test icon positioning and visual hierarchy
+
+## P0: Production Database Migration (CRITICAL)
+- [x] Run pnpm db:push against production DATABASE_URL
+- [x] Verify leads table exists in production
+- [x] Verify documentDownloads table exists in production
+- [x] Test full download flow in browser (Resources page)
+- [x] Confirm 200 responses from TRPC mutations
+- [x] Query production DB to confirm rows are created
+- [x] Generate comprehensive database audit report (DATABASE_AUDIT_REPORT.md)
+
+## P1: Code Cleanup (Before/After Launch)
+- [ ] Rename duplicate downloads router to downloadProtection
+- [ ] Fix resourceUrl logging to use actual CDN path
+- [ ] Parse x-forwarded-for header correctly for IP logging

@@ -189,7 +189,18 @@ export default function Resources() {
             </CardContent>
             <CardFooter className="border-t bg-muted/20 pt-4 flex justify-between items-center">
               <span className="text-xs text-muted-foreground font-medium">PDF • {resource.size}</span>
-              <Button variant="ghost" size="sm" className="gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                onClick={() => {
+                  setSelectedDocument({
+                    url: `https://files.manuscdn.com/placeholder-${resource.id}.pdf`,
+                    title: resource.title,
+                  });
+                  setEmailModalOpen(true);
+                }}
+              >
                 <Download className="w-4 h-4" />
                 Download
               </Button>

@@ -1,0 +1,13 @@
+{
+  "query": "SHOW TABLES LIKE 'documentDownloads';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3DoThoLFV6pZU86.ae1b24b81fef --database DYeT6pudYnkTsfmPDdt3og --execute SHOW TABLES LIKE 'documentDownloads';",
+  "rows": [
+    {
+      "Tables_in_DYeT6pudYnkTsfmPDdt3og (documentDownloads)": "documentDownloads"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_DYeT6pudYnkTsfmPDdt3og (documentDownloads)\ndocumentDownloads\n",
+  "stderr": "",
+  "execution_time_ms": 50
+}

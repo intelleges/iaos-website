@@ -1,0 +1,23 @@
+{
+  "query": "SELECT * FROM documentDownloads WHERE email = 'p0test@intelleges-prod.com'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3DoThoLFV6pZU86.ae1b24b81fef --database DYeT6pudYnkTsfmPDdt3og --execute SELECT * FROM documentDownloads WHERE email = 'p0test@intelleges-prod.com'",
+  "rows": [
+    {
+      "id": "60001",
+      "email": "p0test@intelleges-prod.com",
+      "name": "P0 Test User",
+      "company": "Intelleges P0 Testing",
+      "role": "NULL",
+      "documentTitle": "CMMC 2.0 Readiness Guide",
+      "documentUrl": "https://files.manuscdn.com/placeholder-cmmc-guide.pdf",
+      "documentType": "whitepaper",
+      "downloadedAt": "2025-11-30 23:39:14",
+      "followUpEmailSent": "0",
+      "followUpEmailSentAt": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\tcompany\trole\tdocumentTitle\tdocumentUrl\tdocumentType\tdownloadedAt\tfollowUpEmailSent\tfollowUpEmailSentAt\n60001\tp0test@intelleges-prod.com\tP0 Test User\tIntelleges P0 Testing\tNULL\tCMMC 2.0 Readiness Guide\thttps://files.manuscdn.com/placeholder-cmmc-guide.pdf\twhitepaper\t2025-11-30 23:39:14\t0\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}
