@@ -348,3 +348,10 @@
 - [x] Remove "Home" from navigation menu (logo is the home link)
 - [x] Add hover effects to navigation links (underline animation)
 - [x] Verify protocol download system is working on production
+
+## Tooltip & Download Functionality Restoration
+- [x] Create CapabilityCard component with tooltip and download functionality
+- [x] Install/verify tooltip UI component from shadcn
+- [x] Add TooltipProvider to App.tsx layout
+- [x] Update "What Intelleges Does" section to use CapabilityCard
+- [x] Test tooltip hover behavior

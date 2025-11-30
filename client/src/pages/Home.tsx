@@ -1,6 +1,7 @@
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import LogoCarousel from "@/components/LogoCarousel";
+import { CapabilityCard } from "@/components/CapabilityCard";
 import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
 
@@ -112,25 +113,42 @@ export default function Home() {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                "Collect supplier data and documentation",
-                "Validate and verify information",
-                "Manage compliance workflows",
-                "Vet domestic and foreign suppliers",
-                "Support offshoring, nearshoring, and re-shoring transitions",
-                "Conduct investigations & due diligence",
-                "Perform environmental scans & regional assessments",
-                "Track expirations, risk indicators, and quality data",
-                "Produce audit-ready documentation automatically"
-              ].map((item, i) => (
-                <div 
-                  key={i} 
-                  className="flex items-start gap-3 p-4 rounded-lg border border-border/40 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-primary/30 cursor-default group"
-                >
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-all duration-300 group-hover:scale-110" />
-                  <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal">{item}</span>
-                </div>
-              ))}
+              <CapabilityCard
+                title="Collect supplier data and documentation"
+                downloadSlug="collect-supplier-data"
+              />
+              <CapabilityCard
+                title="Validate and verify information"
+                downloadSlug="validate-verify"
+              />
+              <CapabilityCard
+                title="Manage compliance workflows"
+                downloadSlug="manage-workflows"
+              />
+              <CapabilityCard
+                title="Vet domestic and foreign suppliers"
+                downloadSlug="vet-suppliers"
+              />
+              <CapabilityCard
+                title="Support offshoring, nearshoring, and re-shoring transitions"
+                downloadSlug="supply-chain-transitions"
+              />
+              <CapabilityCard
+                title="Conduct investigations & due diligence"
+                downloadSlug="investigations-due-diligence"
+              />
+              <CapabilityCard
+                title="Perform environmental scans & regional assessments"
+                downloadSlug="environmental-scans"
+              />
+              <CapabilityCard
+                title="Track expirations, risk indicators, and quality data"
+                downloadSlug="track-quality-data"
+              />
+              <CapabilityCard
+                title="Produce audit-ready documentation automatically"
+                downloadSlug="audit-documentation"
+              />
             </div>
             
             <div className="text-center space-y-2 pt-8">
