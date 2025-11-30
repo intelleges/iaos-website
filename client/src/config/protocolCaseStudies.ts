@@ -65,5 +65,9 @@ export const protocolCaseStudies: Record<string, { filename: string; title: stri
   "Site Security (C-TPAT / CFATS)": {
     filename: "Case_Study_16_Site_Security_C_TPAT_CFATS_Chemical_Hazardous_Materials_Manufacturing.pdf",
     title: "Site Security (C-TPAT / CFATS) - Chemical & Hazardous Materials Manufacturing"
+  },
+  "Sole Source Risk Mitigation": {
+    filename: "Case_Study_17_Sole_Source_Risk_Mitigation_Aerospace.pdf",
+    title: "Sole Source Risk Mitigation - Aerospace"
   }
 };

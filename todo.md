@@ -316,33 +316,29 @@
 - [ ] Integrate with email capture modal for protected downloads
 
 ## Download Protection System
-- [x] Push database schema for leads and downloads tables
-- [ ] Create API endpoint for download validation (check rate limits)
-- [ ] Create API endpoint for recording downloads
-- [ ] Create API endpoint for submitting leads
-- [ ] Update EmailCaptureModal to call validation API before download
-- [ ] Implement rate limiting logic (max 3 downloads per email OR IP)
-- [ ] Show error messages when download limits are reached
-- [ ] Make protocol cards clickable to trigger email capture modal
-- [ ] Pass correct PDF filename to modal based on protocol clickedModal to handle verification flow
+- [ ] Create database schema for download tracking (email, IP, timestamp, resource)
+- [ ] Implement email verification before downloads
+- [ ] Add rate limiting: max 3 downloads per email address
+- [ ] Add rate limiting: max 3 downloads per IP address
+- [ ] Store download records in database for persistent tracking
+- [ ] Show clear error messages when limits are reached
+- [ ] Update EmailCaptureModal to handle verification flow
 - [ ] Test download protection with multiple scenarios
 
-## Download Protection System
-- [x] Create database schema with leads and downloads tables
-- [x] Push database schema with pnpm db:push
-- [x] Create API endpoints for download validation (rate limit check)
-- [x] Create API endpoints for lead submission
-- [x] Create API endpoints for download tracking
-- [ ] Update EmailCaptureModal to integrate with new API endpoints
-- [ ] Add click handlers to 16 protocol cards on homepage
-- [ ] Implement email verification flow
-- [ ] Test complete download protection system (3-download limit per email/IP)
+## YouTube Video Integration
+- [x] Add YouTube video link (https://www.youtube.com/watch?v=7BstopG9qbU) to homepage
+- [x] Update "Watch 2-Minute Overview" button to open video in new tab
+- [x] Embed video player on homepage or link to YouTube
 
-## Header Logo Alignment Fix (ChatGPT Solution)
-- [x] Set strict header container height (72px)
-- [x] Remove baseline spacing from logo images (display: block)
-- [x] Add vertical-align: middle to all images/SVGs
-- [x] Normalize flex alignment across all header elements
-- [x] Remove mt-3 margin from logo
-- [x] Generate new logo with transparent background for light header
-- [x] Test alignment at all breakpoints
+## Case Study PDF Conversion and Download Protection
+- [x] Convert all 17 case study DOCX files to PDF (including new Case Study 17: Sole Source Risk Mitigation)
+- [x] Add 17th protocol card to homepage (Sole Source Risk Mitigation)
+- [x] Create API endpoints for download validation and tracking
+- [x] Update EmailCaptureModal with sales-focused rate limit message
+- [x] Add "Schedule a Meeting" button for rate-limited users
+- [x] Make protocol cards clickable to trigger download flow
+- [x] Test complete download protection system
+
+## Demo Route Redirect
+- [x] Create /demo route that redirects to /contact page
+- [x] Ensure PDF links to www.intelleges.com/demo work correctly

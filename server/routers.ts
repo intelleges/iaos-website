@@ -27,7 +27,7 @@ export const appRouter = router({
     validate: publicProcedure
       .input(z.object({
         email: z.string().email(),
-        resource: z.string(),
+        resource: z.string().min(1),
       }))
       .query(async ({ input, ctx }) => {
         const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
@@ -89,7 +89,7 @@ export const appRouter = router({
     record: publicProcedure
       .input(z.object({
         email: z.string().email(),
-        resource: z.string(),
+        resource: z.string().min(1),
       }))
       .mutation(async ({ input, ctx }) => {
         const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
@@ -121,7 +121,6 @@ export const appRouter = router({
         resource: z.string().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
-        const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
         const db = await getDb();
         if (!db) {
           throw new Error('Database not available');
