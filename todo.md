@@ -652,9 +652,10 @@
 - [ ] Add error handling and retry logic
 
 ## Fix PDF Download Modal UI Issues
-- [x] Fix broken close button (× appearing as text instead of icon) - added relative positioning to DialogContent
-- [x] Fix modal title display (remove × from title text)
-- [ ] Verify modal closes properly when clicking X button
+- [x] Fix modal width - form is too narrow causing text wrapping and messy layout
+- [x] Increase max-width from max-w-lg (512px) to max-w-2xl (672px)
+- [ ] Test modal display with proper width
+- [ ] Verify close button appears correctly in top-right
 - [ ] Test download button functionality
 - [ ] Ensure form validation works correctly
 - [ ] Test complete download flow from click to PDF delivery
