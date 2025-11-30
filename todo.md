@@ -692,3 +692,13 @@
 - [x] Add hover animations (scale, shadow, border highlight)
 - [x] Add smooth transitions (300ms)
 - [x] Test hover effects in browser
+
+## Expandable Flow Cards: Collect → Validate → Comply
+- [x] Rename "Decide" to "Comply" in flow boxes
+- [x] Add hover subtitle (fade in below label): "Automated Data Gathering", "Real-Time Verification", "Audit-Ready, Always"
+- [x] Add click/tap expand behavior to reveal full content block
+- [x] Add expanded content for each card (3 paragraphs + result line)
+- [x] Add arrow pulse animations (opacity 0.5 → 1.0)
+- [x] Implement mobile accordion behavior (vertical stack, one open at a time)
+- [x] Test desktop hover and click interactions
+- [x] Test mobile tap-to-expand behavior

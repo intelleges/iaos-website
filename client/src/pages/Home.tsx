@@ -11,7 +11,8 @@ import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
 import type { ProtocolCaseStudy } from "@/types/protocol";
 
-import { useState } from "react";
+import { useState } from 'react';
+import FlowCard from '@/components/FlowCard';
 
 export default function Home() {
 
@@ -95,24 +96,36 @@ export default function Home() {
         <div className="container">
           <div className="max-w-4xl mx-auto space-y-12">
             {/* Visual Flow Diagram */}
-            <div className="flex items-center justify-center gap-4 md:gap-8">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer">
-                  <span className="text-2xl md:text-3xl font-light transition-all duration-300 hover:font-normal">Collect</span>
-                </div>
-              </div>
-              <div className="text-4xl text-muted-foreground">→</div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer">
-                  <span className="text-2xl md:text-3xl font-light transition-all duration-300 hover:font-normal">Validate</span>
-                </div>
-              </div>
-              <div className="text-4xl text-muted-foreground">→</div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer">
-                  <span className="text-2xl md:text-3xl font-light transition-all duration-300 hover:font-normal">Decide</span>
-                </div>
-              </div>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4">
+              <FlowCard
+                label="Collect"
+                subtitle="Automated Data Gathering"
+                content={{
+                  intro: "Stop chasing suppliers for documents.",
+                  description: "Our platform automatically collects certificates, insurance records, compliance questionnaires, and regulatory evidence from your entire supplier network — without your team lifting a finger.",
+                  result: "Result: 80% reduction in manual data collection effort."
+                }}
+              />
+              <div className="hidden md:block text-4xl text-muted-foreground transition-opacity duration-300 hover:opacity-100 opacity-50 animate-pulse">→</div>
+              <FlowCard
+                label="Validate"
+                subtitle="Real-Time Verification"
+                content={{
+                  intro: "Every document checked. Every requirement mapped.",
+                  description: "Submissions are validated instantly against FAR, DFARS, NIST 800-171, ISO, CMMC, and 80+ regulatory frameworks. Non-compliant items are flagged before they become audit findings.",
+                  result: "Result: Zero surprises. Zero manual cross-checking."
+                }}
+              />
+              <div className="hidden md:block text-4xl text-muted-foreground transition-opacity duration-300 hover:opacity-100 opacity-50 animate-pulse">→</div>
+              <FlowCard
+                label="Comply"
+                subtitle="Audit-Ready, Always"
+                content={{
+                  intro: "Compliance isn't a project. It's a state.",
+                  description: "Continuous monitoring ensures your supplier network stays compliant 24/7. When auditors arrive, generate complete evidence packages in seconds — not weeks.",
+                  result: "Result: Audit confidence. Every time."
+                }}
+              />
             </div>
 
             {/* The Intelleges Method */}
