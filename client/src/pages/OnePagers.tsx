@@ -22,19 +22,13 @@ export default function OnePagers() {
 
   const handleServiceClick = async (serviceKey: ServiceKey) => {
     const config = serviceDownloads[serviceKey];
-    const s3Key = `services/${config.filename}`;
 
     if (config.gating === "public") {
-      // Public download - get S3 URL and open
-      try {
-        await downloadFromS3(s3Key);
-      } catch (error) {
-        console.error("Failed to get download URL:", error);
-        alert("Failed to download file. Please try again.");
-      }
+      // Public download - open CDN URL directly
+      window.open(config.cdnUrl, "_blank");
     } else if (config.gating === "email") {
       // Email-gated download - trigger email capture modal
-      setSelectedService({ s3Key, serviceKey, title: config.title });
+      setSelectedService({ s3Key: config.cdnUrl, serviceKey, title: config.title });
       setEmailModalOpen(true);
     }
   };

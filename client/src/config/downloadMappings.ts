@@ -246,6 +246,7 @@ export const serviceDownloads = {
   "reps-certs-service": {
     title: "Reps & Certs Compliance Service",
     filename: "Service_Reps_Certs.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/vVwqyaiBCoIyWUmi.pdf",
     tooltip: "Download Reps & Certs Service Overview",
     gating: "email" as GatingType,
     description: "Annual representations and certifications compliance service"
@@ -253,6 +254,7 @@ export const serviceDownloads = {
   "export-control": {
     title: "Export Control (ITAR/EAR) Service",
     filename: "Service_Export_Control.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/pwgebxRoqZYndkzw.pdf",
     tooltip: "Download Export Control Service Overview",
     gating: "email" as GatingType,
     description: "ITAR and EAR export compliance service"
@@ -260,6 +262,7 @@ export const serviceDownloads = {
   "cybersecurity": {
     title: "Cybersecurity (CMMC/NIST) Service",
     filename: "Service_Cybersecurity.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/DfrrnZSuxRPLgXFc.pdf",
     tooltip: "Download Cybersecurity Service Overview",
     gating: "email" as GatingType,
     description: "CMMC 2.0 and NIST 800-171 compliance service"
@@ -267,6 +270,7 @@ export const serviceDownloads = {
   "small-business-service": {
     title: "Small Business Programs Service",
     filename: "Service_Small_Business.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/UvGePgcADyBgVNJd.pdf",
     tooltip: "Download Small Business Programs Service Overview",
     gating: "email" as GatingType,
     description: "SBIR/STTR and small business compliance service"
@@ -274,6 +278,7 @@ export const serviceDownloads = {
   "conflict-minerals-service": {
     title: "Conflict Minerals Service",
     filename: "Service_Conflict_Minerals.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/nBxkkXmTIaaOVfEO.pdf",
     tooltip: "Download Conflict Minerals Service Overview",
     gating: "email" as GatingType,
     description: "Dodd-Frank conflict minerals compliance service"
@@ -281,6 +286,7 @@ export const serviceDownloads = {
   "buy-american-service": {
     title: "Buy American Compliance Service",
     filename: "Service_Buy_American.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/kvnzNPnOtSHiWUbj.pdf",
     tooltip: "Download Buy American Service Overview",
     gating: "email" as GatingType,
     description: "Buy American Act and BAA compliance service"
@@ -288,6 +294,7 @@ export const serviceDownloads = {
   "supplier-risk": {
     title: "Supplier Risk Management Service",
     filename: "Service_Supplier_Risk.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/ofBiEnfDyweBHsQZ.pdf",
     tooltip: "Download Supplier Risk Service Overview",
     gating: "email" as GatingType,
     description: "Third-party risk assessment and monitoring service"
@@ -295,6 +302,7 @@ export const serviceDownloads = {
   "quality-systems-service": {
     title: "Quality Systems (ISO/AS9100) Service",
     filename: "Service_Quality_Systems.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/sQSKAjmuUYXkDKcd.pdf",
     tooltip: "Download Quality Systems Service Overview",
     gating: "email" as GatingType,
     description: "ISO 9001 and AS9100 quality compliance service"
@@ -302,6 +310,7 @@ export const serviceDownloads = {
   "environmental-coi": {
     title: "Environmental & COI Tracking Service",
     filename: "Service_Environmental_COI.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/ieWusptwhAlCQRiR.pdf",
     tooltip: "Download Environmental & COI Service Overview",
     gating: "email" as GatingType,
     description: "ESG and certificate of insurance tracking service"
