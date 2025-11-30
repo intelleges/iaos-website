@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { capabilityDownloads, type CapabilityKey } from "@/config/downloadMappings";
-import { downloadFromS3 } from "@/lib/s3Downloads";
+
 
 type CapabilityCardProps = {
   capabilityKey: CapabilityKey;
@@ -18,30 +18,25 @@ export function CapabilityCard({
 }: CapabilityCardProps) {
   const config = capabilityDownloads[capabilityKey];
   const { title, filename, tooltip, gating } = config;
-  const s3Key = `pdfs/capabilities/${filename}`;
+  const publicUrl = `/capabilities/${filename}`;
 
   const handleClick = async () => {
     if (gating === "public") {
-      // Public download - get S3 URL and open
-      try {
-        await downloadFromS3(s3Key);
-      } catch (error) {
-        console.error("Failed to get download URL:", error);
-        alert("Failed to download file. Please try again.");
-      }
+      // Public download - open PDF directly
+      window.open(publicUrl, "_blank");
     } else if (gating === "email") {
       // Email-gated download - trigger email capture modal
       if (onGatedDownload) {
-        onGatedDownload(s3Key, capabilityKey);
+        onGatedDownload(publicUrl, capabilityKey);
       } else {
-        // Fallback: navigate to download page
-        window.location.href = `/downloads/${capabilityKey}`;
+        // Fallback: open PDF directly
+        window.open(publicUrl, "_blank");
       }
     } else if (gating === "calendly") {
       // Calendly-gated download - open Calendly modal
       // TODO: Implement Calendly modal integration
       console.log("Calendly gating not yet implemented for:", capabilityKey);
-      window.location.href = `/schedule-demo?download=${capabilityKey}`;
+      window.open(publicUrl, "_blank");
     }
   };
 

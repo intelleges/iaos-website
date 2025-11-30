@@ -413,3 +413,25 @@
 - [x] Add max-height and scrolling to modal content
 - [x] Ensure modal is responsive on all screen sizes
 - [x] Test modal overflow behavior
+
+## Modal Width Bug Fix
+- [x] Create custom SimpleModal component using React createPortal
+- [x] Replace WhitepaperChoiceModal with SimpleModal
+- [x] Replace EmailCaptureModal with SimpleModal
+- [x] Test modal rendering (proper width confirmed)
+
+## Broken One-Pager Download Links
+- [ ] Fix "Download the Supplier Documentation & Collection Summary" link (shows Page not found)
+- [ ] Verify all one-pager download links work correctly
+
+## Modal Width Bug Fix
+- [x] Create custom SimpleModal component using React createPortal
+- [x] Replace WhitepaperChoiceModal with SimpleModal
+- [x] Replace EmailCaptureModal with SimpleModal
+- [x] Test modal rendering (proper width confirmed)
+
+## Broken Download Links (One-Pagers AND Protocol Case Studies)
+- [x] Fix ALL one-pager download buttons showing "Page not found" error
+- [x] Fix ALL protocol case study downloads showing "Page not found" error
+- [x] Investigate download configuration and routing
+- [x] Test all downloads after fix

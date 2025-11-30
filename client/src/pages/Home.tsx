@@ -10,7 +10,7 @@ import { WhitepaperChoiceModal } from "@/components/WhitepaperChoiceModal";
 import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
 import type { ProtocolCaseStudy } from "@/types/protocol";
-import { downloadFromS3 } from "@/lib/s3Downloads";
+
 import { useState } from "react";
 
 export default function Home() {
@@ -20,17 +20,13 @@ export default function Home() {
   const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; s3Key: string } | null>(null);
   const [isWhitepaperModalOpen, setIsWhitepaperModalOpen] = useState(false);
 
-  const handleProtocolClick = async (protocolName: string) => {
+  const handleProtocolClick = (protocolName: string) => {
     const caseStudy = protocolCaseStudies[protocolName] as ProtocolCaseStudy | undefined;
     if (caseStudy) {
-      // For now, directly download from S3 (calendly gating to be implemented later)
-      try {
-        // @ts-expect-error TypeScript cache bug - s3Key exists but TS thinks it's filename
-        await downloadFromS3(caseStudy.s3Key);
-      } catch (error) {
-        console.error("Failed to download case study:", error);
-        alert("Failed to download case study. Please try again.");
-      }
+      // Extract filename from s3Key and open from public directory
+      const filename = caseStudy.s3Key.split('/').pop();
+      const publicUrl = `/case-studies/${filename}`;
+      window.open(publicUrl, "_blank");
     }
   };
 
