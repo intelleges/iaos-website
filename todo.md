@@ -346,3 +346,9 @@
 - [x] Remove mt-3 margin from logo
 - [x] Generate new logo with transparent background for light header
 - [x] Test alignment at all breakpoints
+
+## Logo Visibility Improvement
+- [x] Generate new logo with better contrast (colorful icon + black text)
+- [x] Increase logo size for better visibility (h-14 / 56px)
+- [x] Crop logo to remove excess white space
+- [x] Test logo visibility on light header background

@@ -31,7 +31,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
       <div className="container flex items-center justify-between h-[72px]">
         <Link href="/" className="logo-wrapper flex items-center h-full">
-          <img src="/logo-light-bg.png" alt="Intelleges" className="h-10 w-auto" />
+          <img src="/logo-vibrant.png" alt="Intelleges" className="h-14 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
