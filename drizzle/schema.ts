@@ -56,3 +56,46 @@ export const downloads = mysqlTable("downloads", {
 
 export type Download = typeof downloads.$inferSelect;
 export type InsertDownload = typeof downloads.$inferInsert;
+
+/**
+ * Document downloads table for tracking all document downloads with detailed metadata
+ */
+export const documentDownloads = mysqlTable("documentDownloads", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull(),
+  name: varchar("name", { length: 255 }),
+  company: varchar("company", { length: 255 }),
+  role: varchar("role", { length: 255 }),
+  documentTitle: varchar("documentTitle", { length: 500 }).notNull(),
+  documentUrl: varchar("documentUrl", { length: 500 }).notNull(),
+  documentType: varchar("documentType", { length: 100 }).notNull(), // 'capability', 'protocol', 'whitepaper'
+  downloadedAt: timestamp("downloadedAt").defaultNow().notNull(),
+  followUpEmailSent: int("followUpEmailSent").default(0).notNull(), // 0 = not sent, 1 = sent
+  followUpEmailSentAt: timestamp("followUpEmailSentAt"),
+});
+
+export type DocumentDownload = typeof documentDownloads.$inferSelect;
+export type InsertDocumentDownload = typeof documentDownloads.$inferInsert;
+
+/**
+ * Scheduled emails table for delayed email automation
+ */
+export const scheduledEmails = mysqlTable("scheduledEmails", {
+  id: int("id").autoincrement().primaryKey(),
+  recipientEmail: varchar("recipientEmail", { length: 320 }).notNull(),
+  recipientName: varchar("recipientName", { length: 255 }),
+  emailType: varchar("emailType", { length: 100 }).notNull(), // 'document_followup', 'newsletter', etc.
+  subject: varchar("subject", { length: 500 }).notNull(),
+  htmlContent: text("htmlContent").notNull(),
+  scheduledFor: timestamp("scheduledFor").notNull(),
+  sent: int("sent").default(0).notNull(), // 0 = not sent, 1 = sent
+  sentAt: timestamp("sentAt"),
+  failed: int("failed").default(0).notNull(), // 0 = not failed, 1 = failed
+  failureReason: text("failureReason"),
+  retryCount: int("retryCount").default(0).notNull(),
+  metadata: text("metadata"), // JSON string for additional data
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ScheduledEmail = typeof scheduledEmails.$inferSelect;
+export type InsertScheduledEmail = typeof scheduledEmails.$inferInsert;

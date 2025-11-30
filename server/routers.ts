@@ -5,8 +5,11 @@ import { downloadsRouter } from "./routers/downloads.js";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
-import { leads, downloads } from "../drizzle/schema";
+import { leads, downloads, documentDownloads, scheduledEmails } from "../drizzle/schema";
 import { eq, and, gte, count } from "drizzle-orm";
+
+const DOWNLOAD_LIMIT = 3;
+const EMAIL_DELAY_HOURS = 2;
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -141,6 +144,158 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+
+  // Document downloads with email automation (3-document lifetime limit)
+  documentDownloads: router({
+    // Check if user has reached 3-document lifetime limit
+    checkLimit: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+      }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) {
+          throw new Error('Database not available');
+        }
+
+        const result = await db
+          .select({ count: count() })
+          .from(documentDownloads)
+          .where(eq(documentDownloads.email, input.email.toLowerCase()));
+
+        const downloadCount = Number(result[0]?.count || 0);
+        
+        return {
+          email: input.email,
+          downloadCount,
+          limitReached: downloadCount >= DOWNLOAD_LIMIT,
+          remainingDownloads: Math.max(0, DOWNLOAD_LIMIT - downloadCount),
+        };
+      }),
+
+    // Record download and schedule follow-up email
+    recordDownload: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        name: z.string().min(1),
+        company: z.string().optional(),
+        role: z.string().optional(),
+        documentTitle: z.string().min(1),
+        documentUrl: z.string().min(1),
+        documentType: z.enum(['capability', 'protocol', 'whitepaper']),
+      }))
+      .mutation(async ({ input }) => {
+        const db = await getDb();
+        if (!db) {
+          throw new Error('Database not available');
+        }
+
+        const normalizedEmail = input.email.toLowerCase();
+
+        // Check limit
+        const limitResult = await db
+          .select({ count: count() })
+          .from(documentDownloads)
+          .where(eq(documentDownloads.email, normalizedEmail));
+
+        const currentCount = Number(limitResult[0]?.count || 0);
+
+        if (currentCount >= DOWNLOAD_LIMIT) {
+          throw new Error(`Download limit of ${DOWNLOAD_LIMIT} reached`);
+        }
+
+        // Record download
+        await db.insert(documentDownloads).values({
+          email: normalizedEmail,
+          name: input.name,
+          company: input.company || null,
+          role: input.role || null,
+          documentTitle: input.documentTitle,
+          documentUrl: input.documentUrl,
+          documentType: input.documentType,
+          downloadedAt: new Date(),
+          followUpEmailSent: 0,
+          followUpEmailSentAt: null,
+        });
+
+        // Schedule follow-up email
+        const scheduledFor = new Date();
+        scheduledFor.setHours(scheduledFor.getHours() + EMAIL_DELAY_HOURS);
+
+        const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(input.name)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
+        
+        const htmlContent = generateFollowUpEmail(input.name, input.documentTitle, calendlyUrl);
+
+        await db.insert(scheduledEmails).values({
+          recipientEmail: normalizedEmail,
+          recipientName: input.name,
+          emailType: 'document_followup',
+          subject: `Thank you for downloading ${input.documentTitle}`,
+          htmlContent,
+          scheduledFor,
+          sent: 0,
+          sentAt: null,
+          failed: 0,
+          failureReason: null,
+          retryCount: 0,
+          metadata: JSON.stringify({ documentTitle: input.documentTitle, documentType: input.documentType }),
+          createdAt: new Date(),
+        });
+
+        return {
+          success: true,
+          downloadCount: currentCount + 1,
+          remainingDownloads: DOWNLOAD_LIMIT - (currentCount + 1),
+        };
+      }),
+  }),
 });
+
+function generateFollowUpEmail(userName: string, documentTitle: string, calendlyUrl: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank you for downloading ${documentTitle}</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <img src="https://intelleges.com/logo.png" alt="Intelleges" style="height: 40px;">
+  </div>
+  <h2 style="color: #0A3A67; font-weight: 300; font-size: 24px;">Hi ${userName},</h2>
+  <p style="font-size: 16px; margin-bottom: 20px;">
+    Thank you for downloading <strong>"${documentTitle}"</strong> from Intelleges.
+  </p>
+  <p style="font-size: 16px; margin-bottom: 20px;">
+    This topic is of great interest to our leadership team. Our subject matter experts have helped dozens of enterprises streamline their compliance processes, reduce supplier management overhead, and make confident, risk-aware decisions.
+  </p>
+  <p style="font-size: 16px; margin-bottom: 30px;">
+    <strong>Would you like to discuss how Intelleges can help your organization?</strong>
+  </p>
+  <div style="text-align: center; margin: 40px 0;">
+    <a href="${calendlyUrl}" style="display: inline-block; background-color: #0A3A67; color: white; padding: 14px 32px; text-decoration: none; border-radius: 25px; font-weight: 500; font-size: 16px;">
+      Schedule a Meeting
+    </a>
+  </div>
+  <p style="font-size: 14px; color: #666; margin-top: 40px;">
+    Our team is ready to show you how Intelleges makes data and document collection simple—easy, a no-brainer.
+  </p>
+  <hr style="border: none; border-top: 1px solid #E0E0E0; margin: 30px 0;">
+  <p style="font-size: 14px; color: #666;">
+    Best regards,<br>
+    <strong>The Intelleges Team</strong>
+  </p>
+  <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #E0E0E0; font-size: 12px; color: #999; text-align: center;">
+    <p>
+      Intelleges | ISO 27001 Certified | Battelle Supplier of the Year<br>
+      <a href="https://intelleges.com" style="color: #0A3A67; text-decoration: none;">intelleges.com</a>
+    </p>
+  </div>
+</body>
+</html>
+  `.trim();
+}
 
 export type AppRouter = typeof appRouter;

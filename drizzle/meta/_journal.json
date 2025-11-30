@@ -15,6 +15,13 @@
       "when": 1764444746397,
       "tag": "0001_hot_skaar",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1764529735928,
+      "tag": "0002_striped_may_parker",
+      "breakpoints": true
     }
   ]
 }

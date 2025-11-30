@@ -460,3 +460,28 @@
 - [x] Update service document downloads to use EmailCaptureModal (not currently displayed on site)
 - [x] Remove all direct download links
 - [x] Test email capture flow for all document types
+
+### 2-Hour Delayed Email Automation with Calendly Follow-up
+- [x] Create database schema for email queue (scheduled_emails table)
+- [x] Create database schema for document downloads tracking
+- [x] Create backend API endpoints (documentDownloads.checkLimit, documentDownloads.recordDownload)
+- [x] Create email template: "Thank you for downloading [Document Name]"
+- [x] Add document-specific Calendly link generation
+- [x] Create DownloadLimitReachedModal component
+- [x] Write QA testing specification document
+- [x] Write implementation guide for frontend integration
+- [ ] Update EmailCaptureModal to integrate with new API
+- [ ] Update Home.tsx to use new download system
+- [ ] Implement background email processor (server/emailProcessor.ts)
+- [ ] Add SendGrid environment variables
+- [ ] Test email automation flow end-to-endmail queue processing
+- [ ] Test 2-hour delay email flow
+- [ ] Verify Calendly links are properly customized per document
+
+## 3-Document Download Limit Per Email
+- [x] Add download count tracking per email address (in backend API)
+- [x] Create "Download Limit Reached" modal component
+- [x] Add Calendly meeting link to limit reached message
+- [ ] Integrate limit check in EmailCaptureModal
+- [ ] Show limit modal when user attempts 4th download
+- [ ] Test download limit enforcement across all document types
