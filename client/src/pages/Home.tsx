@@ -4,9 +4,6 @@ import LogoCarousel from "@/components/LogoCarousel";
 import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import EmailCaptureModal from "@/components/EmailCaptureModal";
-import { protocolCaseStudies } from "@/config/protocolCaseStudies";
-import { useState } from "react";
 
 export default function Home() {
   const trustBlock = useScrollAnimation();
@@ -14,21 +11,6 @@ export default function Home() {
   const protocols = useScrollAnimation();
   const howItWorks = useScrollAnimation();
   const whitepaper = useScrollAnimation();
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; filename: string } | null>(null);
-
-  const handleProtocolClick = (protocolName: string) => {
-    const caseStudy = protocolCaseStudies[protocolName];
-    if (caseStudy) {
-      setSelectedProtocol(caseStudy);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleVideoClick = () => {
-    window.open('https://www.youtube.com/watch?v=7BstopG9qbU', '_blank');
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -57,12 +39,7 @@ export default function Home() {
                   Book a Demo
                 </Button>
               </Link>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="rounded-full px-8 font-light"
-                onClick={handleVideoClick}
-              >
+              <Button size="lg" variant="outline" className="rounded-full px-8 font-light">
                 Watch 2-Minute Overview
               </Button>
             </div>
@@ -190,12 +167,10 @@ export default function Home() {
                 "Quality Systems (ISO, AS9100, GMP)",
                 "Conflict Minerals",
                 "Counterfeit Parts Prevention",
-                "Site Security (C-TPAT / CFATS)",
-                "Sole Source Risk Mitigation"
+                "Site Security (C-TPAT / CFATS)"
               ].map((protocol, i) => (
                 <div 
                   key={i} 
-                  onClick={() => handleProtocolClick(protocol)}
                   className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
                 >
                   <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
@@ -314,16 +289,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Email Capture Modal */}
-      {selectedProtocol && (
-        <EmailCaptureModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          downloadUrl={`/case-studies/${selectedProtocol.filename}`}
-          resourceTitle={selectedProtocol.title}
-        />
-      )}
     </div>
   );
 }

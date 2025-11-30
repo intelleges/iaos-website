@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SEO from "@/components/seo";
 import { AlertCircle, Loader2 } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "wouter";
 
 export default function Login() {
@@ -11,6 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +20,15 @@ export default function Login() {
     setIsLoading(true);
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await recaptchaRef.current?.executeAsync();
+      
+      if (!recaptchaToken) {
+        setError("Security verification failed. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
       // Simulate authentication delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -32,6 +43,9 @@ export default function Login() {
     } catch (err) {
       setError("An error occurred. Please try again.");
       setIsLoading(false);
+    } finally {
+      // Reset reCAPTCHA
+      recaptchaRef.current?.reset();
     }
   };
 
@@ -98,6 +112,13 @@ export default function Login() {
                   className="h-12 rounded-lg font-light"
                 />
               </div>
+
+              {/* Hidden reCAPTCHA */}
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                size="invisible"
+                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              />
 
               {/* Error Message */}
               {error && (
