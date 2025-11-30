@@ -17,7 +17,7 @@ export function WhitepaperChoiceModal({
 }: WhitepaperChoiceModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-light">Choose Your Download</DialogTitle>
           <DialogDescription className="text-base">
@@ -25,7 +25,7 @@ export function WhitepaperChoiceModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-6 py-6">
+        <div className="grid gap-4 py-4">
           {/* Executive Summary Option */}
           <div className="flex flex-col gap-4 p-6 rounded-lg border border-border/40 bg-background hover:border-primary/30 transition-all">
             <div className="flex items-start gap-4">

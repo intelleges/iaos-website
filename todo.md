@@ -408,3 +408,8 @@
 - [x] Option 2: Executive summary (email-gated)
 - [x] Update Home.tsx to show modal on button click
 - [x] Test both download flows
+
+## Whitepaper Modal Overflow Fix
+- [x] Add max-height and scrolling to modal content
+- [x] Ensure modal is responsive on all screen sizes
+- [x] Test modal overflow behavior
