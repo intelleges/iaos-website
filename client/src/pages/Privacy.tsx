@@ -39,6 +39,18 @@ export default function Privacy() {
               <li><strong>Log Data:</strong> Access times, error logs, performance metrics</li>
               <li><strong>Cookies and Tracking Technologies:</strong> Session cookies, analytics cookies, preference cookies</li>
             </ul>
+
+            <h3 className="text-xl font-medium mt-6 mb-3">2.3 Marketing Website Data Collection</h3>
+            <p className="text-muted-foreground mb-3">
+              When you visit our marketing website (intelleges.com), we may collect:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li><strong>Contact Information:</strong> Name, email, and company when downloading resources</li>
+              <li><strong>Download Activity:</strong> Tracking of resource downloads and document access</li>
+              <li><strong>Analytics Data:</strong> Website usage patterns via Google Analytics</li>
+              <li><strong>Visitor Intelligence:</strong> B2B marketing insights via Apollo.io for enterprise outreach</li>
+              <li><strong>Meeting Scheduling Data:</strong> Information collected via Calendly when booking consultations</li>
+            </ul>
           </section>
 
           <section>
@@ -55,6 +67,22 @@ export default function Privacy() {
               <li><strong>Security:</strong> To detect, prevent, and address technical issues and security threats</li>
               <li><strong>Legal Obligations:</strong> To comply with applicable laws and regulations</li>
             </ul>
+           </section>
+
+          <section>
+            <h2 className="text-2xl font-medium mb-4">3.1 Processing of Supplier Information</h2>
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Intelleges processes supplier information on behalf of our customers (data controllers), including:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li><strong>Business Contact Information:</strong> Supplier company names, contact persons, email addresses, phone numbers</li>
+              <li><strong>Compliance Certifications:</strong> ISO certifications, quality management documentation, regulatory approvals</li>
+              <li><strong>Insurance Certificates:</strong> Liability insurance, workers' compensation, professional indemnity coverage</li>
+              <li><strong>Questionnaire Responses:</strong> Compliance questionnaires, due diligence forms, capability assessments</li>
+            </ul>
+            <p className="text-muted-foreground leading-relaxed mt-4">
+              As a data processor, we process this information only as directed by our customers and in accordance with our data processing agreements. Our customers remain the data controllers responsible for ensuring lawful processing of supplier data.
+            </p>
           </section>
 
           <section>

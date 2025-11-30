@@ -4,7 +4,6 @@ import { Shield, Lock, Eye, FileCheck, Server, Users, AlertTriangle, CheckCircle
 export default function Security() {
   const certifications = [
     { name: "ISO 27001", description: "Information Security Management" },
-    { name: "SOC 2 Type II", description: "Service Organization Controls" },
     { name: "NIST 800-171", description: "Controlled Unclassified Information" },
   ];
 
@@ -134,7 +133,7 @@ export default function Security() {
             <div>
               <h3 className="text-2xl font-medium mb-4">3. Infrastructure Security</h3>
               <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li><strong>Cloud Provider:</strong> Hosted on AWS with SOC 2 and ISO 27001 certified data centers</li>
+                <li><strong>Cloud Provider:</strong> Hosted on AWS with ISO 27001 certified data centers</li>
                 <li><strong>Network Security:</strong> Virtual Private Cloud (VPC), network segmentation, and firewall rules</li>
                 <li><strong>DDoS Protection:</strong> AWS Shield and CloudFlare protection against distributed attacks</li>
                 <li><strong>Redundancy:</strong> Multi-region deployment with automatic failover</li>
@@ -168,7 +167,7 @@ export default function Security() {
               <h3 className="text-2xl font-medium mb-4">6. Compliance & Governance</h3>
               <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
                 <li><strong>ISO 27001:</strong> Certified Information Security Management System</li>
-                <li><strong>SOC 2 Type II:</strong> Annual audits of security, availability, and confidentiality controls</li>
+
                 <li><strong>GDPR Compliance:</strong> Full compliance with EU data protection regulations</li>
                 <li><strong>CCPA Compliance:</strong> California Consumer Privacy Act compliance</li>
                 <li><strong>NIST 800-171:</strong> Compliance with Controlled Unclassified Information requirements</li>

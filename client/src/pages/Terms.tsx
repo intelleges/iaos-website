@@ -83,8 +83,11 @@ export default function Terms() {
 
           <section>
             <h2 className="text-2xl font-medium mb-4">7. Data Security and Privacy</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed mb-4">
               Intelleges implements industry-standard security measures to protect your data. We are ISO 27001 certified and comply with applicable data protection regulations. For detailed information about how we collect, use, and protect your data, please review our Privacy Policy.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              <strong>Data Processing Agreement (DPA):</strong> A Data Processing Agreement is available upon request for enterprise customers requiring GDPR-compliant data processing terms. Please contact us at <a href="mailto:legal@intelleges.com" className="text-primary hover:underline">legal@intelleges.com</a> to request a DPA.
             </p>
           </section>
 

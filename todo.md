@@ -630,3 +630,13 @@
   ✅ Rebranded Case Studies to "Solutions by Protocol"
   ✅ Updated button text to "View Solution Details"
   ✅ Updated footer navigation link
+
+## Update Legal Pages with Enhanced Content
+- [x] Read INT_WEB_LEGAL_01_v1.1 specification
+  - Remove SOC 2 Type II claims (CRITICAL)
+  - Add Marketing Website Data Collection section (HIGH)
+  - Add Supplier Data Processing section (HIGH)
+  - Add DPA reference to Terms (MEDIUM)
+- [x] Update Terms of Service page (added DPA reference)
+- [x] Update Privacy Policy page (added Marketing Website Data Collection and Supplier Data Processing sections)
+- [x] Update Security Statement page (removed all SOC 2 Type II claims)
