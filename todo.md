@@ -452,3 +452,11 @@
 - [x] Fix narrow column layout issue on pricing page
 - [x] Ensure pricing cards display in proper grid layout
 - [ ] Test responsive behavior across breakpoints
+
+## Email-Gated Downloads for ALL Documents
+- [x] Update capability one-pager cards to use EmailCaptureModal
+- [x] Update protocol case study downloads to use EmailCaptureModal
+- [x] Update whitepaper downloads to use EmailCaptureModal
+- [x] Update service document downloads to use EmailCaptureModal (not currently displayed on site)
+- [x] Remove all direct download links
+- [x] Test email capture flow for all document types

@@ -19,19 +19,32 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; s3Key: string } | null>(null);
   const [isWhitepaperModalOpen, setIsWhitepaperModalOpen] = useState(false);
+  const [isWhitepaperEmailModalOpen, setIsWhitepaperEmailModalOpen] = useState(false);
+  const [selectedWhitepaper, setSelectedWhitepaper] = useState<{ title: string; url: string } | null>(null);
+  const [isCapabilityModalOpen, setIsCapabilityModalOpen] = useState(false);
+  const [selectedCapability, setSelectedCapability] = useState<{ title: string; url: string } | null>(null);
 
   const handleProtocolClick = (protocolName: string) => {
     const caseStudy = protocolCaseStudies[protocolName] as ProtocolCaseStudy | undefined;
     if (caseStudy) {
-      // Extract filename from s3Key and open from public directory
+      // Extract filename from s3Key and prepare for email-gated download
       const filename = caseStudy.s3Key.split('/').pop();
       const publicUrl = `/case-studies/${filename}`;
-      window.open(publicUrl, "_blank");
+      setSelectedProtocol({ title: caseStudy.title, s3Key: filename || '' });
+      setIsModalOpen(true);
     }
   };
 
   const handleVideoClick = () => {
     window.open('https://www.youtube.com/watch?v=7BstopG9qbU', '_blank');
+  };
+
+  const handleCapabilityDownload = (url: string, capabilityKey: string) => {
+    // Get the capability title from downloadMappings
+    const { capabilityDownloads } = require('@/config/downloadMappings');
+    const config = capabilityDownloads[capabilityKey];
+    setSelectedCapability({ title: config.title, url });
+    setIsCapabilityModalOpen(true);
   };
 
   return (
@@ -120,15 +133,15 @@ export default function Home() {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <CapabilityCard capabilityKey="collect-supplier-data" />
-              <CapabilityCard capabilityKey="validate-verify" />
-              <CapabilityCard capabilityKey="manage-workflows" />
-              <CapabilityCard capabilityKey="vet-suppliers" />
-              <CapabilityCard capabilityKey="supply-chain-transitions" />
-              <CapabilityCard capabilityKey="investigations-due-diligence" />
-              <CapabilityCard capabilityKey="environmental-scans" />
-              <CapabilityCard capabilityKey="track-quality-data" />
-              <CapabilityCard capabilityKey="audit-documentation" />
+              <CapabilityCard capabilityKey="collect-supplier-data" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="validate-verify" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="manage-workflows" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="vet-suppliers" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="supply-chain-transitions" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="investigations-due-diligence" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="environmental-scans" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="track-quality-data" onGatedDownload={handleCapabilityDownload} />
+              <CapabilityCard capabilityKey="audit-documentation" onGatedDownload={handleCapabilityDownload} />
             </div>
             
             <div className="text-center space-y-2 pt-8">
@@ -296,6 +309,26 @@ export default function Home() {
         />
       )}
 
+      {/* Capability Email Capture Modal */}
+      {selectedCapability && (
+        <EmailCaptureModal
+          isOpen={isCapabilityModalOpen}
+          onClose={() => setIsCapabilityModalOpen(false)}
+          downloadUrl={selectedCapability.url}
+          resourceTitle={selectedCapability.title}
+        />
+      )}
+
+      {/* Whitepaper Email Capture Modal */}
+      {selectedWhitepaper && (
+        <EmailCaptureModal
+          isOpen={isWhitepaperEmailModalOpen}
+          onClose={() => setIsWhitepaperEmailModalOpen(false)}
+          downloadUrl={selectedWhitepaper.url}
+          resourceTitle={selectedWhitepaper.title}
+        />
+      )}
+
       {/* Whitepaper Choice Modal */}
       <WhitepaperChoiceModal
         isOpen={isWhitepaperModalOpen}
@@ -303,10 +336,11 @@ export default function Home() {
         onChooseExecutiveSummary={() => {
           // Download executive summary (email-gated)
           setIsWhitepaperModalOpen(false);
-          downloadFromS3("pdfs/marketing/Intelleges_Executive_Summary.pdf").catch(error => {
-            console.error("Failed to download executive summary:", error);
-            alert("Failed to download. Please try again.");
+          setSelectedWhitepaper({
+            title: "Executive Summary: The Hidden Cost of Supplier Compliance",
+            url: "/whitepapers/Intelleges_Executive_Summary.pdf"
           });
+          setIsWhitepaperEmailModalOpen(true);
         }}
         onChooseFullWhitepaper={() => {
           // Open Calendly for full whitepaper (calendly-gated)

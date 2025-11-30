@@ -62,7 +62,7 @@ export const capabilityDownloads = {
     title: "Support offshoring, nearshoring, and re-shoring transitions",
     filename: "nearshoring-transitions.pdf",
     tooltip: "Download Nearshoring Transition Whitepaper",
-    gating: "public" as GatingType, // Only public capability download
+    gating: "email" as GatingType,
     caseStudies: ["mexico-nearshoring"]
   },
   "investigations-due-diligence": {
