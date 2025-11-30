@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
 
 import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
 import { useState } from "react";
 
@@ -165,13 +166,11 @@ export default function Home() {
                 "Site Security (C-TPAT / CFATS)",
                 "Sole Source Risk Mitigation"
               ].map((protocol, i) => (
-                <div 
-                  key={i} 
+                <ProtocolCard
+                  key={i}
+                  title={protocol}
                   onClick={() => handleProtocolClick(protocol)}
-                  className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
-                >
-                  <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
-                </div>
+                />
               ))}
             </div>
             

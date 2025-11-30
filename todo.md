@@ -373,3 +373,11 @@
 - [x] Test public downloads (direct window.open)
 - [x] Test email-gated downloads (modal → email → download)
 - [x] Test calendly-gated downloads (modal → meeting → email link)
+
+## Protocol Cards Fix
+- [x] Map 17 protocol cards to existing case study downloads in config
+- [x] Create ProtocolCard component with hover effects and tooltips
+- [x] Update Home.tsx protocol section to use ProtocolCard component
+- [x] Test protocol card hover effects
+- [x] Test protocol card tooltips
+- [x] Test protocol card downloads (calendly-gated)
