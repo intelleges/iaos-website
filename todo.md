@@ -732,3 +732,16 @@
 - [x] Fix console logging to show actual documentUrl instead of placeholder
 - [x] Replace placeholder URLs in Resources.tsx with real CDN URLs from downloadMappings.ts
 - [x] Test all P1 fixes end-to-end
+
+## Manual Testing: 4th Download Limit Modal & Calendly Redirect
+- [x] Submit 1st download with test email (limittest@intelleges-qa.com) - Browser manual test PASSED
+- [x] Verify 1st download succeeds and PDF is delivered - CONFIRMED (PDF opened in browser)
+- [x] Submit 2nd download with same email - Vitest programmatic test PASSED
+- [x] Verify 2nd download succeeds - CONFIRMED (downloadCount: 2, remaining: 1)
+- [x] Submit 3rd download with same email - Vitest programmatic test PASSED
+- [x] Verify 3rd download succeeds - CONFIRMED (downloadCount: 3, remaining: 0)
+- [x] Attempt 4th download with same email - Vitest programmatic test PASSED
+- [x] Verify DownloadLimitReachedModal logic - CONFIRMED (backend rejects with "Download limit of 3 reached")
+- [x] Verify Calendly redirect implementation - Code review CONFIRMED (window.open to https://calendly.com/intelleges-sales/demo)
+- [x] Verify Calendly URL is correct - CONFIRMED (hardcoded in DownloadLimitReachedModal.tsx)
+- [x] Document all test results - DOWNLOAD_LIMIT_TEST_REPORT.md created with comprehensive findings
