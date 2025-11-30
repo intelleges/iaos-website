@@ -633,3 +633,28 @@
 - [x] Check if there's a custom Tailwind config affecting widths
 - [x] Verify no conflicting CSS from global styles
 - [x] **BUG FIXED:** Applied inline styles `style={{display: 'block', width: '100%', maxWidth: '42rem'}}` to force proper text flow
+
+## SendGrid Email Automation Implementation
+- [ ] Verify SendGrid API key is configured in environment variables
+- [ ] Create email templates directory structure
+- [ ] Design Day 0 email template (immediate PDF delivery)
+- [ ] Design Day 3 email template (case study highlights)
+- [ ] Design Day 7 email template (consultation reminder)
+- [ ] Create SendGrid service module for sending emails
+- [ ] Implement PDF attachment logic for Executive Summary
+- [ ] Create API endpoint for immediate email delivery
+- [ ] Set up database table for tracking email sends
+- [ ] Implement scheduled job system for follow-up emails
+- [ ] Create Day 3 follow-up scheduler
+- [ ] Create Day 7 follow-up scheduler
+- [ ] Add email preferences/unsubscribe functionality
+- [ ] Test complete email flow end-to-end
+- [ ] Add error handling and retry logic
+
+## Fix PDF Download Modal UI Issues
+- [x] Fix broken close button (× appearing as text instead of icon) - added relative positioning to DialogContent
+- [x] Fix modal title display (remove × from title text)
+- [ ] Verify modal closes properly when clicking X button
+- [ ] Test download button functionality
+- [ ] Ensure form validation works correctly
+- [ ] Test complete download flow from click to PDF delivery

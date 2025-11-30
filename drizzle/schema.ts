@@ -56,3 +56,35 @@ export const downloads = mysqlTable("downloads", {
 
 export type Download = typeof downloads.$inferSelect;
 export type InsertDownload = typeof downloads.$inferInsert;
+
+/**
+ * Email sends tracking table for nurture campaign
+ */
+export const emailSends = mysqlTable("emailSends", {
+  id: int("id").autoincrement().primaryKey(),
+  leadId: int("leadId").notNull(), // Foreign key to leads table
+  emailType: mysqlEnum("emailType", ["executive_summary", "day3_followup", "day7_followup"]).notNull(),
+  sentAt: timestamp("sentAt").defaultNow().notNull(),
+  status: mysqlEnum("status", ["sent", "failed", "bounced"]).default("sent").notNull(),
+  errorMessage: text("errorMessage"),
+});
+
+export type EmailSend = typeof emailSends.$inferSelect;
+export type InsertEmailSend = typeof emailSends.$inferInsert;
+
+/**
+ * Scheduled emails table for follow-up automation
+ */
+export const scheduledEmails = mysqlTable("scheduledEmails", {
+  id: int("id").autoincrement().primaryKey(),
+  leadId: int("leadId").notNull(), // Foreign key to leads table
+  emailType: mysqlEnum("emailType", ["day3_followup", "day7_followup"]).notNull(),
+  scheduledFor: timestamp("scheduledFor").notNull(),
+  status: mysqlEnum("status", ["pending", "sent", "failed", "cancelled"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  sentAt: timestamp("sentAt"),
+  errorMessage: text("errorMessage"),
+});
+
+export type ScheduledEmail = typeof scheduledEmails.$inferSelect;
+export type InsertScheduledEmail = typeof scheduledEmails.$inferInsert;

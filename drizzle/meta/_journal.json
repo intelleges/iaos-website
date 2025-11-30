@@ -15,6 +15,13 @@
       "when": 1764445181344,
       "tag": "0001_regular_shape",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1764464187584,
+      "tag": "0002_wakeful_vance_astro",
+      "breakpoints": true
     }
   ]
 }
