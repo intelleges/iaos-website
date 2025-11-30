@@ -654,6 +654,8 @@
 ## Fix PDF Download Modal UI Issues
 - [x] Fix modal width - form is too narrow causing text wrapping and messy layout
 - [x] Increase max-width from max-w-lg (512px) to max-w-2xl (672px)
+- [x] Found EmailCaptureModal was overriding with sm:max-w-md (448px) - changed to sm:max-w-2xl
+- [x] max-w-2xl still too narrow - increased to max-w-4xl (896px)
 - [ ] Test modal display with proper width
 - [ ] Verify close button appears correctly in top-right
 - [ ] Test download button functionality

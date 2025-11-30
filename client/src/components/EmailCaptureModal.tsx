@@ -157,7 +157,7 @@ export default function EmailCaptureModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-4xl">
         {!isSubmitted ? (
           <>
             <DialogHeader>
