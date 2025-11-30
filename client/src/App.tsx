@@ -19,6 +19,7 @@ import FOCICaseStudy from "@/pages/case-studies/FOCI";
 import COOComplianceCaseStudy from "@/pages/case-studies/COOCompliance";
 import CounterfeitPartsCaseStudy from "@/pages/case-studies/CounterfeitParts";
 import Resources from "@/pages/Resources";
+import OnePagers from "@/pages/OnePagers";
 import Login from "@/pages/Login";
 import Demo from "@/pages/Demo";
 import NotFound from "@/pages/not-found";
@@ -47,6 +48,7 @@ function Router() {
           <Route path="/case-studies/counterfeit-parts" component={CounterfeitPartsCaseStudy} />
           <Route path="/pricing" component={Pricing} />
           <Route path="/resources" component={Resources} />
+          <Route path="/one-pagers" component={OnePagers} />
           <Route path="/contact" component={Contact} />
           <Route path="/demo" component={Demo} />
           <Route path="/login" component={Login} />

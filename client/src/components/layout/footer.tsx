@@ -68,6 +68,11 @@ export default function Footer() {
                   Whitepapers
                 </Link>
               </li>
+              <li>
+                <Link href="/one-pagers" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
+                  One-Pagers
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -17,7 +17,7 @@ export function WhitepaperChoiceModal({
 }: WhitepaperChoiceModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="!max-w-2xl max-h-[90vh] overflow-y-auto w-full">
         <DialogHeader>
           <DialogTitle className="text-2xl font-light">Choose Your Download</DialogTitle>
           <DialogDescription className="text-base">
