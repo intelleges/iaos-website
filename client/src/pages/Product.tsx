@@ -63,8 +63,8 @@ export default function Product() {
     },
     {
       icon: Zap,
-      title: "Automated Workflows",
-      description: "Invitations, reminders, escalations — all handled for you."
+      title: "Automated Communications",
+      description: "Invitations, reminders, alerts — all handled by the system."
     },
     {
       icon: Users,
