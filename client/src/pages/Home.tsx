@@ -13,6 +13,7 @@ import type { ProtocolCaseStudy } from "@/types/protocol";
 
 import { useState } from 'react';
 import FlowCard from '@/components/FlowCard';
+import { Inbox, Shield, Award } from 'lucide-react';
 
 export default function Home() {
 
@@ -100,6 +101,7 @@ export default function Home() {
               <FlowCard
                 label="Collect"
                 subtitle="Automated Data Gathering"
+                icon={Inbox}
                 content={{
                   intro: "Stop chasing suppliers for documents.",
                   description: "Our platform automatically collects certificates, insurance records, compliance questionnaires, and regulatory evidence from your entire supplier network — without your team lifting a finger.",
@@ -110,6 +112,7 @@ export default function Home() {
               <FlowCard
                 label="Validate"
                 subtitle="Real-Time Verification"
+                icon={Shield}
                 content={{
                   intro: "Every document checked. Every requirement mapped.",
                   description: "Submissions are validated instantly against FAR, DFARS, NIST 800-171, ISO, CMMC, and 80+ regulatory frameworks. Non-compliant items are flagged before they become audit findings.",
@@ -120,6 +123,7 @@ export default function Home() {
               <FlowCard
                 label="Comply"
                 subtitle="Audit-Ready, Always"
+                icon={Award}
                 content={{
                   intro: "Compliance isn't a project. It's a state.",
                   description: "Continuous monitoring ensures your supplier network stays compliant 24/7. When auditors arrive, generate complete evidence packages in seconds — not weeks.",
@@ -135,21 +139,21 @@ export default function Home() {
               </h2>
               
               <div className="grid md:grid-cols-3 gap-8 text-left">
-                <div className="space-y-3">
+                <div className="space-y-3 p-6 rounded-lg border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/20 hover:bg-primary/5 cursor-pointer">
                   <h3 className="text-xl font-normal">Order enables excellence</h3>
                   <p className="text-base text-muted-foreground font-light leading-relaxed">
                     Structured workflows prevent errors before they happen.
                   </p>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-3 p-6 rounded-lg border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/20 hover:bg-primary/5 cursor-pointer">
                   <h3 className="text-xl font-normal">Form enforces discipline</h3>
                   <p className="text-base text-muted-foreground font-light leading-relaxed">
                     Nothing is missed, skipped, or forgotten.
                   </p>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-3 p-6 rounded-lg border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/20 hover:bg-primary/5 cursor-pointer">
                   <h3 className="text-xl font-normal">Validation at the point of entry</h3>
                   <p className="text-base text-muted-foreground font-light leading-relaxed">
                     Clean data, no rework, no audit risk.

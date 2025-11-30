@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, type LucideIcon } from 'lucide-react';
 
 interface FlowCardProps {
   label: string;
   subtitle: string;
+  icon: LucideIcon;
   content: {
     intro: string;
     description: string;
@@ -11,7 +12,7 @@ interface FlowCardProps {
   };
 }
 
-export default function FlowCard({ label, subtitle, content }: FlowCardProps) {
+export default function FlowCard({ label, subtitle, icon: Icon, content }: FlowCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -20,6 +21,7 @@ export default function FlowCard({ label, subtitle, content }: FlowCardProps) {
         onClick={() => setIsExpanded(!isExpanded)}
         className="group relative w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer"
       >
+        <Icon className="absolute top-3 right-3 w-5 h-5 text-primary/40 transition-all duration-300 group-hover:text-primary/60" />
         <span className="text-2xl md:text-3xl font-light transition-all duration-300 group-hover:font-normal">
           {label}
         </span>

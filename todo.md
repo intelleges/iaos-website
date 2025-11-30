@@ -702,3 +702,16 @@
 - [x] Implement mobile accordion behavior (vertical stack, one open at a time)
 - [x] Test desktop hover and click interactions
 - [x] Test mobile tap-to-expand behavior
+
+## Why Structure Wins Card Hover Animations
+- [x] Apply hover animations to "Order enables excellence" card
+- [x] Apply hover animations to "Form enforces discipline" card
+- [x] Apply hover animations to "Validation at the point of entry" card
+- [x] Test hover effects for visual consistency with flow cards
+
+## Flow Card Icon Graphics
+- [x] Add Inbox icon to Collect card (top-right corner)
+- [x] Add Shield icon to Validate card (top-right corner)
+- [x] Add Award/Certificate icon to Comply card (top-right corner)
+- [x] Update FlowCard component to accept icon prop
+- [x] Test icon positioning and visual hierarchy
