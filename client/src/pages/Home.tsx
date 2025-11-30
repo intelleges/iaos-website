@@ -37,7 +37,6 @@ export default function Home() {
   };
 
   return (
-    <>
     <div className="flex flex-col min-h-screen">
       <SEO 
         title="Home" 
@@ -299,25 +298,25 @@ export default function Home() {
         />
       )}
 
-
+      {/* Whitepaper Choice Modal */}
+      <WhitepaperChoiceModal
+        isOpen={isWhitepaperModalOpen}
+        onClose={() => setIsWhitepaperModalOpen(false)}
+        onChooseExecutiveSummary={() => {
+          // Download executive summary (email-gated)
+          setIsWhitepaperModalOpen(false);
+          downloadFromS3("pdfs/marketing/Intelleges_Executive_Summary.pdf").catch(error => {
+            console.error("Failed to download executive summary:", error);
+            alert("Failed to download. Please try again.");
+          });
+        }}
+        onChooseFullWhitepaper={() => {
+          // Open Calendly for full whitepaper (calendly-gated)
+          setIsWhitepaperModalOpen(false);
+          // TODO: Implement Calendly modal
+          alert("Calendly integration coming soon! For now, please book a demo using the button in the header.");
+        }}
+      />
     </div>
-
-    {/* Modals rendered outside flex container */}
-    <WhitepaperChoiceModal
-      isOpen={isWhitepaperModalOpen}
-      onClose={() => setIsWhitepaperModalOpen(false)}
-      onChooseExecutiveSummary={() => {
-        setIsWhitepaperModalOpen(false);
-        downloadFromS3("pdfs/marketing/Intelleges_Executive_Summary.pdf").catch(error => {
-          console.error("Failed to download executive summary:", error);
-          alert("Failed to download. Please try again.");
-        });
-      }}
-      onChooseFullWhitepaper={() => {
-        setIsWhitepaperModalOpen(false);
-        alert("Calendly integration coming soon! For now, please book a demo using the button in the header.");
-      }}
-    />
-    </>
   );
 }

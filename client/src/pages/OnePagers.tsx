@@ -38,7 +38,6 @@ export default function OnePagers() {
   const services = Object.entries(serviceDownloads) as [ServiceKey, typeof serviceDownloads[ServiceKey]][];
 
   return (
-    <>
     <div className="flex flex-col min-h-screen">
       <SEO 
         title="Service One-Pagers" 
@@ -113,20 +112,18 @@ export default function OnePagers() {
         </div>
       </section>
 
+      {/* Email Capture Modal */}
+      {selectedService && (
+        <EmailCaptureModal
+          isOpen={emailModalOpen}
+          onClose={() => {
+            setEmailModalOpen(false);
+            setSelectedService(null);
+          }}
+          downloadUrl={selectedService.s3Key}
+          resourceTitle={selectedService.title}
+        />
+      )}
     </div>
-
-    {/* Email Capture Modal - rendered outside flex container */}
-    {selectedService && (
-      <EmailCaptureModal
-        isOpen={emailModalOpen}
-        onClose={() => {
-          setEmailModalOpen(false);
-          setSelectedService(null);
-        }}
-        downloadUrl={selectedService.s3Key}
-        resourceTitle={selectedService.title}
-      />
-    )}
-    </>
   );
 }
