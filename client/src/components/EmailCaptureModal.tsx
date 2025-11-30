@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Download, Check, Calendar } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export interface EmailCaptureModalProps {
@@ -12,7 +13,7 @@ export interface EmailCaptureModalProps {
   onClose: () => void;
   downloadUrl: string;
   resourceTitle: string;
-  documentType?: 'capability' | 'protocol' | 'whitepaper' | 'case_study';
+  documentType: 'capability' | 'protocol' | 'whitepaper' | 'case_study' | string;
   onLimitReached?: () => void;
   isCaseStudy?: boolean;
   onCaseStudySubmit?: (email: string, name: string) => void;
@@ -28,6 +29,10 @@ export default function EmailCaptureModal({
   isCaseStudy = false,
   onCaseStudySubmit
 }: EmailCaptureModalProps) {
+  const queryClient = useQueryClient();
+  const utils = trpc.useUtils();
+  const recordDownloadMutation = trpc.documentDownloads.recordDownload.useMutation();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -60,18 +65,22 @@ export default function EmailCaptureModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[EmailCaptureModal] Form submitted');
 
     if (!validateForm()) {
+      console.log('[EmailCaptureModal] Form validation failed');
       return;
     }
+    console.log('[EmailCaptureModal] Form validation passed');
 
     setIsSubmitting(true);
+    console.log('[EmailCaptureModal] isSubmitting set to true');
 
     try {
       // Case Study Flow: Redirect to Calendly without download
       if (isCaseStudy && onCaseStudySubmit) {
         // Record interest in database (no download limit check for case studies)
-        await trpc.documentDownloads.recordDownload.mutate({
+        await recordDownloadMutation.mutateAsync({
           email: formData.email,
           name: formData.name,
           company: formData.company || undefined,
@@ -95,11 +104,14 @@ export default function EmailCaptureModal({
 
       // Regular Document Download Flow
       // Check download limit first
-      const limitCheck = await trpc.documentDownloads.checkLimit.query({
+      console.log('[EmailCaptureModal] About to call checkLimit query');
+      const limitCheck = await utils.documentDownloads.checkLimit.fetch({
         email: formData.email,
       });
+      console.log('[EmailCaptureModal] checkLimit result:', limitCheck);
 
       if (limitCheck.limitReached) {
+        console.log('[EmailCaptureModal] Limit reached, showing limit modal');
         // Close email capture modal and show limit reached modal
         onClose();
         if (onLimitReached) {
@@ -109,7 +121,16 @@ export default function EmailCaptureModal({
       }
 
       // Record the download
-      await trpc.documentDownloads.recordDownload.mutate({
+      console.log('[EmailCaptureModal] About to call recordDownload mutation with:', {
+        email: formData.email,
+        name: formData.name,
+        company: formData.company || undefined,
+        documentTitle: resourceTitle,
+        documentUrl: downloadUrl,
+        documentType: documentType,
+      });
+      
+      await recordDownloadMutation.mutateAsync({
         email: formData.email,
         name: formData.name,
         company: formData.company || undefined,
@@ -140,7 +161,12 @@ export default function EmailCaptureModal({
       }, 2000);
 
     } catch (error: any) {
-      console.error("Download error:", error);
+      console.error("[EmailCaptureModal] Download error:", error);
+      console.error("[EmailCaptureModal] Error details:", {
+        message: error.message,
+        data: error.data,
+        shape: error.shape,
+      });
       toast.error(error.message || "An error occurred. Please try again.");
       setIsSubmitting(false);
     }

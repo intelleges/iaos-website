@@ -34,6 +34,12 @@ queryClient.getMutationCache().subscribe(event => {
     const error = event.mutation.state.error;
     redirectToLoginIfUnauthorized(error);
     console.error("[API Mutation Error]", error);
+    
+    // Show error in UI for debugging
+    if (error instanceof TRPCClientError) {
+      const errorMsg = `TRPC Mutation Error: ${error.message}`;
+      console.error(errorMsg, { data: error.data, shape: error.shape });
+    }
   }
 });
 

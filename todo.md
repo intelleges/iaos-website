@@ -647,3 +647,42 @@
 - [x] Test download flows and modals (EmailCaptureModal opens correctly, form fields present)
 - [x] Test forms and user interactions (Contact page working, Calendly integration present)
 - [x] Verify all buttons and CTAs work (Navigation, downloads, modals all functional)
+
+## End-to-End Download Flow Test
+- [x] Test document download with email capture (modal opens correctly, form fields work)
+- [ ] Submit form and verify download triggers
+- [ ] Note: Browser connection lost during form submission test
+- [x] Verify database schema and structure (confirmed correct)
+- [x] Check scheduled email logic via code review (2-hour delay confirmed)
+- [x] Document test results in END_TO_END_TEST_RESULTS.md
+
+## Manual Testing - Download Flow Complete Verification
+- [ ] Submit download form (1st download)
+- [ ] Verify PDF downloads successfully
+- [ ] Check database for documentDownloads entry
+- [ ] Check database for scheduledEmails entry
+- [ ] Submit 2nd download with same email
+- [ ] Submit 3rd download with same email
+- [ ] Attempt 4th download and verify limit modal appears
+- [ ] Document all test results
+
+## Gate #2 Blocker - Fix Download Form Submission (CRITICAL)
+- [ ] Debug TRPC mutation failure in EmailCaptureModal
+- [ ] Add comprehensive error handling and logging
+- [ ] Test form submission with browser dev tools
+- [ ] Verify database entries created
+- [ ] Test 3-download limit enforcement
+- [ ] Test 4th download limit modal
+- [ ] Verify scheduled email creation
+- [ ] Create post-fix QA automation script
+
+## Gate #2 Critical Blocker Fix
+- [x] Fix Zod schema mismatch in backend TRPC router (documentType enum missing 'case_study')
+- [x] Fix TRPC mutation calls to use mutateAsync instead of mutate
+- [x] Fix TRPC query calls to use utils.fetch() for imperative queries
+- [x] Run database migration to create documentDownloads table
+- [x] Test download flow end-to-end with all document types
+- [x] Verified download triggers PDF delivery
+- [x] Verified database records download correctly
+- [x] Verify all 7 Gate #2 completion criteria pass
+- [ ] Save checkpoint after successful fix

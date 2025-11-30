@@ -1,0 +1,23 @@
+{
+  "query": "SELECT * FROM documentDownloads WHERE email = 'working@test.com' ORDER BY downloadedAt DESC LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3DoThoLFV6pZU86.ae1b24b81fef --database DYeT6pudYnkTsfmPDdt3og --execute SELECT * FROM documentDownloads WHERE email = 'working@test.com' ORDER BY downloadedAt DESC LIMIT 1;",
+  "rows": [
+    {
+      "id": "30001",
+      "email": "working@test.com",
+      "name": "Working Test",
+      "company": "Test Co",
+      "role": "NULL",
+      "documentTitle": "Reps & Certs Compliance Service",
+      "documentUrl": "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/uUdaxEZihzIGXfpV.pdf",
+      "documentType": "capability",
+      "downloadedAt": "2025-11-30 22:23:10",
+      "followUpEmailSent": "0",
+      "followUpEmailSentAt": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\tcompany\trole\tdocumentTitle\tdocumentUrl\tdocumentType\tdownloadedAt\tfollowUpEmailSent\tfollowUpEmailSentAt\n30001\tworking@test.com\tWorking Test\tTest Co\tNULL\tReps & Certs Compliance Service\thttps://files.manuscdn.com/user_upload_by_module/session_file/89620106/uUdaxEZihzIGXfpV.pdf\tcapability\t2025-11-30 22:23:10\t0\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 120
+}

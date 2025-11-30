@@ -188,7 +188,7 @@ export const appRouter = router({
         role: z.string().optional(),
         documentTitle: z.string().min(1),
         documentUrl: z.string().min(1),
-        documentType: z.enum(['capability', 'protocol', 'whitepaper']),
+        documentType: z.enum(['capability', 'protocol', 'whitepaper', 'case_study']),
       }))
       .mutation(async ({ input }) => {
         const db = await getDb();
