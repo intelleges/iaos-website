@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/seo";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { ArrowRight, BarChart3, CheckCircle2, Clock, ShieldCheck } from "lucide-react";
 import { Link } from "wouter";
+import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { DownloadLimitReachedModal } from "@/components/DownloadLimitReachedModal";
 
 const caseStudies = [
   {
@@ -93,6 +96,39 @@ const caseStudies = [
 ];
 
 export default function CaseStudies() {
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [limitModalOpen, setLimitModalOpen] = useState(false);
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState<{
+    title: string;
+    id: string;
+  } | null>(null);
+
+  const handleCaseStudyClick = (study: typeof caseStudies[0]) => {
+    setSelectedCaseStudy({
+      title: study.title,
+      id: study.id,
+    });
+    setEmailModalOpen(true);
+  };
+
+  const handleEmailCaptureSuccess = (email: string, name: string) => {
+    // Redirect to Calendly with prefilled email and name
+    const calendlyUrl = new URL("https://calendly.com/intelleges/demo");
+    calendlyUrl.searchParams.set("prefill_email", email);
+    calendlyUrl.searchParams.set("prefill_name", name);
+    if (selectedCaseStudy) {
+      calendlyUrl.searchParams.set("a1", selectedCaseStudy.title);
+      calendlyUrl.searchParams.set("a2", "case_study");
+    }
+    
+    // Open Calendly in new tab
+    window.open(calendlyUrl.toString(), "_blank");
+    
+    // Close modal
+    setEmailModalOpen(false);
+    setSelectedCaseStudy(null);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <SEO 
@@ -175,11 +211,13 @@ export default function CaseStudies() {
                 </div>
 
                 <div className="pt-4">
-                  <Link href={`/case-studies/${study.id}`}>
-                    <Button variant="outline" className="group">
-                      Read Full Case Study <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="outline" 
+                    className="group"
+                    onClick={() => handleCaseStudyClick(study)}
+                  >
+                    Read Full Case Study <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -210,6 +248,31 @@ export default function CaseStudies() {
           </div>
         </div>
       </section>
+
+      {/* Email Capture Modal for Case Studies */}
+      {selectedCaseStudy && (
+        <EmailCaptureModal
+          isOpen={emailModalOpen}
+          onClose={() => {
+            setEmailModalOpen(false);
+            setSelectedCaseStudy(null);
+          }}
+          downloadUrl="" // No download URL for case studies
+          resourceTitle={selectedCaseStudy.title}
+          documentType="case_study"
+          onLimitReached={() => {
+            setLimitModalOpen(true);
+          }}
+          isCaseStudy={true}
+          onCaseStudySubmit={handleEmailCaptureSuccess}
+        />
+      )}
+
+      {/* Download Limit Reached Modal */}
+      <DownloadLimitReachedModal
+        isOpen={limitModalOpen}
+        onClose={() => setLimitModalOpen(false)}
+      />
     </div>
   );
 }

@@ -22,6 +22,9 @@ import Resources from "@/pages/Resources";
 import OnePagers from "@/pages/OnePagers";
 import Login from "@/pages/Login";
 import Demo from "@/pages/Demo";
+import Terms from "@/pages/Terms";
+import Privacy from "@/pages/Privacy";
+import Security from "@/pages/Security";
 import NotFound from "@/pages/not-found";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -52,6 +55,9 @@ function Router() {
           <Route path="/contact" component={Contact} />
           <Route path="/demo" component={Demo} />
           <Route path="/login" component={Login} />
+          <Route path="/terms" component={Terms} />
+          <Route path="/privacy" component={Privacy} />
+          <Route path="/security" component={Security} />
           <Route component={NotFound} />
           </Switch>
         </PageTransition>

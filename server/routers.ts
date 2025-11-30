@@ -6,6 +6,13 @@ import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
 import { leads, downloads, documentDownloads, scheduledEmails } from "../drizzle/schema";
+import sgMail from "@sendgrid/mail";
+
+// Initialize SendGrid
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || "";
+if (SENDGRID_API_KEY) {
+  sgMail.setApiKey(SENDGRID_API_KEY);
+}
 import { eq, and, gte, count } from "drizzle-orm";
 
 const DOWNLOAD_LIMIT = 3;
@@ -14,7 +21,6 @@ const EMAIL_DELAY_HOURS = 2;
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
-  downloads: downloadsRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -247,6 +253,76 @@ export const appRouter = router({
           downloadCount: currentCount + 1,
           remainingDownloads: DOWNLOAD_LIMIT - (currentCount + 1),
         };
+      }),
+  }),
+
+  // Contact form submission with multi-channel notifications
+  contact: router({
+    submit: publicProcedure
+      .input(z.object({
+        firstName: z.string().min(1, "First name is required"),
+        lastName: z.string().min(1, "Last name is required"),
+        email: z.string().email("Valid email is required"),
+        company: z.string().min(1, "Company name is required"),
+        phone: z.string().min(1, "Phone number is required"),
+        role: z.string().optional(),
+        plan: z.string().optional(),
+        message: z.string().min(1, "Message is required"),
+      }))
+      .mutation(async ({ input }) => {
+        const db = await getDb();
+        if (!db) {
+          throw new Error('Database not available');
+        }
+
+        try {
+          // 1. Write to leads database table
+          const fullName = `${input.firstName} ${input.lastName}`;
+          await db.insert(leads).values({
+            name: fullName,
+            email: input.email,
+            company: input.company,
+          });
+
+          // 2. Send email notifications to sales team
+          const recipients = [
+            "john@intelleges.com",
+            "team@intelleges.com",
+            "sales@intelleges.com",
+          ];
+
+          const emailPromises = recipients.map((recipient) =>
+            sgMail.send({
+              to: recipient,
+              from: process.env.SENDGRID_FROM_EMAIL || "noreply@intelleges.com",
+              subject: `New Contact Form Submission - ${input.company}`,
+              html: `
+                <h2>New Contact Form Submission</h2>
+                <p><strong>Name:</strong> ${fullName}</p>
+                <p><strong>Email:</strong> ${input.email}</p>
+                <p><strong>Company:</strong> ${input.company}</p>
+                <p><strong>Phone:</strong> ${input.phone}</p>
+                ${input.role ? `<p><strong>Role:</strong> ${input.role}</p>` : ""}
+                ${input.plan ? `<p><strong>Interested Plan:</strong> ${input.plan}</p>` : ""}
+                <p><strong>Message:</strong></p>
+                <p>${input.message.replace(/\n/g, "<br>")}</p>
+                <hr>
+                <p><small>Source: Contact Form | Submitted: ${new Date().toISOString()}</small></p>
+              `,
+            })
+          );
+
+          await Promise.allSettled(emailPromises);
+
+          return {
+            success: true,
+            leadId: 0,
+            message: "Thank you for contacting us! We'll be in touch soon.",
+          };
+        } catch (error: any) {
+          console.error("Contact form submission error:", error);
+          throw new Error("Failed to submit contact form. Please try again.");
+        }
       }),
   }),
 });

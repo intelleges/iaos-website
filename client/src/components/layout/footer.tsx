@@ -81,17 +81,17 @@ export default function Footer() {
             <h3 className="text-base font-normal">Legal</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/security" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
                   Security
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/privacy" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
                   Privacy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/terms" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
                   Terms
                 </Link>
               </li>

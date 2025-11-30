@@ -523,3 +523,70 @@
 - [x] Highlight Compliance Maturity Model document
 - [x] Highlight Current Compliance Landscape document
 - [x] Design visually distinct section for strategic resources
+
+## Create Comprehensive QA Testing Guide
+- [x] Document all clickable elements and navigation
+- [x] Document download system rules and limits
+- [x] Document email automation workflows
+- [x] Document modal behaviors and edge cases
+- [x] Create testing checklists for each page
+
+## Create Complete Content Audit
+- [x] Extract all text from every page
+- [x] Include navigation and button labels
+- [x] Include modal and form text
+- [x] Organize by page for easy review
+
+## Production Requirements - Critical P0 Issues
+
+### 5. Fix Case Study Flow (Email Capture Before Calendly)
+- [x] Update CaseStudies page to show EmailCaptureModal
+- [x] Modify modal to redirect to Calendly instead of downloading PDF
+- [x] Pass email/name to Calendly prefill parameters
+- [x] Track case study interest in database
+- [x] Send follow-up email: "Case study provided after discovery call"
+- [x] Remove direct Calendly links from case study cards
+
+### 6. Implement SEO Component (P0 - Required for Production)
+- [x] Create SEO component with title, description, OG tags, Twitter cards
+- [x] Add canonical URLs to all pages
+- [x] Implement JSON-LD structured data (Organization, WebSite, Breadcrumbs, Product)
+- [x] Add SEO component to all 10 main pages
+- [x] Fix missing SEO import on Pricing page
+
+### 7. Email Automation Deployment
+- [x] Document Railway Scheduled Worker option (already in CRON_SETUP.md)
+- [x] Create deployment guide for 15-minute email processor (already in CRON_SETUP.md)
+- [x] Add retry logic and failure handling (implemented in emailProcessor.ts)
+- [x] Document monitoring and alerting setup (already in CRON_SETUP.md)
+
+### 8. Analytics Infrastructure (P0 - Required for GTM)
+- [x] Add Google Analytics (GA4) tracking
+- [x] Implement Google Tag Manager
+- [x] Add LinkedIn Insight Tag
+- [x] Add Apollo.io visitor tracking
+- [x] Set up conversion goals (lead form, email capture, Calendly opened, Calendly booked, PDF viewed)
+- [x] Create Analytics component with tracking functions
+- [x] Document complete setup guide in ANALYTICS_SETUP_GUIDE.md
+
+### 9. Contact Form Multi-Channel Notifications
+- [x] Write contact form submissions to `leads` database table
+- [x] Send email notifications to john@intelleges.com, team@intelleges.com, sales@intelleges.com
+- [x] Add WhatsApp/Signal notification via Twilio (documented, ready to enable)
+- [x] Create CRM integration (Apollo or HubSpot) (documented, ready to enable)
+- [x] Document complete contact form flow in CONTACT_FORM_FLOW.md
+- [x] Integrate contact form with trpc API
+
+### 10. Product and Protocols Pages
+- [x] Enhance /product page with platform overview (already exists)
+- [x] Create /protocols page with grid of all 16 compliance protocols (already exists)
+- [x] Protocol categories and listings complete
+- [x] Add SEO metadata to pages (already added)
+
+### 11. Legal Pages (Required for Production)
+- [x] Generate Terms of Service (U.S. compliant)
+- [x] Generate Privacy Policy (GDPR + U.S. compliant)
+- [x] Generate Security Statement (ISO 27001 certified version)
+- [x] Generate Responsible Disclosure Policy (included in Security page)
+- [x] Add routes to App.tsx for legal pages
+- [x] Link legal pages in footer

@@ -9,6 +9,8 @@ import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { CheckCircle2, AlertCircle, Phone, Mail, MapPin, Calendar } from "lucide-react";
 import { InlineWidget } from "react-calendly";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 export default function Contact() {
   const [, setLocation] = useLocation();
@@ -83,17 +85,20 @@ export default function Contact() {
     setSubmitStatus("idle");
     
     try {
-      // Simulate API call - replace with actual endpoint
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData),
-      // });
+      const result = await trpc.contact.submit.mutate({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        phone: formData.phone,
+        role: formData.role || undefined,
+        plan: formData.plan || undefined,
+        message: formData.message,
+      });
       
       setSubmitStatus("success");
+      toast.success(result.message);
+      
       setFormData({
         firstName: "",
         lastName: "",
@@ -104,8 +109,9 @@ export default function Contact() {
         plan: "",
         message: "",
       });
-    } catch (error) {
+    } catch (error: any) {
       setSubmitStatus("error");
+      toast.error(error.message || "Failed to submit form. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

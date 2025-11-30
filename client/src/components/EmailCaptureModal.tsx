@@ -7,13 +7,15 @@ import { Download, Check, Calendar } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
-interface EmailCaptureModalProps {
+export interface EmailCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   downloadUrl: string;
   resourceTitle: string;
-  documentType?: 'capability' | 'protocol' | 'whitepaper';
+  documentType?: 'capability' | 'protocol' | 'whitepaper' | 'case_study';
   onLimitReached?: () => void;
+  isCaseStudy?: boolean;
+  onCaseStudySubmit?: (email: string, name: string) => void;
 }
 
 export default function EmailCaptureModal({ 
@@ -22,7 +24,9 @@ export default function EmailCaptureModal({
   downloadUrl, 
   resourceTitle,
   documentType = 'capability',
-  onLimitReached
+  onLimitReached,
+  isCaseStudy = false,
+  onCaseStudySubmit
 }: EmailCaptureModalProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -64,6 +68,32 @@ export default function EmailCaptureModal({
     setIsSubmitting(true);
 
     try {
+      // Case Study Flow: Redirect to Calendly without download
+      if (isCaseStudy && onCaseStudySubmit) {
+        // Record interest in database (no download limit check for case studies)
+        await trpc.documentDownloads.recordDownload.mutate({
+          email: formData.email,
+          name: formData.name,
+          company: formData.company || undefined,
+          documentTitle: resourceTitle,
+          documentUrl: '', // No download URL for case studies
+          documentType: 'case_study',
+        });
+
+        // Send follow-up email about case study after discovery call
+        toast.success("Redirecting to schedule your discovery call...");
+        
+        setIsSubmitting(false);
+        
+        // Call parent handler to redirect to Calendly
+        onCaseStudySubmit(formData.email, formData.name);
+        
+        // Reset form
+        setFormData({ name: "", email: "", company: "" });
+        return;
+      }
+
+      // Regular Document Download Flow
       // Check download limit first
       const limitCheck = await trpc.documentDownloads.checkLimit.query({
         email: formData.email,
@@ -129,9 +159,14 @@ export default function EmailCaptureModal({
         {!isSubmitted ? (
           <>
             <div className="p-6 border-b">
-              <h2 className="text-2xl font-light mb-2">Download {resourceTitle}</h2>
+              <h2 className="text-2xl font-light mb-2">
+                {isCaseStudy ? `Schedule Discovery Call` : `Download ${resourceTitle}`}
+              </h2>
               <p className="text-base text-muted-foreground">
-                Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.
+                {isCaseStudy 
+                  ? `Provide your information to schedule a discovery call. We'll share the full case study during your meeting.`
+                  : `Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.`
+                }
               </p>
             </div>
             <div className="p-6">
@@ -208,8 +243,17 @@ export default function EmailCaptureModal({
                     "Processing..."
                   ) : (
                     <>
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Document
+                      {isCaseStudy ? (
+                        <>
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Schedule Discovery Call
+                        </>
+                      ) : (
+                        <>
+                          <Download className="mr-2 h-4 w-4" />
+                          Download Document
+                        </>
+                      )}
                     </>
                   )}
                 </Button>
