@@ -9,11 +9,11 @@ export default function ThankYou() {
       {/* Hero Section */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50 to-white">
         <div className="container max-w-4xl mx-auto px-4">
-          <div className="text-center space-y-6">
-            <div className="flex justify-center">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
               <CheckCircle2 className="h-16 w-16 text-green-600" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-6">
               Thank You for Downloading
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -68,11 +68,78 @@ export default function ThankYou() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-16 bg-white">
+        <div className="container max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-base font-semibold mb-4">
+              <CheckCircle2 className="h-4 w-4" />
+              Battelle Supplier of the Year
+            </div>
+            <h2 className="text-3xl font-light mb-4">Trusted by Leading Research Organizations</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Intelleges has been recognized for delivering exceptional value in supply chain compliance and procurement automation
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {/* Testimonial 1 - Ed McFarland */}
+            <Card className="border-2">
+              <CardContent className="pt-6 space-y-4">
+                <div className="text-4xl text-primary/20">"</div>
+                <p className="text-lg leading-relaxed">
+                  Thanks to their support, we have been able to transform our supply chain, reduce costs and improve our processes. We look forward to expanding our relationship with Intelleges and continuing to use their platform to drive transformation in our overall procurement process.
+                </p>
+                <div className="pt-4 border-t">
+                  <p className="font-semibold">Ed McFarland</p>
+                  <p className="text-base text-muted-foreground">Vice President of Contracts, Procurement & Small Business Programs</p>
+                  <p className="text-base text-primary font-semibold mt-1">Battelle</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Testimonial 2 - John Betancourt */}
+            <Card className="border-2">
+              <CardContent className="pt-6 space-y-4">
+                <div className="text-4xl text-primary/20">"</div>
+                <p className="text-lg leading-relaxed">
+                  What's great about working with Battelle is that our strategies and values are aligned. When they work on critical projects that impact national security, it's awesome that we can be a reliable, trusted and helpful partner.
+                </p>
+                <div className="pt-4 border-t">
+                  <p className="font-semibold">John Betancourt</p>
+                  <p className="text-base text-muted-foreground">CEO & Founder</p>
+                  <p className="text-base text-primary font-semibold mt-1">Intelleges</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Key Achievements */}
+          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-8">
+            <h3 className="text-xl font-semibold text-center mb-6">Proven Results with Battelle</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="text-3xl font-bold text-primary mb-2">95%</div>
+                <p className="text-base text-muted-foreground">Reduction in manual data collection time</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-primary mb-2">Q1 2023</div>
+                <p className="text-base text-muted-foreground">Critical microchips delivered in record time</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-primary mb-2">100%</div>
+                <p className="text-base text-muted-foreground">Compliance with FAR requirements</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Calendly Section */}
       <section className="py-16 bg-blue-50">
         <div className="container max-w-5xl mx-auto px-4">
-          <div className="text-center space-y-4 mb-8">
-            <h2 className="text-3xl font-light">Schedule Your Free Consultation</h2>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-light mb-4">Schedule Your Free Consultation</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               We're happy to spend <strong>30 minutes with you free of charge</strong> answering any question you or your team might have about federal compliance, supplier management, or how Intelleges can streamline your operations.
             </p>
