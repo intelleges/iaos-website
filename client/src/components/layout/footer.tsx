@@ -60,7 +60,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link href="/case-studies" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
-                  Case Studies
+                  Solutions
                 </Link>
               </li>
               <li>

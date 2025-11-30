@@ -50,8 +50,8 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <SEO 
-        title="Home" 
-        description="Intelleges makes data & document collection simple. Enterprise compliance depends on information. We get it all cleanly, automatically, and on time."
+        title="Intelleges | Enterprise Compliance Automation Platform" 
+        description="Automated supplier data collection, validation, and audit-ready documentation for aerospace, defense, healthcare, and manufacturing. 25 years of proven compliance expertise."
       />
       
       {/* Hero Section */}
@@ -59,13 +59,12 @@ export default function Home() {
         <div className="container">
           <div className="max-w-5xl mx-auto text-center space-y-8">
             <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-tight">
-              Intelleges makes data &<br />
-              document collection simple.<br />
-              <span className="text-muted-foreground">Easy. A no-brainer.</span>
+              Enterprise compliance.<br />
+              <span className="text-muted-foreground">Structured. Automated. Audit-ready.</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-4xl mx-auto">
-              Enterprise compliance depends on information. Intelleges gets it all cleanly, automatically, and on time — without email chains, spreadsheets, or chasing suppliers.
+              Intelleges replaces email chains, spreadsheets, and manual follow-ups with a unified platform for supplier data collection, validation, and audit-ready documentation.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -85,8 +84,74 @@ export default function Home() {
             </div>
             
              <p className="text-base text-muted-foreground font-light pt-8">
-              Trusted by organizations in aerospace, defense, healthcare, and manufacturing.
+              Trusted by enterprise organizations and national security partners.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Structure Wins - CEO Addition */}
+      <section className="py-20 border-y border-border/50">
+        <div className="container">
+          <div className="max-w-4xl mx-auto space-y-12">
+            {/* Visual Flow Diagram */}
+            <div className="flex items-center justify-center gap-4 md:gap-8">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
+                  <span className="text-2xl md:text-3xl font-light">Collect</span>
+                </div>
+              </div>
+              <div className="text-4xl text-muted-foreground">→</div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
+                  <span className="text-2xl md:text-3xl font-light">Validate</span>
+                </div>
+              </div>
+              <div className="text-4xl text-muted-foreground">→</div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
+                  <span className="text-2xl md:text-3xl font-light">Decide</span>
+                </div>
+              </div>
+            </div>
+
+            {/* The Intelleges Method */}
+            <div className="text-center space-y-8">
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+                Why Structure Wins
+              </h2>
+              
+              <div className="grid md:grid-cols-3 gap-8 text-left">
+                <div className="space-y-3">
+                  <h3 className="text-xl font-normal">Order enables excellence</h3>
+                  <p className="text-base text-muted-foreground font-light leading-relaxed">
+                    Structured workflows prevent errors before they happen.
+                  </p>
+                </div>
+                
+                <div className="space-y-3">
+                  <h3 className="text-xl font-normal">Form enforces discipline</h3>
+                  <p className="text-base text-muted-foreground font-light leading-relaxed">
+                    Nothing is missed, skipped, or forgotten.
+                  </p>
+                </div>
+                
+                <div className="space-y-3">
+                  <h3 className="text-xl font-normal">Validation at the point of entry</h3>
+                  <p className="text-base text-muted-foreground font-light leading-relaxed">
+                    Clean data, no rework, no audit risk.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Authority Callout */}
+            <div className="bg-muted/30 border border-border/50 rounded-lg p-8 md:p-12 text-center space-y-4">
+              <h3 className="text-2xl md:text-3xl font-light">Built for Complex Organizations</h3>
+              <p className="text-lg text-muted-foreground font-light leading-relaxed max-w-3xl mx-auto">
+                Intelleges supports national labs, aerospace primes, regulated manufacturers, and healthcare institutions — environments where accuracy, structure, and audit readiness are non-negotiable.
+              </p>
+            </div>
           </div>
         </div>
       </section>

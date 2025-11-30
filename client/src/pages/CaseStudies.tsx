@@ -132,21 +132,21 @@ export default function CaseStudies() {
   return (
     <div className="flex flex-col min-h-screen">
       <SEO 
-        title="Case Studies" 
-        description="See how Intelleges helps aerospace, healthcare, and energy companies achieve compliance and optimize their supply chains."
+        title="Solutions by Protocol | Intelleges" 
+        description="Compliance automation solutions for aerospace, defense, healthcare, and manufacturing. View protocol-specific implementations and capabilities."
       />
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden bg-muted/30">
         <div className="container relative z-10">
           <div className="max-w-3xl">
             <Badge variant="outline" className="mb-4 bg-background/50 backdrop-blur-sm">
-              Success Stories
+              Solutions
             </Badge>
             <h1 className="text-4xl font-medium tracking-tight sm:text-5xl mb-6 text-foreground">
-              Proven results in the most demanding industries.
+              Solutions by Protocol
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              See how leading organizations in aerospace, healthcare, and energy use Intelleges to turn compliance from a burden into a competitive advantage.
+              Protocol-specific compliance solutions for aerospace, defense, healthcare, and manufacturing organizations.
             </p>
           </div>
         </div>
@@ -216,7 +216,7 @@ export default function CaseStudies() {
                     className="group"
                     onClick={() => handleCaseStudyClick(study)}
                   >
-                    Read Full Case Study <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    View Solution Details <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </div>
               </div>
