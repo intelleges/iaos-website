@@ -4,16 +4,6 @@ import LogoCarousel from "@/components/LogoCarousel";
 import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import EmailCaptureModal from "@/components/EmailCaptureModal";
-import { protocolCaseStudies } from "@/config/protocolCaseStudies";
-import { serviceDocuments, getServiceDocumentByTitle } from "@/config/serviceDocuments";
-import { useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 export default function Home() {
   const trustBlock = useScrollAnimation();
@@ -21,36 +11,9 @@ export default function Home() {
   const protocols = useScrollAnimation();
   const howItWorks = useScrollAnimation();
   const whitepaper = useScrollAnimation();
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; filename: string } | null>(null);
-  
-  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<{ title: string; shortTitle: string; pdfPath: string; fileName: string } | null>(null);
-
-  const handleProtocolClick = (protocolName: string) => {
-    const caseStudy = protocolCaseStudies[protocolName];
-    if (caseStudy) {
-      setSelectedProtocol(caseStudy);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleServiceClick = (serviceTitle: string) => {
-    const serviceDoc = getServiceDocumentByTitle(serviceTitle);
-    if (serviceDoc) {
-      setSelectedService(serviceDoc);
-      setIsServiceModalOpen(true);
-    }
-  };
-
-  const handleVideoClick = () => {
-    window.open('https://www.youtube.com/watch?v=7BstopG9qbU', '_blank');
-  };
 
   return (
-    <TooltipProvider>
-      <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <SEO 
         title="Home" 
         description="Intelleges makes data & document collection simple. Enterprise compliance depends on information. We get it all cleanly, automatically, and on time."
@@ -76,12 +39,7 @@ export default function Home() {
                   Book a Demo
                 </Button>
               </Link>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="rounded-full px-8 font-light"
-                onClick={handleVideoClick}
-              >
+              <Button size="lg" variant="outline" className="rounded-full px-8 font-light">
                 Watch 2-Minute Overview
               </Button>
             </div>
@@ -156,21 +114,13 @@ export default function Home() {
                 "Track expirations, risk indicators, and quality data",
                 "Produce audit-ready documentation automatically"
               ].map((item, i) => (
-                <Tooltip key={i}>
-                  <TooltipTrigger asChild>
-                    <div 
-                      onClick={() => handleServiceClick(item)}
-                      className="flex items-start gap-3 p-4 rounded-lg border border-border/40 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-primary/30 cursor-pointer group"
-                    >
-                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-all duration-300 group-hover:scale-110" />
-                      <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal flex-1">{item}</span>
-                      <Download className="h-4 w-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Click to download service overview</p>
-                  </TooltipContent>
-                </Tooltip>
+                <div 
+                  key={i} 
+                  className="flex items-start gap-3 p-4 rounded-lg border border-border/40 transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-primary/30 cursor-default group"
+                >
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-all duration-300 group-hover:scale-110" />
+                  <span className="text-base font-light transition-all duration-300 group-hover:text-lg group-hover:font-normal">{item}</span>
+                </div>
               ))}
             </div>
             
@@ -217,25 +167,14 @@ export default function Home() {
                 "Quality Systems (ISO, AS9100, GMP)",
                 "Conflict Minerals",
                 "Counterfeit Parts Prevention",
-                "Site Security (C-TPAT / CFATS)",
-                "Sole Source Risk Mitigation"
+                "Site Security (C-TPAT / CFATS)"
               ].map((protocol, i) => (
-                <Tooltip key={i}>
-                  <TooltipTrigger asChild>
-                    <div 
-                      onClick={() => handleProtocolClick(protocol)}
-                      className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
-                    >
-                      <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="flex items-center gap-2">
-                      <Download className="h-4 w-4" />
-                      Download Case Study
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+                <div 
+                  key={i} 
+                  className="p-4 rounded-lg border border-border/40 bg-background transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/30 cursor-pointer"
+                >
+                  <p className="text-base font-light transition-all duration-300 hover:text-lg hover:font-normal">{protocol}</p>
+                </div>
               ))}
             </div>
             
@@ -343,39 +282,13 @@ export default function Home() {
               </p>
             </div>
             
-            <Button 
-              size="lg" 
-              className="rounded-full px-8 font-light"
-              onClick={() => window.location.href = "/resources"}
-            >
+            <Button size="lg" className="rounded-full px-8 font-light">
               <Download className="mr-2 h-5 w-5" />
               Download Whitepaper
             </Button>
           </div>
         </div>
       </section>
-
-      {/* Email Capture Modal for Protocols */}
-      {selectedProtocol && (
-        <EmailCaptureModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          downloadUrl={`/case-studies/${selectedProtocol.filename}`}
-          resourceTitle={selectedProtocol.title}
-        />
-      )}
-
-      {/* Email Capture Modal for Service Documents */}
-      {selectedService && (
-        <EmailCaptureModal
-          isOpen={isServiceModalOpen}
-          onClose={() => setIsServiceModalOpen(false)}
-          downloadUrl={selectedService.pdfPath}
-          resourceTitle={selectedService.shortTitle}
-          resourceType="service-overview"
-        />
-      )}
-      </div>
-    </TooltipProvider>
+    </div>
   );
 }

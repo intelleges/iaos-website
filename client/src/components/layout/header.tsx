@@ -28,64 +28,48 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
-      <div className={cn(
-        "container flex items-center justify-between transition-all duration-300",
-        "py-4"
-      )}>
-        <Link href="/" className="flex items-center gap-2">
-          {/* Full logo on desktop/tablet (768px+) */}
-          <img src="/logo.png" alt="Intelleges" className="hidden md:block h-[120px] w-auto mt-3" />
-          {/* Favicon on mobile (below 768px) */}
-          <img src="/favicon.png" alt="Intelleges" className="block md:hidden h-28 w-28" />
+    <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80">
+      <div className="container flex items-center justify-between h-[72px]">
+        <Link href="/" className="logo-wrapper flex items-center h-full">
+          <img src="/logo-light-bg.png" alt="Intelleges" className="h-10 w-auto" />
         </Link>
 
-        {/* Desktop Navigation - hide below 1024px (lg) */}
-        <nav className="hidden lg:flex items-center gap-8">
+        {/* Desktop Navigation */}
+        <nav className="hidden xl:flex items-center gap-10">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
               href={item.href}
               className={cn(
-                "relative inline-flex items-center text-base font-light tracking-wide transition-all duration-300 cursor-pointer whitespace-nowrap group",
-                location === item.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                "text-base font-light tracking-wide transition-colors hover:text-foreground cursor-pointer",
+                location === item.href ? "text-foreground" : "text-muted-foreground"
               )}
             >
               {item.name}
-              {/* Animated underline */}
-              <span className={cn(
-                "absolute left-0 -bottom-[6px] h-[2px] bg-primary transition-all duration-300 ease-out",
-                location === item.href ? "w-full" : "w-0 group-hover:w-full"
-              )} />
             </Link>
           ))}
         </nav>
 
-        {/* Right side: Certification + Buttons */}
-        <div className="flex items-center gap-6">
-          {/* Certification labels - hide first (below 1280px / xl) */}
-          <div className="hidden xl:block text-base font-semibold text-primary tracking-wide whitespace-nowrap">
+        {/* Trust Markers & CTA */}
+        <div className="hidden xl:flex items-center gap-8">
+          <div className="text-base font-semibold text-primary tracking-wide whitespace-nowrap">
             ISO 27001 Certified · Battelle Supplier of the Year
           </div>
-          
-          {/* CTA Buttons - always visible on desktop */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link href="/login">
-              <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
-                Client Login
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="sm" className="text-base rounded-full px-6 font-light transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap">
-                Book a Demo
-              </Button>
-            </Link>
-          </div>
+          <Link href="/login">
+            <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              Client Login
+            </Button>
+          </Link>
+          <Link href="/contact">
+            <Button size="sm" className="rounded-full px-6 font-light transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              Book a Demo
+            </Button>
+          </Link>
         </div>
 
-        {/* Mobile Menu Toggle - show below 1024px (lg) */}
+        {/* Mobile Menu Toggle */}
         <button 
-          className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
+          className="xl:hidden p-2 text-muted-foreground hover:text-foreground"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -102,10 +86,10 @@ export default function Header() {
                 <Link 
                   key={item.name} 
                   href={item.href}
-                  className="flex items-center gap-3 text-base font-light py-3 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide transition-all duration-300 hover:translate-x-1"
+                  className="flex items-center gap-3 text-base font-light py-3 text-muted-foreground hover:text-foreground cursor-pointer tracking-wide transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                  <Icon className="h-5 w-5" />
                   {item.name}
                 </Link>
               );

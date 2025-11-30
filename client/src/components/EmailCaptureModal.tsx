@@ -3,30 +3,19 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Download, Check, Calendar } from "lucide-react";
+import { Download, Check, AlertCircle } from "lucide-react";
 import { trpc } from "@/lib/trpc";
-import { useLocation } from "wouter";
 
 interface EmailCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   downloadUrl: string;
   resourceTitle: string;
-  buttonText?: string; // Optional custom button text
-  resourceType?: 'case-study' | 'service-overview'; // Type of resource
 }
 
-export default function EmailCaptureModal({ 
-  isOpen, 
-  onClose, 
-  downloadUrl, 
-  resourceTitle,
-  buttonText,
-  resourceType = 'case-study'
-}: EmailCaptureModalProps) {
+export default function EmailCaptureModal({ isOpen, onClose, downloadUrl, resourceTitle }: EmailCaptureModalProps) {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     company: "",
   });
@@ -35,7 +24,6 @@ export default function EmailCaptureModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rateLimitError, setRateLimitError] = useState<string | null>(null);
 
-  const [, setLocation] = useLocation();
   const validateDownloadQuery = trpc.downloads.validate.useQuery(
     { email: formData.email, resource: resourceTitle },
     { enabled: false } // Don't auto-fetch, we'll trigger manually
@@ -46,12 +34,8 @@ export default function EmailCaptureModal({
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
     }
 
     if (!formData.email.trim()) {
@@ -84,20 +68,19 @@ export default function EmailCaptureModal({
 
       if (!validationResult.data?.allowed) {
         setRateLimitError(
-          "You seem interested in our products. It is best for you to set up a meeting with one of our sales people to ensure that we can fully address your questions and help you with additional downloads."
+          validationResult.data?.message || 
+          "You have reached the maximum download limit. Please contact sales@intelleges.com for additional access."
         );
         setIsSubmitting(false);
         return;
       }
 
-      // Step 2: Submit lead information and send email
-      const leadResult = await submitLeadMutation.mutateAsync({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+      // Step 2: Submit lead information
+      await submitLeadMutation.mutateAsync({
+        name: formData.name,
         email: formData.email,
         company: formData.company,
         resource: resourceTitle,
-        caseStudyFilename: downloadUrl.split('/').pop() || '',
       });
 
       // Step 3: Record the download
@@ -117,24 +100,13 @@ export default function EmailCaptureModal({
       setIsSubmitting(false);
       setIsSubmitted(true);
 
-      // For Executive Summary, redirect to Thank You page after brief delay
-      // For other resources, just close the modal
-      if (resourceTitle === "Executive Summary") {
-        setTimeout(() => {
-          onClose();
-          setIsSubmitted(false);
-          setFormData({ firstName: "", lastName: "", email: "", company: "" });
-          setRateLimitError(null);
-          setLocation("/thank-you");
-        }, 1500);
-      } else {
-        setTimeout(() => {
-          onClose();
-          setIsSubmitted(false);
-          setFormData({ firstName: "", lastName: "", email: "", company: "" });
-          setRateLimitError(null);
-        }, 2000);
-      }
+      // Close modal after 2 seconds
+      setTimeout(() => {
+        onClose();
+        setIsSubmitted(false);
+        setFormData({ name: "", email: "", company: "" });
+        setRateLimitError(null);
+      }, 2000);
 
     } catch (error: any) {
       console.error("Download error:", error);
@@ -157,148 +129,116 @@ export default function EmailCaptureModal({
     }
   };
 
-  const handleScheduleMeeting = () => {
-    window.location.href = '/contact';
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-md">
         {!isSubmitted ? (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-light">{resourceTitle}</DialogTitle>
+              <DialogTitle className="text-2xl font-light">Download {resourceTitle}</DialogTitle>
               <DialogDescription className="text-base">
                 Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.
               </DialogDescription>
             </DialogHeader>
 
             {rateLimitError && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 space-y-4">
-                <div className="flex items-start gap-3">
-                  <Calendar className="h-6 w-6 text-[#0A3A67] flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-base text-gray-800 font-normal leading-relaxed">{rateLimitError}</p>
-                  </div>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-base text-red-800 font-normal">{rateLimitError}</p>
+                  <p className="text-sm text-red-700 mt-1">
+                    Need more access? Contact us at{" "}
+                    <a href="mailto:sales@intelleges.com" className="underline font-medium">
+                      sales@intelleges.com
+                    </a>
+                  </p>
                 </div>
-                <Button
-                  onClick={handleScheduleMeeting}
-                  className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105 bg-[#0A3A67] hover:bg-[#0A3A67]/90"
-                >
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Schedule a Meeting
-                </Button>
               </div>
             )}
 
-            {!rateLimitError && (
-              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-base">
-                      First Name *
-                    </Label>
-                    <Input
-                      id="firstName"
-                      type="text"
-                      value={formData.firstName}
-                      onChange={(e) => handleChange("firstName", e.target.value)}
-                      className={`text-base ${errors.firstName ? "border-red-500" : ""}`}
-                      placeholder="John"
-                      aria-invalid={!!errors.firstName}
-                      aria-describedby={errors.firstName ? "firstName-error" : undefined}
-                    />
-                    {errors.firstName && (
-                      <p id="firstName-error" className="text-sm text-red-500">
-                        {errors.firstName}
-                      </p>
-                    )}
-                  </div>
+            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-base">
+                  Full Name *
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => handleChange("name", e.target.value)}
+                  className={`text-base ${errors.name ? "border-red-500" : ""}`}
+                  placeholder="John Smith"
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "name-error" : undefined}
+                />
+                {errors.name && (
+                  <p id="name-error" className="text-sm text-red-500">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-base">
-                      Last Name *
-                    </Label>
-                    <Input
-                      id="lastName"
-                      type="text"
-                      value={formData.lastName}
-                      onChange={(e) => handleChange("lastName", e.target.value)}
-                      className={`text-base ${errors.lastName ? "border-red-500" : ""}`}
-                      placeholder="Smith"
-                      aria-invalid={!!errors.lastName}
-                      aria-describedby={errors.lastName ? "lastName-error" : undefined}
-                    />
-                    {errors.lastName && (
-                      <p id="lastName-error" className="text-sm text-red-500">
-                        {errors.lastName}
-                      </p>
-                    )}
-                  </div>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-base">
+                  Email Address *
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                  className={`text-base ${errors.email ? "border-red-500" : ""}`}
+                  placeholder="john@company.com"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                />
+                {errors.email && (
+                  <p id="email-error" className="text-sm text-red-500">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-base">
-                    Email Address *
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
-                    className={`text-base ${errors.email ? "border-red-500" : ""}`}
-                    placeholder="john@company.com"
-                    aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? "email-error" : undefined}
-                  />
-                  {errors.email && (
-                    <p id="email-error" className="text-sm text-red-500">
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="company" className="text-base">
+                  Company Name *
+                </Label>
+                <Input
+                  id="company"
+                  type="text"
+                  value={formData.company}
+                  onChange={(e) => handleChange("company", e.target.value)}
+                  className={`text-base ${errors.company ? "border-red-500" : ""}`}
+                  placeholder="Acme Corporation"
+                  aria-invalid={!!errors.company}
+                  aria-describedby={errors.company ? "company-error" : undefined}
+                />
+                {errors.company && (
+                  <p id="company-error" className="text-sm text-red-500">
+                    {errors.company}
+                  </p>
+                )}
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="company" className="text-base">
-                    Company Name *
-                  </Label>
-                  <Input
-                    id="company"
-                    type="text"
-                    value={formData.company}
-                    onChange={(e) => handleChange("company", e.target.value)}
-                    className={`text-base ${errors.company ? "border-red-500" : ""}`}
-                    placeholder="Acme Corporation"
-                    aria-invalid={!!errors.company}
-                    aria-describedby={errors.company ? "company-error" : undefined}
-                  />
-                  {errors.company && (
-                    <p id="company-error" className="text-sm text-red-500">
-                      {errors.company}
-                    </p>
-                  )}
-                </div>
+              <Button
+                type="submit"
+                className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  "Processing..."
+                ) : (
+                  <>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Whitepaper
+                  </>
+                )}
+              </Button>
 
-                <Button
-                  type="submit"
-                  className="w-full rounded-full text-base font-light transition-all duration-300 hover:scale-105"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    "Processing..."
-                  ) : (
-                    <>
-                      <Download className="mr-2 h-4 w-4" />
-                      {buttonText || (resourceType === 'service-overview' ? 'Download Service Overview' : 'Download Case Study')}
-                    </>
-                  )}
-                </Button>
-
-                <p className="text-sm text-muted-foreground text-center">
-                  By downloading, you agree to receive occasional updates from Intelleges about compliance solutions.
-                </p>
-              </form>
-            )}
+              <p className="text-sm text-muted-foreground text-center">
+                By downloading, you agree to receive occasional updates from Intelleges about compliance solutions.
+              </p>
+            </form>
           </>
         ) : (
           <div className="py-8 text-center space-y-4">
@@ -307,10 +247,9 @@ export default function EmailCaptureModal({
                 <Check className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <DialogTitle className="text-2xl font-light">Success!</DialogTitle>
-            <DialogDescription className="text-base space-y-2">
-              <p>Your {resourceType === 'service-overview' ? 'service overview' : 'case study'} is downloading now. Check your downloads folder.</p>
-              <p className="text-green-600 font-medium">📧 We've also sent a copy to your email!</p>
+            <DialogTitle className="text-2xl font-light">Download Started!</DialogTitle>
+            <DialogDescription className="text-base">
+              Your whitepaper is downloading now. Check your downloads folder.
             </DialogDescription>
           </div>
         )}
