@@ -97,20 +97,20 @@ export default function Home() {
             {/* Visual Flow Diagram */}
             <div className="flex items-center justify-center gap-4 md:gap-8">
               <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
-                  <span className="text-2xl md:text-3xl font-light">Collect</span>
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer">
+                  <span className="text-2xl md:text-3xl font-light transition-all duration-300 hover:font-normal">Collect</span>
                 </div>
               </div>
               <div className="text-4xl text-muted-foreground">→</div>
               <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
-                  <span className="text-2xl md:text-3xl font-light">Validate</span>
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer">
+                  <span className="text-2xl md:text-3xl font-light transition-all duration-300 hover:font-normal">Validate</span>
                 </div>
               </div>
               <div className="text-4xl text-muted-foreground">→</div>
               <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
-                  <span className="text-2xl md:text-3xl font-light">Decide</span>
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/40 hover:bg-primary/10 cursor-pointer">
+                  <span className="text-2xl md:text-3xl font-light transition-all duration-300 hover:font-normal">Decide</span>
                 </div>
               </div>
             </div>

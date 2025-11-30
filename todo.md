@@ -685,4 +685,10 @@
 - [x] Verified download triggers PDF delivery
 - [x] Verified database records download correctly
 - [x] Verify all 7 Gate #2 completion criteria pass
-- [ ] Save checkpoint after successful fix
+- [x] Save checkpoint after successful fix (version: 46c3e615)
+
+## Collect → Validate → Decide Flow Box Hover Animations
+- [x] Locate flow boxes in Home.tsx (visual flow diagram section)
+- [x] Add hover animations (scale, shadow, border highlight)
+- [x] Add smooth transitions (300ms)
+- [x] Test hover effects in browser
