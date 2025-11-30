@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, CheckSquare, FileBarChart, Shield } from "lucide-react";
+import { FileText, Download, CheckSquare, FileBarChart, Shield, TrendingUp, Map } from "lucide-react";
+import { serviceDownloads } from "@/config/downloadMappings";
+import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { DownloadLimitReachedModal } from "@/components/DownloadLimitReachedModal";
 
 const resources = [
   {
@@ -46,7 +50,40 @@ const resources = [
   }
 ];
 
+const featuredDocuments = [
+  {
+    key: "compliance-maturity-model",
+    icon: TrendingUp,
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-600/10",
+    borderColor: "border-indigo-600/20",
+  },
+  {
+    key: "current-compliance-landscape",
+    icon: Map,
+    color: "text-violet-600",
+    bgColor: "bg-violet-600/10",
+    borderColor: "border-violet-600/20",
+  }
+] as const;
+
 export default function Resources() {
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [limitModalOpen, setLimitModalOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<{
+    url: string;
+    title: string;
+  } | null>(null);
+
+  const handleFeaturedDownload = (docKey: typeof featuredDocuments[number]["key"]) => {
+    const config = serviceDownloads[docKey];
+    setSelectedDocument({
+      url: config.cdnUrl,
+      title: config.title,
+    });
+    setEmailModalOpen(true);
+  };
+
   return (
     <div className="container py-24">
       <div className="mx-auto max-w-3xl text-center mb-16">
@@ -56,6 +93,79 @@ export default function Resources() {
         </p>
       </div>
 
+      {/* Featured Strategic Documents */}
+      <div className="mb-20">
+        <div className="text-center mb-10">
+          <Badge variant="outline" className="mb-4 text-sm font-normal px-4 py-1.5">
+            Strategic Resources
+          </Badge>
+          <h2 className="text-3xl font-medium tracking-tight mb-3">
+            Featured Compliance Frameworks
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Essential strategic documents for assessing and improving your organization's compliance posture
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+          {featuredDocuments.map((doc) => {
+            const config = serviceDownloads[doc.key];
+            return (
+              <Card 
+                key={doc.key} 
+                className={`flex flex-col border-2 ${doc.borderColor} bg-gradient-to-br from-background to-muted/20 transition-all hover:shadow-xl hover:scale-[1.02] group cursor-pointer`}
+                onClick={() => handleFeaturedDownload(doc.key)}
+              >
+                <CardHeader className="flex-row gap-4 items-start space-y-0 pb-3">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${doc.bgColor} ring-2 ring-offset-2 ring-offset-background ${doc.borderColor.replace('border-', 'ring-')}`}>
+                    <doc.icon className={`w-7 h-7 ${doc.color}`} />
+                  </div>
+                  <div className="space-y-2 flex-1">
+                    <Badge variant="secondary" className="font-normal text-xs">
+                      One-Pager
+                    </Badge>
+                    <CardTitle className="text-xl leading-tight group-hover:text-indigo-600 transition-colors">
+                      {config.title}
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-1 pt-2">
+                  <CardDescription className="text-base leading-relaxed">
+                    {config.description}
+                  </CardDescription>
+                </CardContent>
+                <CardFooter className="border-t bg-muted/30 pt-4 flex justify-between items-center">
+                  <span className="text-xs text-muted-foreground font-medium">PDF • Free Download</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className={`gap-2 ${doc.color} hover:bg-opacity-10 transition-all group-hover:translate-x-1`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleFeaturedDownload(doc.key);
+                    }}
+                  >
+                    <Download className="w-4 h-4" />
+                    Download
+                  </Button>
+                </CardFooter>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="relative mb-16">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border/60"></div>
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-background px-4 text-sm text-muted-foreground">Additional Resources</span>
+        </div>
+      </div>
+
+      {/* Existing Resources Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
         {resources.map((resource) => (
           <Card key={resource.id} className="flex flex-col border-border/60 transition-all hover:border-border hover:shadow-md group">
@@ -98,6 +208,29 @@ export default function Resources() {
           Contact Support
         </Button>
       </div>
+
+      {/* Email Capture Modal */}
+      {selectedDocument && (
+        <EmailCaptureModal
+          isOpen={emailModalOpen}
+          onClose={() => {
+            setEmailModalOpen(false);
+            setSelectedDocument(null);
+          }}
+          downloadUrl={selectedDocument.url}
+          resourceTitle={selectedDocument.title}
+          documentType="whitepaper"
+          onLimitReached={() => {
+            setLimitModalOpen(true);
+          }}
+        />
+      )}
+
+      {/* Download Limit Reached Modal */}
+      <DownloadLimitReachedModal
+        isOpen={limitModalOpen}
+        onClose={() => setLimitModalOpen(false)}
+      />
     </div>
   );
 }

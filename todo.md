@@ -517,3 +517,9 @@
 - [x] Add cron job configuration documentation (CRON_SETUP.md)
 - [ ] Deploy cron job to production server
 - [ ] Test automated email sending for scheduled follow-ups
+
+## Add Featured Section to Resources Page
+- [x] Create featured documents section on Resources page
+- [x] Highlight Compliance Maturity Model document
+- [x] Highlight Current Compliance Landscape document
+- [x] Design visually distinct section for strategic resources
