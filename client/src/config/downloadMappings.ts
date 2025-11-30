@@ -318,7 +318,7 @@ export const serviceDownloads = {
   "compliance-maturity-model": {
     title: "Compliance Maturity Model",
     filename: "Compliance_Maturity_Model.pdf",
-    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/TBD1.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/dOInHIoAFriHMlIE.pdf",
     tooltip: "Download Compliance Maturity Model Framework",
     gating: "email" as GatingType,
     description: "Framework for assessing and improving organizational compliance maturity"
@@ -326,7 +326,7 @@ export const serviceDownloads = {
   "current-compliance-landscape": {
     title: "Current Compliance Landscape",
     filename: "Current_Compliance_Landscape.pdf",
-    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/TBD2.pdf",
+    cdnUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/89620106/sApjtmZgYGrjYCct.pdf",
     tooltip: "Download Current Compliance Landscape Report",
     gating: "email" as GatingType,
     description: "Overview of current regulatory compliance requirements and trends"

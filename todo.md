@@ -590,3 +590,26 @@
 - [x] Generate Responsible Disclosure Policy (included in Security page)
 - [x] Add routes to App.tsx for legal pages
 - [x] Link legal pages in footer
+
+## Generate Legal Pages PDFs
+- [x] Generate Terms of Service PDF
+- [x] Generate Privacy Policy PDF
+- [x] Generate Security Statement PDF
+
+## Create Deployment Guides
+- [x] Create analytics tracking ID deployment guide
+- [x] Create PDF upload guide for new one-pagers
+- [x] Create email cron job deployment guide
+- [x] Created comprehensive PRODUCTION_DEPLOYMENT_GUIDE.md
+
+## Upload PDFs and Configure Analytics/Cron
+- [x] Create PDF for Compliance Maturity Model
+- [x] Create PDF for Current Compliance Landscape
+- [x] Upload both PDFs to S3 via manus-upload-file
+  - Maturity Model: https://files.manuscdn.com/user_upload_by_module/session_file/89620106/dOInHIoAFriHMlIE.pdf
+  - Compliance Landscape: https://files.manuscdn.com/user_upload_by_module/session_file/89620106/sApjtmZgYGrjYCct.pdf
+- [x] Update downloadMappings.ts with real S3 URLs
+- [x] Prepare analytics configuration with placeholder IDs
+  - Created DEPLOY_ANALYTICS_CONFIG.md with step-by-step instructions
+- [x] Prepare cron job deployment code
+  - Created DEPLOY_EMAIL_CRON.md with 4 deployment options
