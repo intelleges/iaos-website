@@ -401,3 +401,10 @@
 - [x] Update ProtocolCard to use S3 downloads
 - [ ] Test S3 downloads in browser
 - [ ] Remove PDFs from client/public to reduce repo size (optional)
+
+## Whitepaper Download Fix
+- [x] Create WhitepaperChoiceModal component with two options
+- [x] Option 1: Full whitepaper (calendly-gated)
+- [x] Option 2: Executive summary (email-gated)
+- [x] Update Home.tsx to show modal on button click
+- [x] Test both download flows

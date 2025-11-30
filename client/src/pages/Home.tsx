@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { Check, FileText, Download } from "lucide-react";
 
 import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { WhitepaperChoiceModal } from "@/components/WhitepaperChoiceModal";
 import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
 import { downloadFromS3 } from "@/lib/s3Downloads";
@@ -16,6 +17,7 @@ export default function Home() {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; s3Key: string } | null>(null);
+  const [isWhitepaperModalOpen, setIsWhitepaperModalOpen] = useState(false);
 
   const handleProtocolClick = async (protocolName: string) => {
     const caseStudy = protocolCaseStudies[protocolName];
@@ -274,7 +276,11 @@ export default function Home() {
               </p>
             </div>
             
-            <Button size="lg" className="rounded-full px-8 font-light">
+            <Button 
+              size="lg" 
+              className="rounded-full px-8 font-light"
+              onClick={() => setIsWhitepaperModalOpen(true)}
+            >
               <Download className="mr-2 h-5 w-5" />
               Download Whitepaper
             </Button>
@@ -287,10 +293,30 @@ export default function Home() {
         <EmailCaptureModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          downloadUrl={`/case-studies/${selectedProtocol.filename}`}
+          downloadUrl={`/case-studies/${selectedProtocol.s3Key}`}
           resourceTitle={selectedProtocol.title}
         />
       )}
+
+      {/* Whitepaper Choice Modal */}
+      <WhitepaperChoiceModal
+        isOpen={isWhitepaperModalOpen}
+        onClose={() => setIsWhitepaperModalOpen(false)}
+        onChooseExecutiveSummary={() => {
+          // Download executive summary (email-gated)
+          setIsWhitepaperModalOpen(false);
+          downloadFromS3("pdfs/marketing/Intelleges_Executive_Summary.pdf").catch(error => {
+            console.error("Failed to download executive summary:", error);
+            alert("Failed to download. Please try again.");
+          });
+        }}
+        onChooseFullWhitepaper={() => {
+          // Open Calendly for full whitepaper (calendly-gated)
+          setIsWhitepaperModalOpen(false);
+          // TODO: Implement Calendly modal
+          alert("Calendly integration coming soon! For now, please book a demo using the button in the header.");
+        }}
+      />
     </div>
   );
 }
