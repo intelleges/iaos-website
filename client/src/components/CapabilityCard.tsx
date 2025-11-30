@@ -5,6 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { capabilityDownloads, type CapabilityKey } from "@/config/downloadMappings";
+import { downloadFromS3 } from "@/lib/s3Downloads";
 
 type CapabilityCardProps = {
   capabilityKey: CapabilityKey;
@@ -17,16 +18,21 @@ export function CapabilityCard({
 }: CapabilityCardProps) {
   const config = capabilityDownloads[capabilityKey];
   const { title, filename, tooltip, gating } = config;
-  const pdf = `/pdfs/${filename}`;
+  const s3Key = `pdfs/capabilities/${filename}`;
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (gating === "public") {
-      // Public download - open PDF directly
-      window.open(pdf, "_blank");
+      // Public download - get S3 URL and open
+      try {
+        await downloadFromS3(s3Key);
+      } catch (error) {
+        console.error("Failed to get download URL:", error);
+        alert("Failed to download file. Please try again.");
+      }
     } else if (gating === "email") {
       // Email-gated download - trigger email capture modal
       if (onGatedDownload) {
-        onGatedDownload(pdf, capabilityKey);
+        onGatedDownload(s3Key, capabilityKey);
       } else {
         // Fallback: navigate to download page
         window.location.href = `/downloads/${capabilityKey}`;

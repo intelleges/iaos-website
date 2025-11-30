@@ -8,19 +8,25 @@ import { Check, FileText, Download } from "lucide-react";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
+import { downloadFromS3 } from "@/lib/s3Downloads";
 import { useState } from "react";
 
 export default function Home() {
 
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; filename: string } | null>(null);
+  const [selectedProtocol, setSelectedProtocol] = useState<{ title: string; s3Key: string } | null>(null);
 
-  const handleProtocolClick = (protocolName: string) => {
+  const handleProtocolClick = async (protocolName: string) => {
     const caseStudy = protocolCaseStudies[protocolName];
     if (caseStudy) {
-      setSelectedProtocol(caseStudy);
-      setIsModalOpen(true);
+      // For now, directly download from S3 (calendly gating to be implemented later)
+      try {
+        await downloadFromS3(caseStudy.s3Key);
+      } catch (error) {
+        console.error("Failed to download case study:", error);
+        alert("Failed to download case study. Please try again.");
+      }
     }
   };
 

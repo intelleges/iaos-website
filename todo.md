@@ -381,3 +381,23 @@
 - [x] Test protocol card hover effects
 - [x] Test protocol card tooltips
 - [x] Test protocol card downloads (calendly-gated)
+
+## Marketing Documents Upload
+- [ ] Create /client/public/marketing/ directory
+- [ ] Upload Intelleges_Content_Library_Index.pdf
+- [ ] Upload Intelleges_Executive_Summary.pdf
+- [ ] Upload Intelleges_Compliance_Supply_Chain_Intelligence_Guide.pdf
+- [ ] Verify all 47 PDFs are accessible
+- [ ] Test marketing document downloads
+
+## S3 PDF Storage Migration
+- [x] Wait for all PDF conversions to complete
+- [x] Create S3 upload script (uploadPDFsToS3.mjs)
+- [x] Upload all 29 PDFs to S3 with organized structure (97MB total)
+- [x] Update downloadMappings.ts to use S3 keys
+- [x] Create downloads API router with S3 pre-signed URLs
+- [x] Add S3 download helper functions (downloadFromS3)
+- [x] Update CapabilityCard to use S3 downloads
+- [x] Update ProtocolCard to use S3 downloads
+- [ ] Test S3 downloads in browser
+- [ ] Remove PDFs from client/public to reduce repo size (optional)

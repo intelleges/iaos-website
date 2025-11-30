@@ -354,19 +354,19 @@ export type DownloadKey = CapabilityKey | CaseStudyKey | ServiceKey | MarketingK
 export function getDownloadAsset(key: DownloadKey): DownloadAsset | undefined {
   if (key in capabilityDownloads) {
     const asset = capabilityDownloads[key as CapabilityKey];
-    return { ...asset, filename: `/pdfs/${asset.filename}` };
+    return { ...asset, filename: `pdfs/capabilities/${asset.filename}` };
   }
   if (key in caseStudyDownloads) {
     const asset = caseStudyDownloads[key as CaseStudyKey];
-    return { ...asset, filename: `/case-studies/${asset.filename}` };
+    return { ...asset, filename: `pdfs/case-studies/${asset.filename}` };
   }
   if (key in serviceDownloads) {
     const asset = serviceDownloads[key as ServiceKey];
-    return { ...asset, filename: `/services/${asset.filename}` };
+    return { ...asset, filename: `pdfs/services/${asset.filename}` };
   }
   if (key in marketingDownloads) {
     const asset = marketingDownloads[key as MarketingKey];
-    return { ...asset, filename: `/marketing/${asset.filename}` };
+    return { ...asset, filename: `pdfs/marketing/${asset.filename}` };
   }
   return undefined;
 }
