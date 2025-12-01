@@ -109,7 +109,24 @@ export default function EmailCaptureModal({
       }
 
       // Regular Document Download Flow
-      // Check download limit first
+      // Check if email is suppressed first
+      console.log('[EmailCaptureModal] Checking email suppression status');
+      const suppressionCheck = await utils.emailSuppression.checkEmailSuppression.fetch({
+        email: formData.email,
+      });
+      console.log('[EmailCaptureModal] Suppression check result:', suppressionCheck);
+
+      if (suppressionCheck.isSuppressed) {
+        console.log('[EmailCaptureModal] Email is suppressed:', suppressionCheck.reason);
+        toast.error(
+          `This email address cannot receive communications (reason: ${suppressionCheck.reason}). ` +
+          `Please contact sales@intelleges.com if you believe this is an error.`
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Check download limit
       console.log('[EmailCaptureModal] About to call checkLimit query');
       const limitCheck = await utils.documentDownloads.checkLimit.fetch({
         email: formData.email,

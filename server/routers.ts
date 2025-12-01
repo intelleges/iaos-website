@@ -4,10 +4,11 @@ import { systemRouter } from "./_core/systemRouter.js";
 import { downloadsRouter } from "./routers/downloads.js";
 import { qualificationRouter } from "./routers/qualification.js";
 import { emailAnalyticsRouter } from "./routers/emailAnalytics.js";
+import { emailSuppressionRouter } from "./routers/emailSuppression.js";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
-import { leads, downloads, documentDownloads, scheduledEmails } from "../drizzle/schema";
+import { leads, downloads, documentDownloads, scheduledEmails, emailStatus } from "../drizzle/schema";
 import sgMail from "@sendgrid/mail";
 
 // Initialize SendGrid
@@ -25,6 +26,7 @@ export const appRouter = router({
   system: systemRouter,
   qualification: qualificationRouter,
   emailAnalytics: emailAnalyticsRouter,
+  emailSuppression: emailSuppressionRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -233,15 +235,25 @@ export const appRouter = router({
           followUpEmailSentAt: null,
         });
 
-        // Schedule follow-up email
-        const scheduledFor = new Date();
-        scheduledFor.setHours(scheduledFor.getHours() + EMAIL_DELAY_HOURS);
+        // Check if email is suppressed before scheduling follow-up
+        const [suppressionStatus] = await db
+          .select()
+          .from(emailStatus)
+          .where(eq(emailStatus.email, normalizedEmail))
+          .limit(1);
 
-        const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(fullName)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
-        
-        const htmlContent = generateFollowUpEmail(fullName, input.documentTitle, calendlyUrl, normalizedEmail, input.documentType);
+        const isSuppressed = suppressionStatus && suppressionStatus.isSuppressed === 1;
 
-        await db.insert(scheduledEmails).values({
+        if (!isSuppressed) {
+          // Schedule follow-up email only if not suppressed
+          const scheduledFor = new Date();
+          scheduledFor.setHours(scheduledFor.getHours() + EMAIL_DELAY_HOURS);
+
+          const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(fullName)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
+          
+          const htmlContent = generateFollowUpEmail(fullName, input.documentTitle, calendlyUrl, normalizedEmail, input.documentType);
+
+          await db.insert(scheduledEmails).values({
           recipientEmail: normalizedEmail,
           recipientName: fullName,
           emailType: 'document_followup',
@@ -255,7 +267,12 @@ export const appRouter = router({
           retryCount: 0,
           metadata: JSON.stringify({ documentTitle: input.documentTitle, documentType: input.documentType }),
           createdAt: new Date(),
-        });
+          });
+
+          console.log(`[Email Scheduling] Follow-up email scheduled for ${normalizedEmail}`);
+        } else {
+          console.log(`[Email Scheduling] Skipping follow-up email for suppressed address: ${normalizedEmail} (reason: ${suppressionStatus.suppressionReason})`);
+        }
 
         return {
           success: true,

@@ -154,6 +154,10 @@ export const emailStatus = mysqlTable("emailStatus", {
   opened: int("opened").default(0).notNull(),
   clicked: int("clicked").default(0).notNull(),
   unsubscribed: int("unsubscribed").default(0).notNull(),
+  // Suppression fields for "Do Not Email" system
+  isSuppressed: int("isSuppressed").default(0).notNull(), // 0 = not suppressed, 1 = suppressed
+  suppressionReason: varchar("suppressionReason", { length: 100 }), // 'bounce', 'spam', 'unsubscribe', 'manual'
+  suppressedAt: timestamp("suppressedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

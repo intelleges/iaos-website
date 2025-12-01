@@ -97,6 +97,9 @@ async function processEvent(event: SendGridEvent): Promise<void> {
 
   // Update emailStatus aggregated counters
   await upsertEmailStatus(db, email, eventType, timestamp);
+
+  // Automatic suppression for critical events
+  await autoSuppressIfNeeded(db, email, eventType, timestamp, reason);
 }
 
 /**
@@ -172,6 +175,63 @@ async function upsertEmailStatus(
 
     await db.insert(emailStatus).values(newRecord);
   }
+}
+
+/**
+ * Automatically suppress email addresses for bounce, spam, and unsubscribe events
+ */
+async function autoSuppressIfNeeded(
+  db: any,
+  email: string,
+  eventType: string,
+  timestamp: Date,
+  reason?: string
+): Promise<void> {
+  // Determine if this event should trigger suppression
+  let shouldSuppress = false;
+  let suppressionReason: "bounce" | "spam" | "unsubscribe" | null = null;
+
+  if (eventType === "bounce" || eventType === "dropped") {
+    shouldSuppress = true;
+    suppressionReason = "bounce";
+  } else if (eventType === "spamreport") {
+    shouldSuppress = true;
+    suppressionReason = "spam";
+  } else if (eventType === "unsubscribe") {
+    shouldSuppress = true;
+    suppressionReason = "unsubscribe";
+  }
+
+  if (!shouldSuppress || !suppressionReason) {
+    return; // No suppression needed
+  }
+
+  // Check if already suppressed
+  const [existing] = await db
+    .select()
+    .from(emailStatus)
+    .where(eq(emailStatus.email, email))
+    .limit(1);
+
+  if (existing && existing.isSuppressed === 1) {
+    console.log(`[Suppression] Email ${email} already suppressed, skipping`);
+    return;
+  }
+
+  // Suppress the email
+  await db
+    .update(emailStatus)
+    .set({
+      isSuppressed: 1,
+      suppressionReason,
+      suppressedAt: timestamp,
+    })
+    .where(eq(emailStatus.email, email));
+
+  console.log(
+    `[Suppression] Auto-suppressed ${email} due to ${eventType} event` +
+      (reason ? ` (reason: ${reason})` : "")
+  );
 }
 
 /**

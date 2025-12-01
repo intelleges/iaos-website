@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import EmailHealthBadge, { EmailHealthBadgeGroup } from "@/components/EmailHealthBadge";
 
 type FilterEvent = "all" | "bounced" | "opened" | "clicked" | "spam" | "unsubscribed";
 
@@ -152,7 +153,7 @@ export function EmailAnalyticsPage() {
                 <thead className="bg-muted">
                   <tr className="text-left">
                     <th className="px-3 py-2 font-medium">Email</th>
-                    <th className="px-3 py-2 font-medium">Last Event</th>
+                    <th className="px-3 py-2 font-medium">Engagement Status</th>
                     <th className="px-3 py-2 font-medium text-center">Delivered</th>
                     <th className="px-3 py-2 font-medium text-center">Opened</th>
                     <th className="px-3 py-2 font-medium text-center">Clicked</th>
@@ -173,9 +174,18 @@ export function EmailAnalyticsPage() {
                       >
                         <td className="px-3 py-2 font-mono text-xs">{row.email}</td>
                         <td className="px-3 py-2">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-muted">
-                            {row.lastEvent ?? "-"}
-                          </span>
+                          <EmailHealthBadgeGroup
+                            statuses={[
+                              ...(row.delivered ? [{ status: "delivered" as const, count: row.delivered, timestamp: row.lastEventAt }] : []),
+                              ...(row.opened ? [{ status: "opened" as const, count: row.opened, timestamp: row.lastEventAt }] : []),
+                              ...(row.clicked ? [{ status: "clicked" as const, count: row.clicked, timestamp: row.lastEventAt }] : []),
+                              ...(row.bounce ? [{ status: "bounced" as const, timestamp: row.lastEventAt }] : []),
+                              ...(row.spam ? [{ status: "spam" as const, timestamp: row.lastEventAt }] : []),
+                              ...(row.unsubscribed ? [{ status: "unsubscribed" as const, timestamp: row.lastEventAt }] : []),
+                            ]}
+                            size="sm"
+                            maxVisible={4}
+                          />
                         </td>
                         <td className="px-3 py-2 text-center">{row.delivered ? "✓" : ""}</td>
                         <td className="px-3 py-2 text-center">{row.opened ? "✓" : ""}</td>

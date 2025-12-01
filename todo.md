@@ -958,3 +958,81 @@
 - [x] Provide instructions for adding webhook in SendGrid dashboard
 - [x] Create test script to simulate webhook events (test-webhook.mjs)
 - [x] Verify events appear in email analytics dashboard
+
+
+## SendGrid Production Configuration
+
+### Phase 1: Production Webhook Setup
+- [x] Add webhook URL to SendGrid dashboard (https://yourdomain.manus.space/api/webhooks/sendgrid)
+- [x] Enable all required event types (delivered, opened, clicked, bounced, dropped, spam_report, unsubscribe)
+- [x] Generate and add webhook verification key to environment variables
+- [x] Enable signature verification in webhook endpoint
+- [x] Test webhook with real SendGrid events
+- [x] Monitor webhook logs for errors
+- [x] Create comprehensive production setup guide (SENDGRID_PRODUCTION_SETUP.md)
+
+## "Do Not Email" Suppression System
+
+### Phase 1: Database Schema & API
+- [x] Add isSuppressed boolean field to emailStatus table
+- [x] Add suppressionReason field (bounce, spam, unsubscribe, manual)
+- [x] Add suppressedAt timestamp field
+- [x] Create database migration for new fields (migration 0005)
+- [x] Build checkEmailSuppression TRPC query (returns boolean + reason)
+- [x] Build suppressEmail TRPC mutation (marks email as suppressed)
+- [x] Build unsuppressEmail TRPC mutation (removes suppression)
+- [x] Build getSuppressionStats TRPC query (returns counts by reason)
+- [x] Add suppression status to emailAnalytics.listStatus query
+
+### Phase 2: Automatic Suppression Logic
+- [x] Update SendGrid webhook to auto-suppress on bounce events
+- [x] Update SendGrid webhook to auto-suppress on spam_report events
+- [x] Update SendGrid webhook to auto-suppress on unsubscribe events
+- [x] Update SendGrid webhook to auto-suppress on dropped events
+- [x] Add logging for all automatic suppression actions
+- [x] Add deduplication check to prevent re-suppressing already suppressed emails
+
+### Phase 3: Frontend Integration
+- [x] Add suppression check to EmailCaptureModal before form submission
+- [x] Show "This email is blocked" error message if suppressed
+- [x] Add suppression badge to email analytics table (via EmailHealthBadge)
+- [ ] Add manual suppress/unsuppress buttons in admin UI (future enhancement)
+- [ ] Add suppression filter to email analytics search (future enhancement)
+
+### Phase 4: Email Automation Protection
+- [x] Check suppression status before scheduling follow-up emails
+- [x] Skip suppressed emails in recordDownload mutation
+- [x] Add logging for all suppression blocks
+- [x] Create comprehensive test suite (test-email-suppression.test.ts)
+- [ ] Add suppression check to contact form submissions (future enhancement)
+- [ ] Add suppression check to qualification form submissions (future enhancement)
+
+## Email Health Badges
+
+### Phase 1: Badge Component
+- [x] Create EmailHealthBadge component with icon variants
+- [x] Add badge types: delivered (✓), opened (📧), clicked (🔗), bounced (⚠️), spam (🚫), unsubscribed (✖️), suppressed (🚫)
+- [x] Add color coding: green (good), blue (engagement), purple (clicked), orange (warning), red (critical)
+- [x] Add tooltip showing event details and timestamps
+- [x] Make badges responsive for mobile views (sm/md/lg sizes)
+- [x] Create EmailHealthBadgeGroup component for displaying multiple badges
+
+### Phase 2: Lead Qualification Views
+- [ ] Add email health badges to QualificationGate form
+- [ ] Show badges in lead qualification attempts table
+- [ ] Add badges to admin lead management views
+- [ ] Display engagement timeline in lead detail modals
+- [ ] Add badge filtering to lead search
+
+### Phase 3: Analytics Dashboard Integration
+- [x] Add health badges to email analytics table rows
+- [x] Show engagement summary with badge groups (max 4 visible)
+- [x] Add visual indicators for suppressed emails
+- [ ] Create engagement score visualization (future enhancement)
+- [ ] Add export functionality for email health reports (future enhancement)
+
+### Phase 4: Welcome Page Analytics
+- [ ] Add email health section to personalized welcome page
+- [ ] Show "Your email engagement" card with badges
+- [ ] Display personalized recommendations based on engagement
+- [ ] Add engagement tracking to GA4 events
