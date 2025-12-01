@@ -786,3 +786,16 @@
 - [x] Clarify that Premium Support ($12,000) is available for ALL tiers
 - [x] Clarify that only ERP and eSRS are restricted to Advanced/Enterprise
 - [x] Update test cases A.6.1 and A.6.2 with correct expectations
+
+## Automated UI Testing
+- [x] Install Playwright and dependencies
+- [x] Create Playwright configuration file
+- [x] Create test suite for pricing calculator integration toggles
+- [x] Test Basic tier integration toggle states
+- [x] Test Professional tier integration toggle states
+- [x] Test Advanced tier integration toggle states
+- [x] Test Enterprise tier integration toggle states
+- [x] Verify restriction messages display correctly
+- [x] Run all tests and verify they pass
+- [x] Add test scripts to package.json
+- [x] Document how to run tests in README
