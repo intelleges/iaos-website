@@ -29,7 +29,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/20 bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 transition-all duration-300">
       <div className="container flex items-center justify-between" style={{ height: '80px' }}>
-        <Link href="/" className="logo-wrapper cursor-pointer" style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+        <Link href="/" className="logo-wrapper cursor-pointer transition-all duration-300 hover:opacity-90 hover:scale-105" style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           <img src="/logo.png" alt="Intelleges" style={{ height: '64px', width: 'auto', display: 'block', pointerEvents: 'none' }} />
         </Link>
 

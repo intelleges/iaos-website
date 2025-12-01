@@ -1058,3 +1058,12 @@
 ## Bug Fixes
 
 - [x] Fix logo navigation - logo is clickable and shows home link but doesn't redirect to homepage
+
+
+## UX Improvements
+
+- [x] Add logo hover effect with subtle scale and opacity transition
+- [x] Test all header navigation links on desktop (Product, Protocols, About, Pricing, Contact)
+- [x] Test all header navigation links on mobile
+- [x] Verify mobile menu opens and closes correctly
+- [x] Verify all navigation links work from different pages
