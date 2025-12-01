@@ -763,3 +763,19 @@
 - [ ] Test reminder emails
 - [ ] Test UI expiration indicators
 - [ ] Test quote extension functionality
+
+
+## Automated Pricing Calculator Testing
+
+### Test Suite Development
+- [x] Create automated test suite for pricing calculator
+- [x] Implement all test configurations from test plan document
+- [x] Run Config A: Basic Tier - Minimum ($25,000)
+- [x] Run Config B: Professional Tier - With Overages ($100,500)
+- [x] Run Config C: Advanced Tier - Celestica Example ($182,500)
+- [x] Run Config D: Enterprise Tier - 3-Year Contract ($561,000 total)
+- [x] Run Config E: Edge Case - Large Quantities ($35,385,000)
+- [x] Test integration restrictions (Basic/Professional cannot use ERP/eSRS)
+- [x] Test multi-year contract calculations (no discount)
+- [x] Test zero quantities and below-included amounts
+- [x] Generate comprehensive test results report
