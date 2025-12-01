@@ -1130,3 +1130,33 @@
 - [x] Create setup documentation (GOOGLE_SHEETS_SETUP.md)
 - [x] Document troubleshooting steps
 - [x] Add monitoring for sync failures (via logging)
+
+
+## QA Bug Fix - Cursor Pointer Issue
+
+### Issue
+QA tester reported that clickable elements don't show hand pointer cursor on hover
+
+### Elements to Fix
+- [x] Protocol cards on homepage (already had cursor-pointer)
+- [x] Capability cards on homepage (already had cursor-pointer)
+- [x] "What Intelleges Does" value proposition items (already had cursor-pointer)
+- [x] Flow cards (Collect, Validate, Comply) (already had cursor-pointer)
+- [x] "Why Structure Wins" cards (already had cursor-pointer)
+- [x] Client logo carousel items (already had cursor-pointer)
+- [x] Case study cards on Resources page (already had cursor-pointer)
+- [x] Service one-pager cards (already had cursor-pointer)
+- [x] Navigation links (Product, Protocols, About, Pricing, Contact)
+- [x] Logo link
+
+### Implementation
+- [x] Audit all interactive elements across all pages
+- [x] Add global CSS rule for cursor-pointer on all interactive elements (a, button, etc.)
+- [x] Added comprehensive cursor rules in index.css @layer base
+- [x] Verify cursor changes to hand pointer on hover
+- [x] Test across all pages
+
+
+## Content Correction - How Intelleges Works Section
+
+- [x] Change "Add Suppliers, Buyers & Reviewers" to "Add Suppliers, Buyers & Approvers" in step 3

@@ -309,7 +309,7 @@ export default function Home() {
                 },
                 {
                   step: "Step 3",
-                  title: "Add Suppliers, Buyers & Reviewers",
+                  title: "Add Suppliers, Buyers & Approvers",
                   description: "Upload suppliers via spreadsheet, ERP sync, or manual entry. Assign internal compliance personnel in minutes."
                 },
                 {
