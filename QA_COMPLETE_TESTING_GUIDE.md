@@ -1,8 +1,8 @@
 # Intelleges Website - Complete QA Testing Guide
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Last Updated:** November 30, 2025  
-**Purpose:** Comprehensive testing specification for QA team covering all clickable elements, business rules, and expected behaviors
+**Purpose:** Comprehensive testing specification for QA team covering all clickable elements, business rules, email management, analytics, and expected behaviors
 
 ---
 
@@ -13,26 +13,38 @@
 3. [Page-by-Page Testing Guide](#page-by-page-testing-guide)
 4. [Download System Rules](#download-system-rules)
 5. [Email Automation Workflows](#email-automation-workflows)
-6. [Modal Behaviors](#modal-behaviors)
-7. [Edge Cases & Error Handling](#edge-cases--error-handling)
-8. [Testing Checklists](#testing-checklists)
+6. [Email Suppression System](#email-suppression-system) **NEW**
+7. [Email Analytics Dashboard](#email-analytics-dashboard) **NEW**
+8. [Email Health Badges](#email-health-badges) **NEW**
+9. [Lead Qualification System](#lead-qualification-system) **NEW**
+10. [Personalized Welcome Pages](#personalized-welcome-pages) **NEW**
+11. [SendGrid Webhook Integration](#sendgrid-webhook-integration) **NEW**
+12. [Modal Behaviors](#modal-behaviors)
+13. [Edge Cases & Error Handling](#edge-cases--error-handling)
+14. [Testing Checklists](#testing-checklists)
+15. [Automated Test Verification](#automated-test-verification) **NEW**
 
 ---
 
 ## System Overview
 
 ### Technology Stack
+
 - **Frontend:** React 19 + Wouter (client-side routing)
 - **Backend:** tRPC API
 - **Database:** MySQL (Drizzle ORM)
-- **Email:** SendGrid
+- **Email:** SendGrid with webhook integration
 - **Storage:** S3 (Manus CDN)
+- **Analytics:** Custom email engagement tracking
 
 ### Key Business Rules
+
 1. **3-Document Lifetime Limit:** Each email address can download maximum 3 documents (lifetime, not per day)
 2. **2-Hour Email Delay:** Follow-up emails sent 2 hours after document download
 3. **Email Capture Required:** All service one-pagers and featured documents require email capture
 4. **Case Studies Require Meeting:** Case study downloads require Calendly meeting booking
+5. **Email Suppression:** Bounced, spam-reported, and unsubscribed emails are automatically blocked from future communications **NEW**
+6. **Lead Qualification:** High-value prospects are tracked and qualified through dedicated workflows **NEW**
 
 ---
 
@@ -68,21 +80,25 @@
 ### 1. Homepage (/)
 
 #### Hero Section
+
 | Element | Type | Click Behavior | Expected Result |
 |---------|------|----------------|-----------------|
 | **Book a Demo** button | Primary CTA | Click | Navigate to /contact |
 | **Watch 2-Minute Overview** button | Secondary CTA | Click | Open video modal (placeholder) |
 
 #### Protocols Section
+
 | Element | Type | Click Behavior | Expected Result |
 |---------|------|----------------|-----------------|
 | Protocol cards (16 total) | Interactive cards | Hover | Show subtle scale effect |
 | Protocol cards | Interactive cards | Click | No action (informational only) |
 
 #### How Intelleges Works Section
+
 - **6 numbered steps:** Informational only, no click actions
 
 #### Download Whitepaper CTA
+
 | Element | Type | Click Behavior | Expected Result |
 |---------|------|----------------|-----------------|
 | **Download Whitepaper** button | CTA | Click | Navigate to /resources |
@@ -94,6 +110,7 @@
 #### Service Document Cards (11 Total)
 
 **List of Documents:**
+
 1. Reps & Certs Compliance Service
 2. Export Control (ITAR/EAR) Service
 3. Cybersecurity (CMMC/NIST) Service
@@ -103,8 +120,8 @@
 7. Supplier Risk Management Service
 8. Quality Systems (ISO/AS9100) Service
 9. Environmental & COI Tracking Service
-10. **Compliance Maturity Model** (NEW)
-11. **Current Compliance Landscape** (NEW)
+10. Compliance Maturity Model (NEW)
+11. Current Compliance Landscape (NEW)
 
 #### Click Behavior for Each Card
 
@@ -116,32 +133,54 @@
 #### EmailCaptureModal Workflow
 
 **Step 1: Modal Opens**
+
 - Title: "Download [Document Name]"
 - 3 required fields: Full Name, Email Address, Company Name
 - All fields have validation
 
 **Step 2: Form Validation**
+
 | Field | Validation Rule | Error Message |
-|-------|----------------|---------------|
+|-------|-----------------|---------------|
 | Full Name | Required, non-empty | "Name is required" |
 | Email Address | Required, valid email format | "Email is required" / "Please enter a valid email address" |
 | Company Name | Required, non-empty | "Company name is required" |
 
-**Step 3: Submit Process**
+**Step 3: Email Suppression Check** **NEW**
+
+Before processing the download, the system checks if the email is suppressed:
+
+1. Call `emailSuppression.checkEmailSuppression` API
+2. If email is suppressed:
+   - Show error toast: "This email address cannot receive communications (reason: [bounce/spam/unsubscribe])"
+   - Do NOT proceed with download
+   - Keep modal open for user to try different email
+3. If email is NOT suppressed:
+   - Proceed to Step 4 (download limit check)
+
+**Step 4: Download Limit Check**
+
 1. Check download limit via `documentDownloads.checkLimit` API
 2. If limit reached (≥3 downloads):
    - Close EmailCaptureModal
    - Open DownloadLimitReachedModal
    - **STOP** (no download occurs)
 3. If limit NOT reached:
-   - Record download via `documentDownloads.recordDownload` API
-   - Trigger browser download of PDF from S3 CDN URL
-   - Schedule follow-up email for 2 hours later
-   - Show success state (green checkmark)
-   - Display toast: "Download started! Check your email in 2 hours for a follow-up message."
-   - Auto-close modal after 2 seconds
+   - Proceed to Step 5
 
-**Step 4: Success State**
+**Step 5: Record Download & Schedule Email**
+
+- Record download via `documentDownloads.recordDownload` API
+- **Check suppression status again** before scheduling follow-up email **NEW**
+- If NOT suppressed: Schedule follow-up email for 2 hours later
+- If suppressed: Skip email scheduling (log suppression block)
+- Trigger browser download of PDF from S3 CDN URL
+- Show success state (green checkmark)
+- Display toast: "Download started! Check your email in 2 hours for a follow-up message."
+- Auto-close modal after 2 seconds
+
+**Step 6: Success State**
+
 - Green checkmark icon
 - Message: "Download Started!"
 - Subtext: "Your document is downloading now. Check your email in 2 hours for a personalized follow-up."
@@ -153,6 +192,7 @@
 #### Featured Compliance Frameworks Section
 
 **2 Featured Documents:**
+
 1. Compliance Maturity Model
 2. Current Compliance Landscape
 
@@ -160,9 +200,10 @@
 |---------|------|----------------|-----------------|
 | Featured document card | Interactive card | Hover | Scale up, shadow increase, gradient effect |
 | Featured document card | Interactive card | Click | Open EmailCaptureModal (same workflow as One-Pagers) |
-| **Download** button | Button inside card | Click | Open EmailCaptureModal |
+| Download button | Button inside card | Click | Open EmailCaptureModal |
 
 **Visual Design:**
+
 - Gradient backgrounds (indigo/violet)
 - Custom icons (TrendingUp, Map)
 - Border ring effects
@@ -172,6 +213,7 @@
 #### Additional Resources Section
 
 **4 Placeholder Resource Cards:**
+
 1. CMMC 2.0 Readiness Guide
 2. The Future of Supply Chain Risk
 3. Intelleges Platform Datasheet
@@ -180,7 +222,7 @@
 | Element | Type | Click Behavior | Expected Result |
 |---------|------|----------------|-----------------|
 | Resource cards | Interactive cards | Hover | Border darkens, shadow appears |
-| **Download** button | Button | Click | **No action** (placeholder, not wired up) |
+| Download button | Button | Click | No action (placeholder, not wired up) |
 
 **Testing Note:** These 4 cards are placeholders and should NOT trigger downloads. QA should verify no modal opens when clicking Download.
 
@@ -195,9 +237,10 @@
 | Element | Type | Click Behavior | Expected Result |
 |---------|------|----------------|-----------------|
 | Case study card | Interactive card | Hover | Scale effect, shadow increase |
-| **Download Case Study** button | CTA button | Click | **Redirect to Calendly booking page** (external link) |
+| **Download Case Study** button | CTA button | Click | Redirect to Calendly booking page (external link) |
 
 **Expected Calendly URL Format:**
+
 ```
 https://calendly.com/intelleges/demo?prefill_email=[user_email]&prefill_name=[user_name]
 ```
@@ -212,48 +255,18 @@ https://calendly.com/intelleges/demo?prefill_email=[user_email]&prefill_name=[us
 
 | Field | Type | Validation | Required |
 |-------|------|------------|----------|
-| Full Name | Text input | Non-empty string | Yes |
-| Email Address | Email input | Valid email format | Yes |
-| Company Name | Text input | Non-empty string | Yes |
-| Message | Textarea | Non-empty string | Yes |
+| Full Name | Text input | Non-empty | Yes |
+| Email | Email input | Valid email format | Yes |
+| Company | Text input | Non-empty | Yes |
+| Message | Textarea | Non-empty | Yes |
 
-#### Form Submission
+#### Submit Behavior
 
-| Action | Expected Result |
-|--------|-----------------|
-| Click **Send Message** | Submit form via tRPC `leads.submit` mutation |
-| Success | Show success toast, clear form |
-| Error | Show error toast with message |
-
----
-
-### 6. Pricing Page (/pricing)
-
-#### Pricing Tiers
-
-**3 Tiers:**
-1. **Starter** - Contact for pricing
-2. **Professional** - Contact for pricing
-3. **Enterprise** - Contact for pricing
-
-| Element | Type | Click Behavior | Expected Result |
-|---------|------|----------------|-----------------|
-| **Contact Sales** button | CTA | Click | Navigate to /contact |
-| **Book a Demo** button | CTA | Click | Navigate to /contact |
-
----
-
-### 7. About Page (/about)
-
-#### Team Section
-- Informational content only
-- No interactive elements beyond global navigation
-
-#### CTA Section
-| Element | Type | Click Behavior | Expected Result |
-|---------|------|----------------|-----------------|
-| **Learn More** button | CTA | Click | Navigate to /product |
-| **Contact Us** button | CTA | Click | Navigate to /contact |
+1. Validate all fields
+2. Call `contact.submitForm` API
+3. Show success toast: "Message sent! We'll get back to you soon."
+4. Clear form fields
+5. No email suppression check (contact form submissions always go through)
 
 ---
 
@@ -261,164 +274,933 @@ https://calendly.com/intelleges/demo?prefill_email=[user_email]&prefill_name=[us
 
 ### 3-Document Lifetime Limit
 
-**Rule:** Each unique email address can download a maximum of 3 documents across their lifetime.
+**Business Rule:** Each email address can download a maximum of 3 documents across their lifetime (not per day, not per session).
 
-#### Counting Logic
-- **What counts:** Any document downloaded via EmailCaptureModal
-- **What doesn't count:** Case studies (require Calendly, not tracked in documentDownloads table)
-- **Scope:** Lifetime (not per day, not per session)
-- **Tracking:** `documentDownloads` table in database
+#### Implementation
 
-#### Database Schema
-```sql
-documentDownloads (
-  id INT PRIMARY KEY,
-  email VARCHAR(320) NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  company VARCHAR(255),
-  documentTitle VARCHAR(500) NOT NULL,
-  documentUrl TEXT NOT NULL,
-  documentType ENUM('capability', 'protocol', 'whitepaper'),
-  downloadedAt TIMESTAMP DEFAULT NOW(),
-  followUpEmailSent TINYINT DEFAULT 0,
-  followUpEmailSentAt TIMESTAMP NULL
-)
-```
+1. **Check Limit Before Download:**
+   - API: `documentDownloads.checkLimit({ email })`
+   - Returns: `{ canDownload: boolean, downloadsUsed: number, limit: number }`
 
-#### API Endpoints
+2. **If Limit Reached:**
+   - Close EmailCaptureModal
+   - Open DownloadLimitReachedModal
+   - Display message: "You've reached your download limit (3 documents)"
+   - Provide contact information for additional access
 
-**1. Check Limit**
-```typescript
-documentDownloads.checkLimit({ email: string })
-// Returns: { email, downloadCount, limitReached, remainingDownloads }
-```
+3. **If Limit NOT Reached:**
+   - Proceed with download
+   - Increment download count in database
 
-**2. Record Download**
-```typescript
-documentDownloads.recordDownload({
-  email: string,
-  name: string,
-  company?: string,
-  documentTitle: string,
-  documentUrl: string,
-  documentType: 'capability' | 'protocol' | 'whitepaper'
-})
-// Returns: { success, downloadCount, remainingDownloads }
-```
+#### Testing Scenarios
 
-### Testing Scenarios
-
-#### Scenario 1: First Download (0/3 used)
-1. User enters email: `test@example.com`
-2. Submit form
-3. **Expected:** Download succeeds, count = 1, remaining = 2
-
-#### Scenario 2: Second Download (1/3 used)
-1. Same email: `test@example.com`
-2. Submit form
-3. **Expected:** Download succeeds, count = 2, remaining = 1
-
-#### Scenario 3: Third Download (2/3 used)
-1. Same email: `test@example.com`
-2. Submit form
-3. **Expected:** Download succeeds, count = 3, remaining = 0
-
-#### Scenario 4: Fourth Download (3/3 used - LIMIT REACHED)
-1. Same email: `test@example.com`
-2. Submit form
-3. **Expected:**
-   - EmailCaptureModal closes immediately
-   - DownloadLimitReachedModal opens
-   - NO download occurs
-   - NO database record created
-
-### DownloadLimitReachedModal
-
-**Content:**
-- Icon: Checkmark in blue circle
-- Title: "You've Reached Your Download Limit"
-- Message: "You've downloaded 3 free resources. To access more compliance documents and get personalized guidance, schedule a brief call with our team."
-- CTA Button: "Schedule a Meeting" → Opens Calendly in new tab
-- Secondary action: Close modal (X button or click outside)
-
-**Calendly URL:**
-```
-https://calendly.com/intelleges/demo
-```
+| Scenario | Downloads Used | Expected Behavior |
+|----------|----------------|-------------------|
+| First download | 0 | Allow download, show success |
+| Second download | 1 | Allow download, show success |
+| Third download | 2 | Allow download, show success |
+| Fourth download | 3 | Block download, show DownloadLimitReachedModal |
+| Fifth+ download | 3+ | Block download, show DownloadLimitReachedModal |
 
 ---
 
 ## Email Automation Workflows
 
-### 2-Hour Delayed Follow-Up Email
+### Follow-Up Email Schedule
 
-**Trigger:** User successfully downloads a document via EmailCaptureModal
+**Business Rule:** Follow-up emails are sent 2 hours after document download (unless email is suppressed).
 
-**Process:**
-1. User submits EmailCaptureModal form
-2. Backend records download in `documentDownloads` table
-3. Backend creates scheduled email in `scheduledEmails` table
-   - `scheduledFor` = current time + 2 hours
-   - `sent` = 0 (not sent yet)
-4. Background processor (cron job) runs every hour
-5. Processor finds emails where `scheduledFor <= NOW()` and `sent = 0`
-6. Processor sends email via SendGrid
-7. Processor marks `sent = 1` and sets `sentAt` timestamp
+#### Workflow
 
-### Email Content Template
+1. **User downloads document** via EmailCaptureModal
+2. **System records download** in `documentDownloads` table
+3. **System checks suppression status** **NEW**
+   - If suppressed: Skip email scheduling, log suppression block
+   - If not suppressed: Continue to step 4
+4. **System schedules email** in `scheduledEmails` table
+   - `scheduledFor`: current time + 2 hours
+   - `status`: "pending"
+5. **Background worker processes scheduled emails** every minute
+   - Finds emails where `scheduledFor <= NOW()` and `status = "pending"`
+   - Sends email via SendGrid
+   - Updates status to "sent"
+   - Records email event in `emailStatus` and `emailEvents` tables **NEW**
 
-**Subject:** `Thank you for downloading [Document Title]`
+#### Email Content
+
+**Subject:** "Your [Document Name] - Next Steps"
 
 **Body:**
-```html
-Hi [Name],
+- Personalized greeting with user's name
+- Summary of downloaded document
+- Call-to-action: Book a demo or contact sales
+- Unsubscribe link
 
-Thank you for downloading [Document Title] from Intelleges.
+#### Testing Scenarios
 
-We hope you found it valuable. If you'd like to discuss how Intelleges can help your organization streamline compliance and supplier management, we'd love to connect.
+| Scenario | Expected Behavior |
+|----------|-------------------|
+| Download at 10:00 AM | Email sent at 12:00 PM |
+| Download at 11:59 PM | Email sent at 1:59 AM next day |
+| Email suppressed (bounced) | Email NOT sent, suppression logged |
+| Email suppressed (spam) | Email NOT sent, suppression logged |
+| Email suppressed (unsubscribed) | Email NOT sent, suppression logged |
 
-[Schedule a 15-Minute Call]
-→ [Calendly URL with pre-filled email and document info]
+---
 
-Best regards,
-The Intelleges Team
+## Email Suppression System **NEW**
+
+### Overview
+
+The email suppression system automatically blocks bounced, spam-reported, and unsubscribed email addresses from receiving future communications. This protects sender reputation and ensures compliance with email best practices.
+
+### Suppression Reasons
+
+| Reason | Trigger | Description |
+|--------|---------|-------------|
+| **bounce** | SendGrid bounce event | Email address bounced (hard or soft bounce) |
+| **spam** | SendGrid spam_report event | Recipient marked email as spam |
+| **unsubscribe** | SendGrid unsubscribe event | Recipient clicked unsubscribe link |
+| **dropped** | SendGrid dropped event | SendGrid dropped email (invalid address, suppression list) |
+| **manual** | Admin action | Manually suppressed by administrator |
+
+### Automatic Suppression Flow
+
+1. **SendGrid sends email** to recipient
+2. **Recipient action triggers event** (bounce, spam report, unsubscribe)
+3. **SendGrid webhook fires** to `/api/webhooks/sendgrid`
+4. **Webhook handler processes event:**
+   - Records event in `emailEvents` table
+   - Updates `emailStatus` table with engagement metrics
+   - **If event is bounce/spam/unsubscribe/dropped:**
+     - Sets `isSuppressed = 1`
+     - Sets `suppressionReason = [reason]`
+     - Sets `suppressedAt = NOW()`
+     - Logs suppression action
+5. **Future email attempts are blocked:**
+   - EmailCaptureModal checks suppression before submission
+   - Follow-up email scheduler checks suppression before scheduling
+   - Contact form submissions bypass suppression (always go through)
+
+### Testing Email Suppression
+
+#### Test Case 1: Bounce Event
+
+**Setup:**
+1. Use test email: `bounce@simulator.amazonses.com`
+2. Download a document with this email
+3. Simulate bounce event via webhook
+
+**Expected Behavior:**
+- Email status shows `isSuppressed = 1`, `suppressionReason = "bounce"`
+- Attempting to download another document with same email shows error: "This email address cannot receive communications (reason: bounce)"
+- Follow-up emails are NOT scheduled for this address
+
+#### Test Case 2: Spam Report
+
+**Setup:**
+1. Use test email: `spam@example.com`
+2. Download a document with this email
+3. Simulate spam_report event via webhook
+
+**Expected Behavior:**
+- Email status shows `isSuppressed = 1`, `suppressionReason = "spam"`
+- Future download attempts blocked with error message
+- Follow-up emails are NOT scheduled
+
+#### Test Case 3: Unsubscribe
+
+**Setup:**
+1. Use test email: `unsubscribe@example.com`
+2. Download a document with this email
+3. Simulate unsubscribe event via webhook
+
+**Expected Behavior:**
+- Email status shows `isSuppressed = 1`, `suppressionReason = "unsubscribe"`
+- Future download attempts blocked with error message
+- Follow-up emails are NOT scheduled
+
+#### Test Case 4: Manual Suppression
+
+**Setup:**
+1. Admin logs into `/admin/email-analytics`
+2. Manually suppresses email via API (future enhancement)
+
+**Expected Behavior:**
+- Email status shows `isSuppressed = 1`, `suppressionReason = "manual"`
+- All future communications blocked
+
+#### Test Case 5: Unsuppression
+
+**Setup:**
+1. Admin logs into `/admin/email-analytics`
+2. Removes suppression via API (future enhancement)
+
+**Expected Behavior:**
+- Email status shows `isSuppressed = 0`, `suppressionReason = NULL`
+- Email can now receive communications again
+
+### Suppression API Endpoints
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `emailSuppression.checkEmailSuppression` | Query | Check if email is suppressed |
+| `emailSuppression.suppressEmail` | Mutation | Manually suppress an email |
+| `emailSuppression.unsuppressEmail` | Mutation | Remove suppression |
+| `emailSuppression.getSuppressionStats` | Query | Get suppression counts by reason |
+
+### Testing Checklist: Email Suppression
+
+- [ ] Bounced email is automatically suppressed
+- [ ] Spam-reported email is automatically suppressed
+- [ ] Unsubscribed email is automatically suppressed
+- [ ] Dropped email is automatically suppressed
+- [ ] Suppressed email cannot download documents (error shown)
+- [ ] Suppressed email does not receive follow-up emails
+- [ ] Suppression reason is correctly recorded
+- [ ] Suppression timestamp is correctly recorded
+- [ ] Manual suppression works (if implemented)
+- [ ] Unsuppression works (if implemented)
+- [ ] Suppression stats are accurate
+- [ ] Case-insensitive email matching works (Test@Example.com = test@example.com)
+
+---
+
+## Email Analytics Dashboard **NEW**
+
+### Overview
+
+The Email Analytics Dashboard (`/admin/email-analytics`) provides comprehensive insights into email engagement, deliverability, and suppression status.
+
+### Access Control
+
+- **URL:** `/admin/email-analytics`
+- **Authentication:** Required (OAuth login)
+- **Authorization:** Admin users only (currently all authenticated users, pending role implementation)
+
+### Dashboard Sections
+
+#### 1. Overview Cards
+
+| Metric | Description | Calculation |
+|--------|-------------|-------------|
+| **Total Tracked Emails** | Number of unique email addresses tracked | COUNT(*) from emailStatus |
+| **Total Delivered** | Number of successfully delivered emails | SUM(delivered) |
+| **Total Opened** | Number of emails opened | SUM(opened) |
+| **Total Clicked** | Number of emails with link clicks | SUM(clicked) |
+| **Total Bounced** | Number of bounced emails | SUM(bounce) |
+| **Total Spam Reports** | Number of spam complaints | SUM(spam) |
+| **Total Unsubscribed** | Number of unsubscribe requests | SUM(unsubscribed) |
+| **Open Rate** | Percentage of delivered emails opened | (opened / delivered) * 100 |
+| **Click Rate** | Percentage of delivered emails clicked | (clicked / delivered) * 100 |
+| **Bounce Rate** | Percentage of emails bounced | (bounced / (delivered + bounced)) * 100 |
+
+#### 2. Email Status Table
+
+**Columns:**
+
+| Column | Description | Data Type |
+|--------|-------------|-----------|
+| **Email** | Email address | String (monospace font) |
+| **Engagement Status** | Visual health badges | Badge group component |
+| **Delivered** | Delivered count | Number (✓ if > 0) |
+| **Opened** | Opened count | Number (✓ if > 0) |
+| **Clicked** | Clicked count | Number (✓ if > 0) |
+| **Bounced** | Bounce count | Number (⚠️ if > 0) |
+| **Unsubscribed** | Unsubscribe count | Number (✖️ if > 0) |
+| **Last Event At** | Timestamp of last event | Formatted date/time |
+
+**Features:**
+
+- **Search:** Filter by email address (partial match)
+- **Filter:** Filter by event type (all, bounced, opened, clicked, spam, unsubscribed)
+- **Pagination:** 25 rows per page with offset-based navigation
+- **Row Selection:** Click row to view detailed timeline
+- **Sorting:** Ordered by last event timestamp (descending)
+
+#### 3. Email Timeline (Detail View)
+
+When clicking an email row, a detailed timeline appears showing all events for that email:
+
+**Event Types Displayed:**
+
+- Delivered
+- Opened
+- Clicked
+- Bounced
+- Spam Report
+- Unsubscribed
+- Dropped
+
+**Event Details:**
+
+- Event type (with icon)
+- Timestamp (formatted as relative time)
+- Event metadata (if available)
+
+### Testing Email Analytics Dashboard
+
+#### Test Case 1: Overview Metrics
+
+**Setup:**
+1. Ensure test data exists in database (use test-webhook.mjs to simulate events)
+2. Navigate to `/admin/email-analytics`
+
+**Expected Behavior:**
+- All overview cards display correct counts
+- Rates (open, click, bounce) are calculated correctly
+- Metrics update when new events occur
+
+#### Test Case 2: Email Search
+
+**Setup:**
+1. Navigate to `/admin/email-analytics`
+2. Enter partial email in search box (e.g., "test")
+
+**Expected Behavior:**
+- Table filters to show only matching emails
+- Search is case-insensitive
+- Partial matches work (e.g., "test" matches "test@example.com")
+
+#### Test Case 3: Event Filter
+
+**Setup:**
+1. Navigate to `/admin/email-analytics`
+2. Select filter: "Bounced"
+
+**Expected Behavior:**
+- Table shows only emails with bounce = 1
+- Other emails are hidden
+- Filter persists when searching
+
+#### Test Case 4: Email Timeline
+
+**Setup:**
+1. Navigate to `/admin/email-analytics`
+2. Click on an email row with multiple events
+
+**Expected Behavior:**
+- Timeline appears below overview cards
+- All events for that email are displayed
+- Events are sorted by timestamp (newest first)
+- Event types have appropriate icons and colors
+
+#### Test Case 5: Pagination
+
+**Setup:**
+1. Ensure > 25 emails exist in database
+2. Navigate to `/admin/email-analytics`
+
+**Expected Behavior:**
+- Only 25 rows displayed initially
+- "Next" button appears if more rows exist
+- Clicking "Next" loads next 25 rows
+- "Previous" button appears on page 2+
+
+### Testing Checklist: Email Analytics Dashboard
+
+- [ ] Dashboard loads without errors
+- [ ] Overview cards display correct metrics
+- [ ] Open rate calculation is correct
+- [ ] Click rate calculation is correct
+- [ ] Bounce rate calculation is correct
+- [ ] Email search works (case-insensitive, partial match)
+- [ ] Event filter works (bounced, opened, clicked, spam, unsubscribed)
+- [ ] Email status table displays all columns
+- [ ] Clicking email row shows timeline
+- [ ] Timeline displays all events for email
+- [ ] Timeline events are sorted correctly
+- [ ] Pagination works (next/previous)
+- [ ] Health badges display correctly (see next section)
+
+---
+
+## Email Health Badges **NEW**
+
+### Overview
+
+Email health badges provide visual indicators of email engagement status throughout the platform. They appear in the email analytics dashboard and will be extended to lead qualification views and personalized welcome pages.
+
+### Badge Types
+
+| Status | Icon | Color | Description |
+|--------|------|-------|-------------|
+| **delivered** | ✓ | Green | Email successfully delivered |
+| **opened** | 📧 | Blue | Recipient opened email |
+| **clicked** | 🔗 | Purple | Recipient clicked link in email |
+| **bounced** | ⚠️ | Orange | Email bounced (hard or soft) |
+| **spam** | 🚫 | Red | Marked as spam |
+| **unsubscribed** | ✖️ | Gray | Recipient unsubscribed |
+| **suppressed** | 🚫 | Red | Email is suppressed (cannot receive emails) |
+
+### Badge Sizes
+
+- **sm:** Small (used in compact tables)
+- **md:** Medium (default)
+- **lg:** Large (used in prominent displays)
+
+### Badge Components
+
+#### 1. EmailHealthBadge (Single Badge)
+
+**Props:**
+
+- `status`: Badge type (delivered, opened, clicked, bounced, spam, unsubscribed, suppressed)
+- `count`: Number of events (optional, shows badge with count)
+- `timestamp`: Event timestamp (optional, shows in tooltip)
+- `size`: Badge size (sm, md, lg)
+
+**Example Usage:**
+
+```tsx
+<EmailHealthBadge 
+  status="opened" 
+  count={3} 
+  timestamp="2025-11-30T10:30:00Z" 
+  size="md" 
+/>
 ```
 
-**Calendly URL Parameters:**
+**Expected Display:**
+
+- Blue badge with 📧 icon
+- Count "3" displayed
+- Tooltip: "Opened (3) - Last: Nov 30, 2025 10:30 AM"
+
+#### 2. EmailHealthBadgeGroup (Multiple Badges)
+
+**Props:**
+
+- `statuses`: Array of badge objects `[{ status, count, timestamp }]`
+- `size`: Badge size for all badges
+- `maxVisible`: Maximum number of badges to show (default: 4)
+
+**Example Usage:**
+
+```tsx
+<EmailHealthBadgeGroup 
+  statuses={[
+    { status: "delivered", count: 1, timestamp: "2025-11-30T10:00:00Z" },
+    { status: "opened", count: 2, timestamp: "2025-11-30T10:30:00Z" },
+    { status: "clicked", count: 1, timestamp: "2025-11-30T11:00:00Z" },
+  ]}
+  size="sm"
+  maxVisible={4}
+/>
 ```
-https://calendly.com/intelleges/demo?email=[email]&name=[name]&a1=[documentTitle]&a2=[documentType]
+
+**Expected Display:**
+
+- Three badges displayed horizontally
+- Each badge shows icon and count
+- Hover shows tooltip with details
+- If > maxVisible badges, show "+N more" indicator
+
+### Badge Placement
+
+#### Current Implementation
+
+- **Email Analytics Dashboard:** Email status table shows badge group for each email
+
+#### Future Implementation (Planned)
+
+- **Lead Qualification Views:** Show badges next to email in qualification attempts table
+- **Admin Lead Management:** Display engagement badges in lead detail modals
+- **Personalized Welcome Pages:** Show "Your email engagement" card with badges
+
+### Testing Email Health Badges
+
+#### Test Case 1: Single Badge Display
+
+**Setup:**
+1. Navigate to `/admin/email-analytics`
+2. Find email with single event (e.g., only delivered)
+
+**Expected Behavior:**
+- Single badge displayed with correct icon and color
+- Hover shows tooltip with timestamp
+- Badge size matches specified size
+
+#### Test Case 2: Multiple Badges Display
+
+**Setup:**
+1. Navigate to `/admin/email-analytics`
+2. Find email with multiple events (delivered, opened, clicked)
+
+**Expected Behavior:**
+- Badge group displays all badges horizontally
+- Each badge has correct icon, color, and count
+- Badges are ordered by priority (delivered → opened → clicked → bounced → spam → unsubscribed)
+- Hover on each badge shows individual tooltip
+
+#### Test Case 3: Badge with Count
+
+**Setup:**
+1. Simulate multiple "opened" events for same email
+2. Navigate to `/admin/email-analytics`
+
+**Expected Behavior:**
+- Opened badge shows count (e.g., "📧 3")
+- Tooltip shows: "Opened (3) - Last: [timestamp]"
+
+#### Test Case 4: Suppressed Badge
+
+**Setup:**
+1. Suppress an email (bounce, spam, or unsubscribe)
+2. Navigate to `/admin/email-analytics`
+
+**Expected Behavior:**
+- Suppressed badge (🚫) displayed in red
+- Tooltip shows: "Suppressed ([reason]) - [timestamp]"
+- Badge appears prominently to indicate blocked status
+
+#### Test Case 5: Badge Overflow
+
+**Setup:**
+1. Create email with > 4 events
+2. Navigate to `/admin/email-analytics`
+
+**Expected Behavior:**
+- First 4 badges displayed
+- "+N more" indicator shown
+- Clicking indicator shows all badges (future enhancement)
+
+### Testing Checklist: Email Health Badges
+
+- [ ] Delivered badge displays correctly (green, ✓)
+- [ ] Opened badge displays correctly (blue, 📧)
+- [ ] Clicked badge displays correctly (purple, 🔗)
+- [ ] Bounced badge displays correctly (orange, ⚠️)
+- [ ] Spam badge displays correctly (red, 🚫)
+- [ ] Unsubscribed badge displays correctly (gray, ✖️)
+- [ ] Suppressed badge displays correctly (red, 🚫)
+- [ ] Badge counts display correctly
+- [ ] Badge tooltips show correct information
+- [ ] Badge sizes (sm, md, lg) render correctly
+- [ ] Badge group displays multiple badges
+- [ ] Badge group respects maxVisible limit
+- [ ] Badge colors match design system
+- [ ] Badges are responsive on mobile
+
+---
+
+## Lead Qualification System **NEW**
+
+### Overview
+
+The lead qualification system identifies high-value prospects and guides them through a structured qualification process. Qualified leads receive personalized welcome pages with their engagement data.
+
+### Qualification Criteria
+
+A lead is considered "qualified" if they meet ANY of the following criteria:
+
+1. **Government Email Domain:** Email ends with `.gov` or `.mil`
+2. **Fortune 500 Company:** Company name matches Fortune 500 list
+3. **High Download Volume:** Downloaded 2+ documents
+4. **High Engagement:** Opened and clicked follow-up emails
+
+### Qualification Workflow
+
+#### Step 1: Lead Capture
+
+- User downloads document via EmailCaptureModal
+- System records: name, email, company, document downloaded
+- System checks qualification criteria
+
+#### Step 2: Qualification Check
+
+**API:** `qualification.checkQualification({ email })`
+
+**Returns:**
+```json
+{
+  "isQualified": true,
+  "reason": "government_email",
+  "qualificationScore": 85
+}
 ```
 
-### Email Delivery Testing
+#### Step 3: Qualification Gate (If Qualified)
 
-| Test Case | Expected Behavior |
-|-----------|-------------------|
-| Download document at 2:00 PM | Email sent at 4:00 PM (or next cron run after 4:00 PM) |
-| Download 3 documents in 1 hour | Receive 3 separate emails, each 2 hours after respective download |
-| Invalid email address | Email fails to send, marked as `failed = 1` in database |
-| SendGrid API error | Email marked as `failed = 1`, `failureReason` logged |
+- After download success, show QualificationGate modal
+- Ask 3 additional questions:
+  1. **Job Title:** Text input
+  2. **Company Size:** Dropdown (1-50, 51-200, 201-1000, 1000+)
+  3. **Primary Compliance Need:** Dropdown (CMMC, ITAR, AS9100, etc.)
+- Submit via `qualification.submitQualification` API
 
-### Database Tables
+#### Step 4: Personalized Welcome Page
 
-**scheduledEmails Schema:**
-```sql
-scheduledEmails (
-  id INT PRIMARY KEY,
-  recipientEmail VARCHAR(320) NOT NULL,
-  recipientName VARCHAR(255),
-  emailType VARCHAR(100) NOT NULL,  -- 'document_followup'
-  subject VARCHAR(500) NOT NULL,
-  htmlContent TEXT NOT NULL,
-  scheduledFor TIMESTAMP NOT NULL,
-  sent TINYINT DEFAULT 0,
-  sentAt TIMESTAMP NULL,
-  failed TINYINT DEFAULT 0,
-  failureReason TEXT NULL,
-  retryCount INT DEFAULT 0,
-  metadata TEXT,  -- JSON string
-  createdAt TIMESTAMP DEFAULT NOW()
-)
-```
+- System generates unique welcome URL: `/welcome/[token]`
+- Welcome page displays:
+  - Personalized greeting with user's name
+  - Company information
+  - Downloaded documents list
+  - Email engagement metrics **NEW**
+  - Call-to-action: Book a demo
+- URL is included in follow-up email
+
+### Testing Lead Qualification
+
+#### Test Case 1: Government Email Qualification
+
+**Setup:**
+1. Download document with email: `john.doe@navy.mil`
+
+**Expected Behavior:**
+- After download success, QualificationGate modal opens
+- Modal shows: "We noticed you're from a government organization"
+- User fills out 3 additional fields
+- Submit creates qualification record
+- Welcome page URL generated
+
+#### Test Case 2: Fortune 500 Qualification
+
+**Setup:**
+1. Download document with company: "Lockheed Martin"
+
+**Expected Behavior:**
+- After download success, QualificationGate modal opens
+- Modal shows: "We noticed you're from a Fortune 500 company"
+- User completes qualification
+- Welcome page URL generated
+
+#### Test Case 3: High Download Volume Qualification
+
+**Setup:**
+1. Download 2 documents with same email
+
+**Expected Behavior:**
+- After 2nd download, QualificationGate modal opens
+- Modal shows: "You've shown strong interest in our resources"
+- User completes qualification
+- Welcome page URL generated
+
+#### Test Case 4: Non-Qualified Lead
+
+**Setup:**
+1. Download document with generic email: `test@example.com`
+2. Company: "Small Business Inc"
+
+**Expected Behavior:**
+- Download completes successfully
+- QualificationGate modal does NOT open
+- Standard follow-up email sent (no welcome page)
+
+### Testing Checklist: Lead Qualification
+
+- [ ] Government email (.gov, .mil) triggers qualification
+- [ ] Fortune 500 company triggers qualification
+- [ ] 2+ downloads trigger qualification
+- [ ] QualificationGate modal opens after qualification
+- [ ] QualificationGate form validates all fields
+- [ ] Qualification submission creates database record
+- [ ] Welcome page URL is generated
+- [ ] Welcome page displays correct user data
+- [ ] Welcome page shows email engagement metrics
+- [ ] Non-qualified leads do not see QualificationGate
+
+---
+
+## Personalized Welcome Pages **NEW**
+
+### Overview
+
+Qualified leads receive personalized welcome pages that display their engagement data, downloaded documents, and email analytics.
+
+### URL Structure
+
+**Format:** `/welcome/[token]`
+
+**Example:** `/welcome/abc123def456`
+
+**Token:** Unique, secure token generated for each qualified lead
+
+### Page Sections
+
+#### 1. Hero Section
+
+- **Personalized Greeting:** "Welcome back, [First Name]!"
+- **Company Name:** "[Company Name]"
+- **Qualification Badge:** Visual indicator of qualification reason
+
+#### 2. Your Downloads Section
+
+**Displays:**
+- List of all documents downloaded by this email
+- Document titles
+- Download timestamps
+- Download count
+
+#### 3. Email Engagement Section **NEW**
+
+**Displays:**
+- Email health badges showing engagement status
+- Metrics:
+  - Emails delivered
+  - Emails opened
+  - Links clicked
+  - Last engagement timestamp
+- Visual engagement timeline (future enhancement)
+
+#### 4. Next Steps Section
+
+**Call-to-Action:**
+- **Primary CTA:** "Book a Demo" (links to Calendly)
+- **Secondary CTA:** "Download More Resources" (links to /resources)
+
+#### 5. Contact Information
+
+- Sales team email
+- Phone number
+- Office hours
+
+### Testing Personalized Welcome Pages
+
+#### Test Case 1: Valid Token
+
+**Setup:**
+1. Qualify a lead and get welcome token
+2. Navigate to `/welcome/[token]`
+
+**Expected Behavior:**
+- Page loads successfully
+- Personalized greeting displays correct name
+- Company name displays correctly
+- Downloads section shows all downloaded documents
+- Email engagement section shows correct metrics
+- Email health badges display correctly
+- CTAs are clickable and functional
+
+#### Test Case 2: Invalid Token
+
+**Setup:**
+1. Navigate to `/welcome/invalid-token-123`
+
+**Expected Behavior:**
+- Show error message: "Invalid or expired welcome link"
+- Provide link to homepage
+- Do NOT display any user data
+
+#### Test Case 3: Expired Token
+
+**Setup:**
+1. Use token older than 90 days (if expiration implemented)
+
+**Expected Behavior:**
+- Show error message: "This welcome link has expired"
+- Provide contact information to request new link
+
+#### Test Case 4: Email Engagement Display
+
+**Setup:**
+1. Qualify lead with multiple email events (delivered, opened, clicked)
+2. Navigate to welcome page
+
+**Expected Behavior:**
+- Email engagement section displays all badges
+- Metrics show correct counts
+- Last engagement timestamp is accurate
+- Badges match those in email analytics dashboard
+
+### Testing Checklist: Personalized Welcome Pages
+
+- [ ] Valid token loads page successfully
+- [ ] Invalid token shows error message
+- [ ] Personalized greeting displays correct name
+- [ ] Company name displays correctly
+- [ ] Downloads section shows all documents
+- [ ] Download timestamps are formatted correctly
+- [ ] Email engagement section displays
+- [ ] Email health badges render correctly
+- [ ] Email metrics are accurate
+- [ ] "Book a Demo" CTA links to Calendly
+- [ ] "Download More Resources" CTA links to /resources
+- [ ] Contact information is correct
+- [ ] Page is responsive on mobile
+- [ ] Page loads quickly (< 2 seconds)
+
+---
+
+## SendGrid Webhook Integration **NEW**
+
+### Overview
+
+SendGrid webhooks enable real-time tracking of email events (delivered, opened, clicked, bounced, spam, unsubscribed). This data powers the email analytics dashboard, suppression system, and engagement tracking.
+
+### Webhook Endpoint
+
+**URL:** `https://yourdomain.manus.space/api/webhooks/sendgrid`
+
+**Method:** POST
+
+**Authentication:** Signature verification (optional but recommended)
+
+### Event Types Tracked
+
+| Event Type | Description | Triggers |
+|------------|-------------|----------|
+| **delivered** | Email successfully delivered | Updates emailStatus.delivered |
+| **open** | Recipient opened email | Updates emailStatus.opened |
+| **click** | Recipient clicked link | Updates emailStatus.clicked |
+| **bounce** | Email bounced | Updates emailStatus.bounce, triggers suppression |
+| **dropped** | SendGrid dropped email | Triggers suppression |
+| **spam_report** | Marked as spam | Updates emailStatus.spam, triggers suppression |
+| **unsubscribe** | Recipient unsubscribed | Updates emailStatus.unsubscribed, triggers suppression |
+
+### Webhook Processing Flow
+
+1. **SendGrid sends POST request** to webhook endpoint
+2. **Webhook handler validates signature** (if verification key provided)
+3. **For each event in batch:**
+   - Extract email address and event type
+   - **Record event** in `emailEvents` table
+   - **Update aggregated stats** in `emailStatus` table
+   - **Check if event triggers suppression** (bounce, spam, unsubscribe, dropped)
+   - **If suppression triggered:**
+     - Set `isSuppressed = 1`
+     - Set `suppressionReason = [event type]`
+     - Set `suppressedAt = NOW()`
+     - Log suppression action
+4. **Return 200 OK** to SendGrid
+
+### Production Configuration
+
+**Step-by-Step Setup:**
+
+1. **Log in to SendGrid Dashboard**
+2. **Navigate to:** Settings → Mail Settings → Event Webhook
+3. **Click:** Create New Webhook
+4. **Enter Webhook URL:** `https://yourdomain.manus.space/api/webhooks/sendgrid`
+5. **Enable Event Types:**
+   - ✅ Delivered
+   - ✅ Opened
+   - ✅ Clicked
+   - ✅ Bounced
+   - ✅ Dropped
+   - ✅ Spam Report
+   - ✅ Unsubscribe
+   - ❌ Deferred (not needed)
+   - ❌ Processed (not needed)
+6. **Generate Verification Key** (recommended for production)
+7. **Add Verification Key to Environment Variables:**
+   - Variable: `SENDGRID_WEBHOOK_VERIFICATION_KEY`
+   - Value: Public key from SendGrid
+8. **Click:** Save
+9. **Send Test Notification** to verify webhook is reachable
+
+**Detailed Setup Guide:** See `SENDGRID_PRODUCTION_SETUP.md` in project root
+
+### Testing SendGrid Webhook
+
+#### Test Case 1: Delivered Event
+
+**Setup:**
+1. Use test script: `node test-webhook.mjs delivered test@example.com`
+
+**Expected Behavior:**
+- Event recorded in `emailEvents` table
+- `emailStatus.delivered` incremented
+- `emailStatus.lastEvent = "delivered"`
+- `emailStatus.lastEventAt` updated
+
+#### Test Case 2: Opened Event
+
+**Setup:**
+1. Use test script: `node test-webhook.mjs open test@example.com`
+
+**Expected Behavior:**
+- Event recorded in `emailEvents` table
+- `emailStatus.opened` incremented
+- `emailStatus.lastEvent = "open"`
+- Email analytics dashboard shows opened badge
+
+#### Test Case 3: Clicked Event
+
+**Setup:**
+1. Use test script: `node test-webhook.mjs click test@example.com`
+
+**Expected Behavior:**
+- Event recorded in `emailEvents` table
+- `emailStatus.clicked` incremented
+- `emailStatus.lastEvent = "click"`
+- Email analytics dashboard shows clicked badge
+
+#### Test Case 4: Bounce Event (Triggers Suppression)
+
+**Setup:**
+1. Use test script: `node test-webhook.mjs bounce test@example.com`
+
+**Expected Behavior:**
+- Event recorded in `emailEvents` table
+- `emailStatus.bounce` incremented
+- **`emailStatus.isSuppressed = 1`**
+- **`emailStatus.suppressionReason = "bounce"`**
+- **`emailStatus.suppressedAt` set to current timestamp**
+- Email analytics dashboard shows bounced badge
+- Future download attempts blocked
+
+#### Test Case 5: Spam Report (Triggers Suppression)
+
+**Setup:**
+1. Use test script: `node test-webhook.mjs spam_report test@example.com`
+
+**Expected Behavior:**
+- Event recorded in `emailEvents` table
+- `emailStatus.spam` incremented
+- **Email automatically suppressed**
+- Email analytics dashboard shows spam badge
+
+#### Test Case 6: Unsubscribe (Triggers Suppression)
+
+**Setup:**
+1. Use test script: `node test-webhook.mjs unsubscribe test@example.com`
+
+**Expected Behavior:**
+- Event recorded in `emailEvents` table
+- `emailStatus.unsubscribed` incremented
+- **Email automatically suppressed**
+- Email analytics dashboard shows unsubscribed badge
+
+#### Test Case 7: Signature Verification
+
+**Setup:**
+1. Set `SENDGRID_WEBHOOK_VERIFICATION_KEY` environment variable
+2. Send webhook request with invalid signature
+
+**Expected Behavior:**
+- Webhook returns 401 Unauthorized
+- Event is NOT processed
+- Error logged: "Webhook signature verification failed"
+
+#### Test Case 8: Batch Events
+
+**Setup:**
+1. Send webhook request with multiple events in single payload
+
+**Expected Behavior:**
+- All events processed successfully
+- Each event recorded individually
+- Aggregated stats updated correctly
+- Webhook returns 200 OK
+
+### Testing Checklist: SendGrid Webhook
+
+- [ ] Webhook endpoint is publicly accessible
+- [ ] Delivered events are recorded correctly
+- [ ] Opened events are recorded correctly
+- [ ] Clicked events are recorded correctly
+- [ ] Bounced events are recorded and trigger suppression
+- [ ] Spam report events are recorded and trigger suppression
+- [ ] Unsubscribe events are recorded and trigger suppression
+- [ ] Dropped events trigger suppression
+- [ ] Signature verification works (if enabled)
+- [ ] Invalid signature returns 401
+- [ ] Batch events are processed correctly
+- [ ] Webhook logs are readable and useful
+- [ ] Email analytics dashboard reflects webhook data
+- [ ] Suppression system responds to webhook events
+- [ ] Webhook performance is acceptable (< 500ms per event)
 
 ---
 
@@ -426,56 +1208,68 @@ scheduledEmails (
 
 ### 1. EmailCaptureModal
 
-**Trigger Locations:**
-- One-Pagers page: Click any service document card
-- Resources page: Click featured document card
+**Trigger:** Click on service one-pager card or featured document
 
-**States:**
+**Contents:**
+- Modal title: "Download [Document Name]"
+- 3 form fields: Full Name, Email Address, Company Name
+- Submit button: "Download"
+- Close button (X in top right)
 
-| State | Visual | Duration |
-|-------|--------|----------|
-| **Form Entry** | 3 input fields, Download button | Until submit or close |
-| **Submitting** | Button text: "Processing...", button disabled | 1-3 seconds |
-| **Success** | Green checkmark, "Download Started!" message | 2 seconds (auto-close) |
-| **Limit Reached** | Modal closes, DownloadLimitReachedModal opens | Immediate |
+**Behaviors:**
 
-**Close Behaviors:**
-- Click X button (top right)
-- Click outside modal (backdrop)
-- Press ESC key
-- Auto-close after success (2 seconds)
-
-**Form Validation:**
-- Real-time validation on blur
-- Error messages appear below each field
-- Submit button enabled only when all fields valid
+| Action | Expected Result |
+|--------|-----------------|
+| Click outside modal | Close modal (no download) |
+| Press ESC key | Close modal (no download) |
+| Click X button | Close modal (no download) |
+| Submit with empty fields | Show validation errors, do NOT close |
+| Submit with invalid email | Show validation error, do NOT close |
+| Submit with valid data (suppressed email) | Show error toast, do NOT close **NEW** |
+| Submit with valid data (limit reached) | Close EmailCaptureModal, open DownloadLimitReachedModal |
+| Submit with valid data (limit NOT reached) | Show success state, trigger download, auto-close after 2 seconds |
 
 ### 2. DownloadLimitReachedModal
 
-**Trigger:** User attempts 4th download (limit already reached)
+**Trigger:** User attempts 4th download (limit is 3)
 
-**Content:**
-- Blue checkmark icon
-- Title: "You've Reached Your Download Limit"
-- Message: Explanation + CTA to schedule meeting
-- Button: "Schedule a Meeting" (opens Calendly)
+**Contents:**
+- Title: "Download Limit Reached"
+- Message: "You've downloaded the maximum of 3 documents. For additional access, please contact our sales team."
+- Contact information: sales@intelleges.com
+- Close button
 
-**Close Behaviors:**
-- Click X button
-- Click outside modal
-- Press ESC key
-- Click "Schedule a Meeting" (opens Calendly, modal stays open)
+**Behaviors:**
 
-### 3. SimpleModal (Base Component)
+| Action | Expected Result |
+|--------|-----------------|
+| Click outside modal | Close modal |
+| Press ESC key | Close modal |
+| Click Close button | Close modal |
 
-**Used by:** EmailCaptureModal, DownloadLimitReachedModal
+### 3. QualificationGate Modal **NEW**
 
-**Features:**
-- Backdrop overlay (semi-transparent black)
-- Center-aligned modal
-- Click outside to close
-- ESC key to close
-- Smooth fade-in/out animations
+**Trigger:** Qualified lead completes document download
+
+**Contents:**
+- Title: "Tell Us More About Your Needs"
+- Subtitle: Personalized based on qualification reason
+- 3 additional fields:
+  - Job Title (text input)
+  - Company Size (dropdown)
+  - Primary Compliance Need (dropdown)
+- Submit button: "Continue"
+- Skip button: "Maybe Later"
+
+**Behaviors:**
+
+| Action | Expected Result |
+|--------|-----------------|
+| Click outside modal | Do NOT close (force user to make choice) |
+| Press ESC key | Close modal (same as "Maybe Later") |
+| Click "Maybe Later" | Close modal, no qualification recorded |
+| Submit with empty fields | Show validation errors, do NOT close |
+| Submit with valid data | Record qualification, close modal, show success toast |
 
 ---
 
@@ -485,169 +1279,261 @@ scheduledEmails (
 
 | Scenario | Expected Behavior |
 |----------|-------------------|
-| **User clears cookies between downloads** | Limit still enforced (tracked by email, not cookies) |
-| **User uses different capitalization (Test@example.com vs test@example.com)** | Treated as same email (normalized to lowercase) |
-| **User enters invalid email format** | Form validation prevents submission |
-| **Database connection fails** | Error toast: "An error occurred. Please try again." |
-| **S3 CDN URL is invalid** | Browser shows download error, but download is still recorded |
-| **User clicks Download button multiple times rapidly** | Button disabled after first click, prevents duplicate records |
+| User at exactly 3 downloads | Block 4th download, show limit modal |
+| User tries same document twice | Each download counts toward limit |
+| User uses different email | New download count (limit is per email) |
+| User uses email variation (test@example.com vs Test@Example.com) | Treated as same email (case-insensitive) |
+| Network error during download | Show error toast, do NOT increment download count |
+| S3 URL expired | Show error toast, regenerate URL, retry download |
 
-### Email Automation Edge Cases
-
-| Scenario | Expected Behavior |
-|----------|-------------------|
-| **Cron job doesn't run for 3 hours** | All pending emails sent on next cron run |
-| **SendGrid API rate limit exceeded** | Email marked as failed, retry on next cron run |
-| **User's email bounces** | Marked as failed in database, no retry |
-| **User downloads 3 documents in 5 minutes** | 3 separate emails scheduled, sent 2 hours after each download |
-
-### Modal Edge Cases
+### Email Suppression Edge Cases **NEW**
 
 | Scenario | Expected Behavior |
 |----------|-------------------|
-| **User opens modal, navigates away, comes back** | Modal state resets (no persisted form data) |
-| **User opens modal on mobile** | Modal is responsive, full-width on small screens |
-| **User has JavaScript disabled** | Modals don't work (graceful degradation not implemented) |
+| Email suppressed mid-download | Download completes, but follow-up email NOT sent |
+| Email suppressed then unsuppressed | Can download again, receives follow-up emails |
+| Multiple suppression events (bounce + spam) | Last event wins, suppressionReason updated |
+| Suppression check fails (API error) | Allow download to proceed (fail open), log error |
+| Case-insensitive email matching | Test@Example.com and test@example.com treated as same |
+
+### Email Analytics Edge Cases **NEW**
+
+| Scenario | Expected Behavior |
+|----------|-------------------|
+| Email with no events | Shows in table with all zeros |
+| Email with only delivered event | Shows delivered badge only |
+| Email with 10+ events | Badge group shows first 4 + "+N more" |
+| Webhook event for unknown email | Create new emailStatus record |
+| Duplicate webhook events | Deduplicate based on event ID, do NOT double-count |
+
+### Form Validation Edge Cases
+
+| Scenario | Expected Behavior |
+|----------|-------------------|
+| Empty name field | Show error: "Name is required" |
+| Invalid email format | Show error: "Please enter a valid email address" |
+| Email with spaces | Trim spaces, validate trimmed email |
+| Very long name (> 255 chars) | Truncate to 255 chars, accept submission |
+| Special characters in name | Accept all Unicode characters |
+| Company name with numbers | Accept (e.g., "3M Company") |
 
 ---
 
 ## Testing Checklists
 
-### Pre-Deployment Checklist
+### Pre-Release Checklist
 
 - [ ] All navigation links work correctly
-- [ ] All footer links work correctly
-- [ ] Logo click returns to homepage
-- [ ] Mobile navigation works (hamburger menu if implemented)
-- [ ] All buttons have hover states
-- [ ] All forms validate correctly
-- [ ] All modals open and close properly
-- [ ] Download limit enforcement works
-- [ ] Email capture records downloads correctly
-- [ ] Scheduled emails created in database
-- [ ] S3 CDN URLs are valid and accessible
-- [ ] Calendly links open in new tab
-- [ ] Toast notifications appear for success/error states
+- [ ] All CTAs trigger expected actions
+- [ ] EmailCaptureModal workflow functions end-to-end
+- [ ] Download limit enforcement works correctly
+- [ ] Follow-up emails are scheduled correctly
+- [ ] Email suppression system blocks suppressed addresses **NEW**
+- [ ] Email analytics dashboard displays accurate data **NEW**
+- [ ] Email health badges render correctly **NEW**
+- [ ] Lead qualification system identifies qualified leads **NEW**
+- [ ] Personalized welcome pages display correct data **NEW**
+- [ ] SendGrid webhook processes events correctly **NEW**
+- [ ] Case studies redirect to Calendly
+- [ ] Contact form submits successfully
+- [ ] All modals open and close correctly
+- [ ] Form validation works on all forms
+- [ ] Mobile responsive design works on all pages
+- [ ] Page load times are acceptable (< 3 seconds)
+- [ ] No console errors on any page
+- [ ] All images load correctly
+- [ ] Footer links work correctly
 
-### Download System Testing Checklist
+### Regression Testing Checklist
 
-**Test with fresh email address:**
-- [ ] Download 1st document → Success, count = 1
-- [ ] Download 2nd document → Success, count = 2
-- [ ] Download 3rd document → Success, count = 3
-- [ ] Download 4th document → Limit modal appears, no download
-- [ ] Verify 3 records in `documentDownloads` table
-- [ ] Verify 3 records in `scheduledEmails` table
-- [ ] Verify `scheduledFor` timestamp is 2 hours after download
+After any code changes, verify:
 
-### Email Automation Testing Checklist
+- [ ] Download system still enforces 3-document limit
+- [ ] EmailCaptureModal still validates all fields
+- [ ] Follow-up emails still schedule correctly
+- [ ] Email suppression still blocks suppressed addresses **NEW**
+- [ ] Email analytics dashboard still loads **NEW**
+- [ ] SendGrid webhook still processes events **NEW**
+- [ ] Navigation still works on all pages
+- [ ] No new console errors introduced
 
-- [ ] Download document, wait 2+ hours
-- [ ] Check email inbox for follow-up email
-- [ ] Verify email subject includes document title
-- [ ] Verify email body includes recipient name
-- [ ] Verify Calendly link works and pre-fills email
-- [ ] Check `scheduledEmails` table: `sent = 1`, `sentAt` populated
-- [ ] Check `documentDownloads` table: `followUpEmailSent = 1`
+### Performance Testing Checklist
 
-### Modal Testing Checklist
+- [ ] Homepage loads in < 2 seconds
+- [ ] One-pagers page loads in < 2 seconds
+- [ ] Resources page loads in < 2 seconds
+- [ ] Case studies page loads in < 3 seconds (17 cards)
+- [ ] Email analytics dashboard loads in < 3 seconds **NEW**
+- [ ] EmailCaptureModal opens instantly (< 100ms)
+- [ ] Download starts within 1 second of submission
+- [ ] Webhook processes events in < 500ms **NEW**
+- [ ] Database queries complete in < 100ms
+- [ ] API responses return in < 500ms
 
-**EmailCaptureModal:**
-- [ ] Opens when clicking document card
-- [ ] Form validation works for all fields
-- [ ] Submit button disabled during submission
-- [ ] Success state shows for 2 seconds
-- [ ] Modal auto-closes after success
-- [ ] ESC key closes modal
-- [ ] Click outside closes modal
-- [ ] X button closes modal
+### Security Testing Checklist
 
-**DownloadLimitReachedModal:**
-- [ ] Opens when limit reached
-- [ ] "Schedule a Meeting" button opens Calendly
-- [ ] Calendly opens in new tab
-- [ ] Modal closes with ESC, X, or click outside
-
-### Cross-Browser Testing
-
-Test on:
-- [ ] Chrome (latest)
-- [ ] Firefox (latest)
-- [ ] Safari (latest)
-- [ ] Edge (latest)
-- [ ] Mobile Safari (iOS)
-- [ ] Mobile Chrome (Android)
-
-### Responsive Design Testing
-
-Test breakpoints:
-- [ ] Mobile (320px - 767px)
-- [ ] Tablet (768px - 1023px)
-- [ ] Desktop (1024px+)
-- [ ] Large desktop (1440px+)
+- [ ] Email addresses are validated server-side
+- [ ] Download limits cannot be bypassed via API manipulation
+- [ ] Webhook signature verification works (if enabled) **NEW**
+- [ ] Personalized welcome page tokens cannot be guessed **NEW**
+- [ ] Admin dashboard requires authentication **NEW**
+- [ ] SQL injection attempts are blocked
+- [ ] XSS attempts are sanitized
+- [ ] CSRF protection is enabled
+- [ ] Environment variables are not exposed to client
 
 ---
 
-## Database Verification Queries
+## Automated Test Verification **NEW**
 
-### Check Download Count for Email
-```sql
-SELECT COUNT(*) as download_count 
-FROM documentDownloads 
-WHERE email = 'test@example.com';
+### Overview
+
+The project includes automated test suites to verify core functionality. QA should run these tests before manual testing to catch regressions early.
+
+### Test Suites
+
+#### 1. Email Suppression System Tests
+
+**File:** `server/test-email-suppression.test.ts`
+
+**Coverage:**
+- Manual suppression/unsuppression
+- Automatic suppression via webhook simulation
+- Suppression status checking
+- Email capture blocking
+- Follow-up email prevention
+- Case-insensitive email handling
+- Edge cases and multiple suppressions
+
+**Run Command:**
+```bash
+pnpm vitest run server/test-email-suppression.test.ts
 ```
 
-### Check Scheduled Emails
-```sql
-SELECT * 
-FROM scheduledEmails 
-WHERE recipientEmail = 'test@example.com' 
-ORDER BY createdAt DESC;
+**Expected Output:**
+```
+✓ Email Suppression System (9 tests)
+✓ Email Suppression Edge Cases (3 tests)
+Test Files  1 passed (1)
+Tests  12 passed (12)
 ```
 
-### Check Failed Emails
-```sql
-SELECT * 
-FROM scheduledEmails 
-WHERE failed = 1 
-ORDER BY createdAt DESC;
+#### 2. Download System Tests (Future)
+
+**File:** `server/test-download-system.test.ts` (to be created)
+
+**Coverage:**
+- Download limit enforcement
+- Email capture validation
+- Follow-up email scheduling
+- Download count tracking
+
+#### 3. Lead Qualification Tests (Future)
+
+**File:** `server/test-lead-qualification.test.ts` (to be created)
+
+**Coverage:**
+- Government email detection
+- Fortune 500 company detection
+- High download volume detection
+- Qualification gate workflow
+
+### Running All Tests
+
+**Command:**
+```bash
+pnpm test
 ```
 
-### Check Pending Emails (Not Yet Sent)
-```sql
-SELECT * 
-FROM scheduledEmails 
-WHERE sent = 0 AND failed = 0 AND scheduledFor <= NOW();
-```
+**Expected Behavior:**
+- All tests pass
+- No console errors
+- Test coverage > 80%
+
+### Test Failure Protocol
+
+If any automated tests fail:
+
+1. **Do NOT proceed with manual testing**
+2. **Report failure to development team**
+3. **Include:**
+   - Test name
+   - Error message
+   - Stack trace
+   - Steps to reproduce
+4. **Wait for fix before continuing QA**
 
 ---
 
-## Known Issues & Limitations
+## Appendix
 
-1. **TypeScript Errors:** Some type mismatches exist but don't affect runtime behavior
-2. **Placeholder Resources:** 4 resource cards on Resources page are not wired up to downloads
-3. **Case Study Downloads:** Not tracked in download limit system (requires Calendly)
-4. **Email Processor:** Requires manual cron job setup (not automatic)
-5. **SEO Component:** Missing from some pages (Pricing, Resources)
+### Test Data
+
+**Test Emails:**
+
+- `test@example.com` - Standard test email
+- `bounce@simulator.amazonses.com` - Simulates bounce
+- `spam@example.com` - For spam testing
+- `unsubscribe@example.com` - For unsubscribe testing
+- `john.doe@navy.mil` - Government email (triggers qualification)
+- `jane.smith@lockheedmartin.com` - Fortune 500 (triggers qualification)
+
+**Test Companies:**
+
+- "Lockheed Martin" - Fortune 500
+- "Northrop Grumman" - Fortune 500
+- "Small Business Inc" - Non-qualified
+- "Test Company" - Generic test
+
+### API Endpoints Reference
+
+| Endpoint | Type | Purpose |
+|----------|------|---------|
+| `documentDownloads.checkLimit` | Query | Check download limit |
+| `documentDownloads.recordDownload` | Mutation | Record download and schedule email |
+| `emailSuppression.checkEmailSuppression` | Query | Check if email is suppressed **NEW** |
+| `emailSuppression.suppressEmail` | Mutation | Manually suppress email **NEW** |
+| `emailSuppression.unsuppressEmail` | Mutation | Remove suppression **NEW** |
+| `emailSuppression.getSuppressionStats` | Query | Get suppression statistics **NEW** |
+| `emailAnalytics.overview` | Query | Get email analytics overview **NEW** |
+| `emailAnalytics.listStatus` | Query | Get email status list **NEW** |
+| `emailAnalytics.getEmailTimeline` | Query | Get event timeline for email **NEW** |
+| `qualification.checkQualification` | Query | Check if lead is qualified **NEW** |
+| `qualification.submitQualification` | Mutation | Submit qualification data **NEW** |
+| `contact.submitForm` | Mutation | Submit contact form |
+
+### Database Tables Reference
+
+| Table | Purpose |
+|-------|---------|
+| `documentDownloads` | Track document downloads per email |
+| `scheduledEmails` | Queue for follow-up emails |
+| `emailStatus` | Aggregated email engagement metrics **NEW** |
+| `emailEvents` | Individual email events from SendGrid **NEW** |
+| `leadQualificationAttempts` | Qualified lead data **NEW** |
+
+### Environment Variables
+
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `SENDGRID_API_KEY` | SendGrid API authentication | Yes |
+| `SENDGRID_FROM_EMAIL` | Sender email address | Yes |
+| `SENDGRID_FROM_NAME` | Sender name | Yes |
+| `SENDGRID_WEBHOOK_VERIFICATION_KEY` | Webhook signature verification | Recommended **NEW** |
+| `DATABASE_URL` | MySQL connection string | Yes |
+| `JWT_SECRET` | JWT token signing | Yes |
 
 ---
 
-## Support & Escalation
+## Revision History
 
-**For QA Issues:**
-- Check this guide first
-- Verify database state using SQL queries
-- Check browser console for JavaScript errors
-- Check network tab for API failures
-
-**For Bug Reports, Include:**
-1. Steps to reproduce
-2. Expected behavior
-3. Actual behavior
-4. Browser/device information
-5. Screenshots/video if applicable
-6. Database state (if relevant)
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0 | Nov 30, 2025 | Initial release |
+| 2.0 | Nov 30, 2025 | Added email suppression system, email analytics dashboard, email health badges, lead qualification system, personalized welcome pages, SendGrid webhook integration, and automated test verification |
 
 ---
 
 **End of QA Testing Guide**
+
+For questions or clarifications, contact: sales@intelleges.com
