@@ -99,3 +99,27 @@ export const scheduledEmails = mysqlTable("scheduledEmails", {
 
 export type ScheduledEmail = typeof scheduledEmails.$inferSelect;
 export type InsertScheduledEmail = typeof scheduledEmails.$inferInsert;
+
+/**
+ * Lead qualification attempts table for tracking Calendly access gating
+ */
+export const leadQualificationAttempts = mysqlTable("leadQualificationAttempts", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  company: varchar("company", { length: 255 }).notNull(),
+  title: varchar("title", { length: 255 }),
+  website: varchar("website", { length: 512 }),
+  country: varchar("country", { length: 128 }),
+  industry: varchar("industry", { length: 255 }),
+  employeeCount: int("employeeCount"),
+  revenueBand: varchar("revenueBand", { length: 128 }),
+  score: int("score").notNull(),
+  qualified: int("qualified").notNull(), // 1 = qualified, 0 = not qualified
+  reasons: text("reasons").notNull(), // JSON-encoded array of strings
+  rawEnrichment: text("rawEnrichment"), // JSON blob of enrichment response (optional)
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type LeadQualificationAttempt = typeof leadQualificationAttempts.$inferSelect;
+export type InsertLeadQualificationAttempt = typeof leadQualificationAttempts.$inferInsert;

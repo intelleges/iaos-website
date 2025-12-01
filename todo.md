@@ -824,3 +824,64 @@
 - [x] Check mobile responsiveness
 - [x] Validate recommendation accuracy
 - [x] Test email-to-landing-page flow end-to-end
+
+## Lead Qualification System (User Request - Dec 2024)
+
+### Phase 1: Database Schema & Infrastructure
+- [x] Create leadQualificationAttempts table in drizzle/schema.ts
+- [x] Add fields: name, email, company, title, website, country, industry, employeeCount, revenueBand
+- [x] Add scoring fields: score, qualified, reasons (JSON), rawEnrichment (JSON)
+- [x] Run database migration with pnpm db:push
+- [x] Verify table creation in database
+
+### Phase 2: Apollo Enrichment Integration
+- [x] Create server/lib/enrichment.ts with Apollo API integration
+- [x] Implement enrichCompanyFromApollo function
+- [x] Extract company data: domain, industry, employeeCount, country, revenueBand
+- [x] Add error handling and fallback logic
+- [x] Test enrichment with sample corporate emails
+
+### Phase 3: Scoring Engine
+- [x] Create server/lib/qualification.ts with scoring logic
+- [x] Implement disqualifiers: free email domains (-100), wrong industry (-80), company too small (-50)
+- [x] Implement positive signals: target industry (+50), employee count (+15-25), corporate domain (+10)
+- [x] Add title keyword scoring: compliance/procurement/VP/director (+30)
+- [x] Set qualification threshold at 60+ points
+- [x] Return detailed reasons array for transparency
+
+### Phase 4: TRPC Qualification API
+- [x] Create server/routers/qualification.ts
+- [x] Implement qualifyLead mutation with input validation
+- [x] Call Apollo enrichment and scoring engine
+- [x] Persist qualification attempt to database
+- [x] Return qualified boolean and score to frontend
+- [x] Add error handling for API failures
+
+### Phase 5: Frontend Qualification Gate
+- [x] Create client/src/components/QualificationGate.tsx
+- [x] Build form: name, email, company, title fields
+- [x] Call qualifyLead TRPC mutation on submit
+- [x] Show Calendly widget if qualified=true
+- [x] Show "we'll reach out" message if qualified=false
+- [x] Add loading states and error handling
+
+### Phase 6: Integration Points
+- [x] Add QualificationGate to Demo page
+- [ ] Add QualificationGate to Contact page (optional)
+- [ ] Update PersonalizedWelcome page to use QualificationGate (optional)
+- [x] Replace direct Calendly links with qualification flow
+- [x] Ensure consistent UX across all pages
+
+### Phase 7: Analytics & Monitoring
+- [x] Add GA4 event for qualification_attempt
+- [x] Track qualification_passed and qualification_failed events
+- [x] Log score distribution for optimization
+- [x] Create admin view to review qualification attempts (via TRPC query)
+- [ ] Monitor false positive/negative rates (requires production data)
+
+### Phase 8: Configuration & Documentation
+- [x] Add APOLLO_API_KEY to environment variables (documented)
+- [x] Document qualification rules and scoring weights (QUALIFICATION_SYSTEM.md)
+- [x] Create guide for adjusting thresholds
+- [x] Add instructions for testing with sample data (qualification.test.ts)
+- [x] Document how to review blocked leads in database
