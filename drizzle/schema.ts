@@ -163,3 +163,64 @@ export const emailStatus = mysqlTable("emailStatus", {
 
 export type EmailStatus = typeof emailStatus.$inferSelect;
 export type InsertEmailStatus = typeof emailStatus.$inferInsert;
+
+/**
+ * Pricing quotes table for internal sales pricing calculator
+ * Stores configuration-based pricing quotes for enterprise customers
+ */
+export const pricingQuotes = mysqlTable("pricingQuotes", {
+  id: int("id").autoincrement().primaryKey(),
+  
+  // Customer information
+  customerName: varchar("customerName", { length: 255 }),
+  industry: varchar("industry", { length: 255 }),
+  region: varchar("region", { length: 255 }),
+  
+  // Tier and configuration
+  tier: varchar("tier", { length: 50 }).notNull(), // Basic, Professional, Advanced, Enterprise
+  users: int("users").notNull(),
+  suppliers: int("suppliers").notNull(),
+  protocols: int("protocols").notNull(),
+  sites: int("sites").notNull(),
+  partnerTypes: int("partnerTypes").notNull(),
+  
+  // Feature flags
+  erpIntegration: int("erpIntegration").default(0).notNull(), // 0 = no, 1 = yes
+  esrsSupport: int("esrsSupport").default(0).notNull(), // 0 = no, 1 = yes
+  supportPremium: int("supportPremium").default(0).notNull(), // 0 = no, 1 = yes
+  
+  // Pricing breakdown (annual)
+  basePrice: int("basePrice").notNull(),
+  usersPrice: int("usersPrice").notNull(),
+  suppliersPrice: int("suppliersPrice").notNull(),
+  protocolsPrice: int("protocolsPrice").notNull(),
+  sitesPrice: int("sitesPrice").notNull(),
+  partnerTypesPrice: int("partnerTypesPrice").notNull(),
+  erpIntegrationPrice: int("erpIntegrationPrice").notNull(),
+  esrsSupportPrice: int("esrsSupportPrice").notNull(),
+  supportPremiumPrice: int("supportPremiumPrice").notNull(),
+  annualPrice: int("annualPrice").notNull(),
+  
+  // Contract terms
+  termYears: int("termYears").default(1).notNull(),
+  currency: varchar("currency", { length: 10 }).default("USD").notNull(),
+  
+  // Quote status
+  status: varchar("status", { length: 50 }).default("draft").notNull(), // draft, sent, won, lost
+  
+  // Stripe integration
+  stripeInvoiceId: varchar("stripeInvoiceId", { length: 255 }),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+  
+  // CRM integration (optional)
+  crmOpportunityId: varchar("crmOpportunityId", { length: 255 }),
+  
+  // Metadata
+  notes: text("notes"),
+  createdBy: int("createdBy"), // user ID who created the quote
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PricingQuote = typeof pricingQuotes.$inferSelect;
+export type InsertPricingQuote = typeof pricingQuotes.$inferInsert;

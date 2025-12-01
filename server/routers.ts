@@ -5,10 +5,11 @@ import { downloadsRouter } from "./routers/downloads.js";
 import { qualificationRouter } from "./routers/qualification.js";
 import { emailAnalyticsRouter } from "./routers/emailAnalytics.js";
 import { emailSuppressionRouter } from "./routers/emailSuppression.js";
+import { pricingRouter } from "./routers/pricing.js";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
-import { leads, downloads, documentDownloads, scheduledEmails, emailStatus } from "../drizzle/schema";
+import { leads, downloads, documentDownloads, scheduledEmails, emailStatus, pricingQuotes, leadQualificationAttempts, emailEvents } from "../drizzle/schema";
 import sgMail from "@sendgrid/mail";
 import { syncLeadToGoogleSheets } from "./lib/googleSheets";
 
@@ -28,6 +29,7 @@ export const appRouter = router({
   qualification: qualificationRouter,
   emailAnalytics: emailAnalyticsRouter,
   emailSuppression: emailSuppressionRouter,
+  pricing: pricingRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

@@ -1181,3 +1181,48 @@ QA tester reported that clickable elements don't show hand pointer cursor on hov
 - [x] Write test for download limit enforcement
 - [x] Write test for Google Sheets integration with company name
 - [x] Run all tests and verify they pass (7/7 tests passing)
+
+
+## Internal Pricing Calculator with Stripe Integration
+
+### Backend API Implementation
+- [x] Create pricing calculation API endpoint (POST /api/pricing/calculate)
+- [x] Implement tier definitions and rate table (server/lib/pricingRates.ts)
+- [x] Add pricing calculation logic (server/lib/pricingCalculator.ts)
+- [x] Create quote management API (save/retrieve quotes)
+- [x] Create quotes database table (pricingQuotes)
+- [x] Register pricing router in main appRouter
+- [ ] Add Stripe invoice generation API
+
+### Admin UI Implementation
+- [ ] Create admin-only pricing calculator page
+- [ ] Build configuration input form (tier, users, suppliers, sites, protocols)
+- [ ] Add integration toggles (ERP, eSRS, Support Premium)
+- [ ] Display real-time pricing breakdown
+- [ ] Show tier inclusions and extras
+
+### Stripe Invoice Integration
+- [ ] Implement Stripe invoice creation from quote
+- [ ] Add customer creation/lookup in Stripe
+- [ ] Generate payment links for invoices
+- [ ] Handle invoice payment webhooks
+
+### Quote Management
+- [ ] Create quotes database table
+- [ ] Implement quote save/load functionality
+- [ ] Add quote history view
+- [ ] Generate PDF proposals from quotes
+- [ ] Add quote status tracking (Draft/Sent/Won/Lost)
+
+### Testing and Documentation
+- [ ] Test pricing calculation with Celestica configuration ($129K)
+- [ ] Test Stripe invoice generation
+- [ ] Test quote management workflow
+- [ ] Document pricing calculator usage for sales team
+
+
+## Pricing Tier Name Updates
+- [x] Change Bronze → Basic
+- [x] Change Silver → Professional
+- [x] Change Gold → Advanced
+- [x] Change Platinum → Enterprise

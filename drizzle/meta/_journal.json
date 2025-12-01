@@ -43,6 +43,13 @@
       "when": 1764550936950,
       "tag": "0005_mighty_grey_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1764561660219,
+      "tag": "0006_rare_iron_patriot",
+      "breakpoints": true
     }
   ]
 }
