@@ -235,7 +235,7 @@ export const appRouter = router({
 
         const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(fullName)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
         
-        const htmlContent = generateFollowUpEmail(fullName, input.documentTitle, calendlyUrl);
+        const htmlContent = generateFollowUpEmail(fullName, input.documentTitle, calendlyUrl, normalizedEmail, input.documentType);
 
         await db.insert(scheduledEmails).values({
           recipientEmail: normalizedEmail,
@@ -332,7 +332,20 @@ export const appRouter = router({
   }),
 });
 
-function generateFollowUpEmail(userName: string, documentTitle: string, calendlyUrl: string): string {
+function generateFollowUpEmail(userName: string, documentTitle: string, calendlyUrl: string, email?: string, documentType?: string): string {
+  // Build personalized welcome page URL
+  const baseUrl = process.env.FRONTEND_URL || 'https://intelleges.com';
+  const welcomeParams = new URLSearchParams();
+  if (email) welcomeParams.append('email', email);
+  const nameParts = userName.split(' ');
+  if (nameParts.length > 0) welcomeParams.append('firstName', nameParts[0]);
+  if (nameParts.length > 1) welcomeParams.append('lastName', nameParts.slice(1).join(' '));
+  welcomeParams.append('documentTitle', documentTitle);
+  if (documentType) welcomeParams.append('documentType', documentType);
+  welcomeParams.append('utm_source', 'email');
+  welcomeParams.append('utm_medium', 'followup');
+  welcomeParams.append('utm_campaign', 'document_download');
+  const welcomeUrl = `${baseUrl}/welcome?${welcomeParams.toString()}`;
   return `
 <!DOCTYPE html>
 <html>
@@ -353,13 +366,16 @@ function generateFollowUpEmail(userName: string, documentTitle: string, calendly
     This topic is of great interest to our leadership team. Our subject matter experts have helped dozens of enterprises streamline their compliance processes, reduce supplier management overhead, and make confident, risk-aware decisions.
   </p>
   <p style="font-size: 16px; margin-bottom: 30px;">
-    <strong>Would you like to discuss how Intelleges can help your organization?</strong>
+    <strong>We've curated additional resources specifically for you based on this download.</strong>
   </p>
   <div style="text-align: center; margin: 40px 0;">
-    <a href="${calendlyUrl}" style="display: inline-block; background-color: #0A3A67; color: white; padding: 14px 32px; text-decoration: none; border-radius: 25px; font-weight: 500; font-size: 16px;">
-      Schedule a Meeting
+    <a href="${welcomeUrl}" style="display: inline-block; background-color: #0A3A67; color: white; padding: 14px 32px; text-decoration: none; border-radius: 25px; font-weight: 500; font-size: 16px;">
+      View Your Personalized Resources
     </a>
   </div>
+  <p style="font-size: 14px; color: #666; text-align: center; margin-top: 20px;">
+    Or <a href="${calendlyUrl}" style="color: #0A3A67; text-decoration: underline;">schedule a meeting directly</a>
+  </p>
   <p style="font-size: 14px; color: #666; margin-top: 40px;">
     Our team is ready to show you how Intelleges makes data and document collection simple—easy, a no-brainer.
   </p>

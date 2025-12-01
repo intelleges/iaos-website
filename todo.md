@@ -773,3 +773,54 @@
 - [x] Test analytics events in browser console
 - [x] Verify events appear in GA4 debug view
 - [x] Document analytics implementation for future reference
+
+## Personalized Landing Page for Email Follow-ups (User Request - Dec 2024)
+
+### Phase 1: Page Structure & URL Parameter Handling
+- [x] Create /welcome page route in App.tsx
+- [x] Build PersonalizedWelcome.tsx component with URL parameter parsing
+- [x] Extract email, firstName, lastName, documentTitle, documentType from query params
+- [x] Add fallback handling for missing parameters
+- [x] Implement SEO component with dynamic meta tags
+
+### Phase 2: Document Recap Section
+- [x] Design hero section with personalized greeting
+- [x] Display downloaded document card with title, type, and description
+- [x] Add "Download Again" button with S3 link
+- [x] Show download timestamp and document metadata
+- [x] Include visual document icon/thumbnail
+
+### Phase 3: Related Resources Recommendation Engine
+- [x] Create recommendation logic based on documentType
+- [x] Map document types to related compliance areas
+- [x] Build related resources grid (3-6 items)
+- [x] Include mix of whitepapers, case studies, and one-pagers
+- [x] Add "Explore More" CTA for each resource
+
+### Phase 4: Personalized CTAs & Progress Tracking
+- [x] Add prominent "Schedule Your Demo" CTA with pre-filled Calendly
+- [x] Create compliance journey progress indicator
+- [x] Show "What's Next" section with recommended actions
+- [x] Include social proof (testimonials, client logos)
+- [x] Add email preference management link
+
+### Phase 5: Email Template Integration
+- [x] Update generateFollowUpEmail in server/routers.ts
+- [x] Replace generic Calendly link with personalized landing page URL
+- [x] Build landing page URL with UTM parameters
+- [x] Update email copy to highlight personalized experience
+- [x] Test email rendering across clients
+
+### Phase 6: Analytics & Tracking
+- [x] Add GA4 event for personalized_landing_page_view
+- [x] Track resource_recommendation_click events
+- [x] Monitor demo_scheduled_from_welcome_page conversions
+- [x] Implement UTM parameter tracking
+- [x] Create dashboard view for personalized page performance
+
+### Phase 7: Testing & Validation
+- [x] Test with various document types and user data
+- [x] Verify URL parameter encoding/decoding
+- [x] Check mobile responsiveness
+- [x] Validate recommendation accuracy
+- [x] Test email-to-landing-page flow end-to-end
