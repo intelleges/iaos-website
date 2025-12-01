@@ -885,3 +885,11 @@
 - [x] Create guide for adjusting thresholds
 - [x] Add instructions for testing with sample data (qualification.test.ts)
 - [x] Document how to review blocked leads in database
+
+## Qualification Gate UX Improvements (User Request - Dec 2024)
+
+- [x] Update QualificationGate "not qualified" message with resource-first nurture path
+- [x] Add recommended resources CTAs (whitepapers, case studies, newsletter)
+- [x] Include direct sales contact escape hatch (email + phone)
+- [x] Test all CTA links work correctly
+- [x] Verify message tone is helpful, not rejecting
