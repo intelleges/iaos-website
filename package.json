@@ -13,6 +13,12 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
+    "test:unit": "playwright test tests/unit-*.spec.ts",
+    "test:regression": "playwright test tests/regression-*.spec.ts",
+    "test:stress": "playwright test tests/stress-*.spec.ts",
+    "test:all": "playwright test tests/",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
     "db:push": "drizzle-kit generate && drizzle-kit migrate"
   },
   "dependencies": {

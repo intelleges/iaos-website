@@ -822,3 +822,44 @@
 - [x] Create comprehensive push guide (PUSH_TO_GITHUB.md)
 - [x] Document branch protection setup
 - [x] Document Dependabot configuration
+
+## TypeScript Error Fixes
+- [ ] Run pnpm check to identify all type errors
+- [ ] Fix FOCI.tsx EmailCaptureModal type errors
+- [ ] Fix server/routers.ts missing schema exports
+- [ ] Fix server/routers/pricing.ts missing schema exports
+- [ ] Verify all TypeScript errors resolved
+
+## Deployment Workflow
+- [ ] Create deployment workflow for staging environment
+- [ ] Create deployment workflow for production environment
+- [ ] Configure deployment triggers (PR merge to main)
+- [ ] Add deployment status notifications
+- [ ] Validate deployment workflow YAML
+
+## Final GitHub Push
+- [ ] Stage all files for commit
+- [ ] Create comprehensive initial commit message
+- [ ] Verify git status before push
+- [ ] Document GitHub remote setup commands
+- [ ] Provide post-push verification checklist
+
+## Comprehensive Test Suite Creation
+- [x] Analyze QA testing guides and requirements
+- [x] Create TEST_REQUIREMENTS.md document
+- [x] Create unit test suite for navigation (30 tests)
+- [x] Create unit test suite for homepage components (8 tests)
+- [x] Create unit test suite for one-pagers and email modal (14 tests)
+- [x] Create unit test suite for contact form (15 tests)
+- [x] Create regression test suite for document download flow (6 tests)
+- [x] Create regression test suite for download limit enforcement (6 tests)
+- [x] Create regression test suite for pricing calculator (13 tests)
+- [x] Create stress test suite for performance and load (18 tests)
+- [x] Add test scripts to package.json (test:unit, test:regression, test:stress, test:all)
+- [x] Create TEST_SUITE_SUMMARY.md documentation
+- [ ] Fix contact form field selectors to match actual implementation
+- [ ] Fix documentType prop issue in case study pages
+- [ ] Enable backend-dependent tests once database is ready
+- [ ] Add email automation workflow tests
+- [ ] Add mobile device testing
+- [ ] Run full test suite and generate reports
