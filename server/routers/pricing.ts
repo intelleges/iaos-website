@@ -13,7 +13,15 @@ import { calculatePricing, validatePricingRequest } from '../lib/pricingCalculat
 import { getTierDefinition, getPricingRates, Tier } from '../lib/pricingRates';
 import { createStripeInvoice } from '../lib/stripeInvoice';
 import { generatePDFProposal } from '../lib/pdfProposal';
+import { generateQuoteEmail, generateQuoteEmailText } from '../lib/quoteEmailTemplate';
 import { eq } from 'drizzle-orm';
+import sgMail from '@sendgrid/mail';
+
+// Initialize SendGrid
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
+if (SENDGRID_API_KEY) {
+  sgMail.setApiKey(SENDGRID_API_KEY);
+}
 
 // Validation schemas
 const tierSchema = z.enum(['Basic', 'Professional', 'Advanced', 'Enterprise']);
@@ -173,6 +181,7 @@ export const pricingRouter = router({
   
   /**
    * Update quote status
+   * Automatically sends email with PDF when status changes to 'sent'
    */
   updateQuoteStatus: protectedProcedure
     .input(z.object({
@@ -183,12 +192,106 @@ export const pricingRouter = router({
       const db = await getDb();
       if (!db) throw new Error('Database not available');
       
+      // Get quote details before updating
+      const [quote] = await db
+        .select()
+        .from(pricingQuotes)
+        .where(eq(pricingQuotes.id, input.quoteId))
+        .limit(1);
+      
+      if (!quote) {
+        throw new Error('Quote not found');
+      }
+      
+      // Update status
       await db
         .update(pricingQuotes)
         .set({ status: input.status })
         .where(eq(pricingQuotes.id, input.quoteId));
       
-      return { success: true };
+      // Send email with PDF when status changes to 'sent'
+      if (input.status === 'sent' && quote.customerEmail) {
+        try {
+          // Generate PDF
+          const pricing = calculatePricing({
+            tier: quote.tier as Tier,
+            users: quote.users,
+            suppliers: quote.suppliers,
+            protocols: quote.protocols,
+            sites: quote.sites,
+            partnerTypes: quote.partnerTypes,
+            erpIntegration: quote.erpIntegration === 1,
+            esrsSupport: quote.esrsSupport === 1,
+            supportPremium: quote.supportPremium === 1,
+            termYears: quote.termYears,
+            currency: quote.currency,
+          });
+          
+          const tierDef = getTierDefinition(quote.tier as Tier);
+          
+          const pdfBuffer = await generatePDFProposal({
+            quoteId: quote.id,
+            customerName: quote.customerName || 'Valued Customer',
+            customerEmail: quote.customerEmail || undefined,
+            industry: quote.industry || undefined,
+            region: quote.region || undefined,
+            tier: quote.tier,
+            annualPrice: quote.annualPrice,
+            totalPrice: quote.totalPrice,
+            termYears: quote.termYears,
+            currency: quote.currency,
+            breakdown: pricing.breakdown,
+            features: tierDef.features,
+            createdAt: quote.createdAt,
+          });
+          
+          // Generate email content
+          const htmlContent = generateQuoteEmail({
+            customerName: quote.customerName || 'Valued Customer',
+            quoteId: quote.id,
+            tier: quote.tier,
+            annualPrice: quote.annualPrice,
+            totalPrice: quote.totalPrice,
+            termYears: quote.termYears,
+            currency: quote.currency,
+          });
+          
+          const textContent = generateQuoteEmailText({
+            customerName: quote.customerName || 'Valued Customer',
+            quoteId: quote.id,
+            tier: quote.tier,
+            annualPrice: quote.annualPrice,
+            totalPrice: quote.totalPrice,
+            termYears: quote.termYears,
+            currency: quote.currency,
+          });
+          
+          // Send email with PDF attachment
+          await sgMail.send({
+            to: quote.customerEmail,
+            from: process.env.SENDGRID_FROM_EMAIL || 'sales@intelleges.com',
+            subject: `Your Intelleges ${quote.tier} Tier Quote - #${quote.id}`,
+            html: htmlContent,
+            text: textContent,
+            attachments: [
+              {
+                content: pdfBuffer.toString('base64'),
+                filename: `intelleges-proposal-${quote.id}.pdf`,
+                type: 'application/pdf',
+                disposition: 'attachment',
+              },
+            ],
+          });
+          
+          return { success: true, emailSent: true };
+        } catch (emailError: any) {
+          console.error('Failed to send quote email:', emailError);
+          // Don't fail the status update if email fails
+          return { success: true, emailSent: false, emailError: emailError.message };
+        }
+      }
+      
+      return { success: true, emailSent: false };
     }),
   
   /**
