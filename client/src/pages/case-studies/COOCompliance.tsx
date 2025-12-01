@@ -239,6 +239,7 @@ export default function COOComplianceCaseStudy() {
         onClose={() => setIsModalOpen(false)}
         downloadUrl="/documents/CountryofOrigin-BuyAmericanAct.pdf"
         resourceTitle="Country of Origin Compliance Whitepaper"
+        documentType="case_study"
       />
     </div>
   );

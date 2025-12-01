@@ -42,6 +42,9 @@ export default function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  
+  // TRPC mutation hook
+  const submitContactMutation = trpc.contact.submit.useMutation();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -85,7 +88,7 @@ export default function Contact() {
     setSubmitStatus("idle");
     
     try {
-      const result = await trpc.contact.submit.mutate({
+      const result = await submitContactMutation.mutateAsync({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,

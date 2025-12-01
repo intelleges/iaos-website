@@ -451,6 +451,7 @@ export default function FOCI() {
         onClose={() => setIsModalOpen(false)}
         downloadUrl="/documents/Intelleges_Federal_Capability_Statement.pdf"
         resourceTitle="Federal Capability Statement"
+        documentType="case_study"
       />
     </div>
   );

@@ -371,6 +371,7 @@ export default function Home() {
           onClose={() => setIsModalOpen(false)}
           downloadUrl={`/case-studies/${selectedProtocol.s3Key}`}
           resourceTitle={selectedProtocol.title}
+          documentType="protocol"
         />
       )}
 
@@ -381,6 +382,7 @@ export default function Home() {
           onClose={() => setIsCapabilityModalOpen(false)}
           downloadUrl={selectedCapability.url}
           resourceTitle={selectedCapability.title}
+          documentType="capability"
         />
       )}
 
@@ -391,6 +393,7 @@ export default function Home() {
           onClose={() => setIsWhitepaperEmailModalOpen(false)}
           downloadUrl={selectedWhitepaper.url}
           resourceTitle={selectedWhitepaper.title}
+          documentType="whitepaper"
         />
       )}
 

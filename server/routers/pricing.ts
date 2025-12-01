@@ -56,7 +56,7 @@ export const pricingRouter = router({
    */
   calculate: protectedProcedure
     .input(pricingRequestSchema)
-    .mutation(async ({ input }) => {
+    .query(async ({ input }) => {
       // Validate request
       const errors = validatePricingRequest(input);
       if (errors.length > 0) {

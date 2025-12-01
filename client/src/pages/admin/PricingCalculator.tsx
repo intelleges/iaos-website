@@ -64,7 +64,7 @@ export default function PricingCalculator() {
 
   // Mutations
   const saveQuoteMutation = trpc.pricing.saveQuote.useMutation();
-  const generateInvoiceMutation = trpc.pricing.generateStripeInvoice.useMutation();
+  const generateInvoiceMutation = trpc.pricing.generateInvoice.useMutation();
   const exportPDFMutation = trpc.pricing.exportPDF.useMutation();
 
   const tierDefinitions = {
@@ -145,10 +145,13 @@ export default function PricingCalculator() {
     }
 
     try {
-      const result = await generateInvoiceMutation.mutateAsync({ id: lastSavedQuoteId });
+      const result = await generateInvoiceMutation.mutateAsync({ 
+        quoteId: lastSavedQuoteId,
+        customerEmail: config.customerEmail 
+      });
       toast.success('Stripe invoice created successfully!');
-      if (result.invoiceUrl) {
-        window.open(result.invoiceUrl, '_blank');
+      if (result.paymentLink) {
+        window.open(result.paymentLink, '_blank');
       }
     } catch (error) {
       toast.error('Failed to generate invoice');
@@ -163,7 +166,7 @@ export default function PricingCalculator() {
     }
 
     try {
-      const result = await exportPDFMutation.mutateAsync({ id: lastSavedQuoteId });
+      const result = await exportPDFMutation.mutateAsync({ quoteId: lastSavedQuoteId });
       
       // Convert base64 to blob and download
       const byteCharacters = atob(result.data);
@@ -464,7 +467,7 @@ export default function PricingCalculator() {
                 ) : pricing ? (
                   <>
                     <div className="space-y-3 mb-6">
-                      {pricing.breakdown.map((item, index) => (
+                      {pricing.breakdown.map((item: { label: string; quantity: number; total: number }, index: number) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span className="text-gray-600">
                             {item.label}

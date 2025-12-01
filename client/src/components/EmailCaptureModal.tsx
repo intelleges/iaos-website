@@ -36,6 +36,10 @@ export default function EmailCaptureModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // TRPC hooks
+  const utils = trpc.useUtils();
+  const recordDownloadMutation = trpc.documentDownloads.recordDownload.useMutation();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -75,7 +79,7 @@ export default function EmailCaptureModal({
       // Case Study Flow: Redirect to Calendly without download
       if (isCaseStudy && onCaseStudySubmit) {
         // Record interest in database (no download limit check for case studies)
-        await trpc.documentDownloads.recordDownload.mutate({
+        await recordDownloadMutation.mutateAsync({
           email: formData.email,
           name: formData.name,
           company: formData.company || undefined,
@@ -100,7 +104,8 @@ export default function EmailCaptureModal({
       // Regular Document Download Flow
       // Check download limit first
       console.log('[EmailCaptureModal] About to call checkLimit query');
-      const limitCheck = await trpc.documentDownloads.checkLimit.query({
+      const utils = trpc.useUtils();
+      const limitCheck = await utils.documentDownloads.checkLimit.fetch({
         email: formData.email,
       });
       console.log('[EmailCaptureModal] checkLimit result:', limitCheck);
@@ -122,16 +127,16 @@ export default function EmailCaptureModal({
         company: formData.company || undefined,
         documentTitle: resourceTitle,
         documentUrl: downloadUrl,
-        documentType: documentType,
+        documentType: documentType as 'capability' | 'protocol' | 'whitepaper' | 'case_study',
       });
       
-      await trpc.documentDownloads.recordDownload.mutate({
+      await recordDownloadMutation.mutateAsync({
         email: formData.email,
         name: formData.name,
         company: formData.company || undefined,
         documentTitle: resourceTitle,
         documentUrl: downloadUrl,
-        documentType: documentType,
+        documentType: documentType as 'capability' | 'protocol' | 'whitepaper' | 'case_study',
       });
 
       // Trigger the actual file download
