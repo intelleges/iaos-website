@@ -250,6 +250,7 @@ export default function CounterfeitPartsCaseStudy() {
         onClose={() => setIsModalOpen(false)}
         downloadUrl="/documents/UnifiedCounterfeitPartsStandardsIntegration.pdf"
         resourceTitle="Unified Counterfeit-Parts Standards Whitepaper"
+        documentType="whitepaper"
       />
     </div>
   );

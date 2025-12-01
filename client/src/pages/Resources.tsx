@@ -74,6 +74,13 @@ export default function Resources() {
     url: string;
     title: string;
   } | null>(null);
+  const [limitUserData, setLimitUserData] = useState<{
+    email: string;
+    firstName: string;
+    lastName: string;
+    company: string;
+    documentTitle: string;
+  } | null>(null);
 
   const handleFeaturedDownload = (docKey: typeof featuredDocuments[number]["key"]) => {
     const config = serviceDownloads[docKey];
@@ -241,7 +248,8 @@ export default function Resources() {
           downloadUrl={selectedDocument.url}
           resourceTitle={selectedDocument.title}
           documentType="whitepaper"
-          onLimitReached={() => {
+          onLimitReached={(userData: { email: string; firstName: string; lastName: string; company: string; documentTitle: string }) => {
+            setLimitUserData(userData);
             setLimitModalOpen(true);
           }}
         />
@@ -251,6 +259,11 @@ export default function Resources() {
       <DownloadLimitReachedModal
         isOpen={limitModalOpen}
         onClose={() => setLimitModalOpen(false)}
+        email={limitUserData?.email}
+        firstName={limitUserData?.firstName}
+        lastName={limitUserData?.lastName}
+        company={limitUserData?.company}
+        documentTitle={limitUserData?.documentTitle}
       />
     </div>
   );

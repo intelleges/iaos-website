@@ -102,6 +102,13 @@ export default function CaseStudies() {
     title: string;
     id: string;
   } | null>(null);
+  const [limitUserData, setLimitUserData] = useState<{
+    email: string;
+    firstName: string;
+    lastName: string;
+    company: string;
+    documentTitle: string;
+  } | null>(null);
 
   const handleCaseStudyClick = (study: typeof caseStudies[0]) => {
     setSelectedCaseStudy({
@@ -260,7 +267,8 @@ export default function CaseStudies() {
           downloadUrl="" // No download URL for case studies
           resourceTitle={selectedCaseStudy.title}
           documentType="case_study"
-          onLimitReached={() => {
+          onLimitReached={(userData: { email: string; firstName: string; lastName: string; company: string; documentTitle: string }) => {
+            setLimitUserData(userData);
             setLimitModalOpen(true);
           }}
           isCaseStudy={true}
@@ -272,6 +280,11 @@ export default function CaseStudies() {
       <DownloadLimitReachedModal
         isOpen={limitModalOpen}
         onClose={() => setLimitModalOpen(false)}
+        email={limitUserData?.email}
+        firstName={limitUserData?.firstName}
+        lastName={limitUserData?.lastName}
+        company={limitUserData?.company}
+        documentTitle={limitUserData?.documentTitle}
       />
     </div>
   );

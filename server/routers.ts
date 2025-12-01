@@ -185,7 +185,8 @@ export const appRouter = router({
     recordDownload: publicProcedure
       .input(z.object({
         email: z.string().email(),
-        name: z.string().min(1),
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
         company: z.string().optional(),
         role: z.string().optional(),
         documentTitle: z.string().min(1),
@@ -213,10 +214,11 @@ export const appRouter = router({
         }
 
         // Record download
+        const fullName = `${input.firstName} ${input.lastName}`;
         console.log(`[Download] ${input.documentTitle} → ${input.documentUrl} for ${normalizedEmail}`);
         await db.insert(documentDownloads).values({
           email: normalizedEmail,
-          name: input.name,
+          name: fullName,
           company: input.company || null,
           role: input.role || null,
           documentTitle: input.documentTitle,
@@ -231,13 +233,13 @@ export const appRouter = router({
         const scheduledFor = new Date();
         scheduledFor.setHours(scheduledFor.getHours() + EMAIL_DELAY_HOURS);
 
-        const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(input.name)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
+        const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(fullName)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
         
-        const htmlContent = generateFollowUpEmail(input.name, input.documentTitle, calendlyUrl);
+        const htmlContent = generateFollowUpEmail(fullName, input.documentTitle, calendlyUrl);
 
         await db.insert(scheduledEmails).values({
           recipientEmail: normalizedEmail,
-          recipientName: input.name,
+          recipientName: fullName,
           emailType: 'document_followup',
           subject: `Thank you for downloading ${input.documentTitle}`,
           htmlContent,

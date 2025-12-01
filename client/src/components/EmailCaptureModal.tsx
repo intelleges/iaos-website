@@ -14,7 +14,7 @@ export interface EmailCaptureModalProps {
   downloadUrl: string;
   resourceTitle: string;
   documentType: 'capability' | 'protocol' | 'whitepaper' | 'case_study' | string;
-  onLimitReached?: () => void;
+  onLimitReached?: (userData: { email: string; firstName: string; lastName: string; company: string; documentTitle: string }) => void;
   isCaseStudy?: boolean;
   onCaseStudySubmit?: (email: string, name: string) => void;
 }
@@ -34,7 +34,8 @@ export default function EmailCaptureModal({
   const recordDownloadMutation = trpc.documentDownloads.recordDownload.useMutation();
   
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     company: "",
   });
@@ -45,8 +46,12 @@ export default function EmailCaptureModal({
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
     }
 
     if (!formData.email.trim()) {
@@ -82,7 +87,8 @@ export default function EmailCaptureModal({
         // Record interest in database (no download limit check for case studies)
         await recordDownloadMutation.mutateAsync({
           email: formData.email,
-          name: formData.name,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           company: formData.company || undefined,
           documentTitle: resourceTitle,
           documentUrl: '', // No download URL for case studies
@@ -95,10 +101,10 @@ export default function EmailCaptureModal({
         setIsSubmitting(false);
         
         // Call parent handler to redirect to Calendly
-        onCaseStudySubmit(formData.email, formData.name);
+        onCaseStudySubmit(formData.email, `${formData.firstName} ${formData.lastName}`);
         
         // Reset form
-        setFormData({ name: "", email: "", company: "" });
+        setFormData({ firstName: "", lastName: "", email: "", company: "" });
         return;
       }
 
@@ -112,10 +118,16 @@ export default function EmailCaptureModal({
 
       if (limitCheck.limitReached) {
         console.log('[EmailCaptureModal] Limit reached, showing limit modal');
-        // Close email capture modal and show limit reached modal
+        // Close email capture modal and show limit reached modal with user data
         onClose();
         if (onLimitReached) {
-          onLimitReached();
+          onLimitReached({
+            email: formData.email,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            company: formData.company,
+            documentTitle: resourceTitle,
+          });
         }
         return;
       }
@@ -123,20 +135,22 @@ export default function EmailCaptureModal({
       // Record the download
       console.log('[EmailCaptureModal] About to call recordDownload mutation with:', {
         email: formData.email,
-        name: formData.name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         company: formData.company || undefined,
         documentTitle: resourceTitle,
         documentUrl: downloadUrl,
-        documentType: documentType,
+        documentType: documentType as 'capability' | 'protocol' | 'whitepaper' | 'case_study',
       });
       
       await recordDownloadMutation.mutateAsync({
         email: formData.email,
-        name: formData.name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         company: formData.company || undefined,
         documentTitle: resourceTitle,
         documentUrl: downloadUrl,
-        documentType: documentType,
+        documentType: documentType as 'capability' | 'protocol' | 'whitepaper' | 'case_study',
       });
 
       // Trigger the actual file download
@@ -157,7 +171,7 @@ export default function EmailCaptureModal({
       setTimeout(() => {
         onClose();
         setIsSubmitted(false);
-        setFormData({ name: "", email: "", company: "" });
+        setFormData({ firstName: "", lastName: "", email: "", company: "" });
       }, 2000);
 
     } catch (error: any) {
@@ -197,25 +211,48 @@ export default function EmailCaptureModal({
             </div>
             <div className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-base">
-                    Full Name *
-                  </Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => handleChange("name", e.target.value)}
-                    className={`text-base ${errors.name ? "border-red-500" : ""}`}
-                    placeholder="John Smith"
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                  />
-                  {errors.name && (
-                    <p id="name-error" className="text-sm text-red-500">
-                      {errors.name}
-                    </p>
-                  )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-base">
+                      First Name *
+                    </Label>
+                    <Input
+                      id="firstName"
+                      type="text"
+                      value={formData.firstName}
+                      onChange={(e) => handleChange("firstName", e.target.value)}
+                      className={`text-base ${errors.firstName ? "border-red-500" : ""}`}
+                      placeholder="John"
+                      aria-invalid={!!errors.firstName}
+                      aria-describedby={errors.firstName ? "firstName-error" : undefined}
+                    />
+                    {errors.firstName && (
+                      <p id="firstName-error" className="text-sm text-red-500">
+                        {errors.firstName}
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-base">
+                      Last Name *
+                    </Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      value={formData.lastName}
+                      onChange={(e) => handleChange("lastName", e.target.value)}
+                      className={`text-base ${errors.lastName ? "border-red-500" : ""}`}
+                      placeholder="Smith"
+                      aria-invalid={!!errors.lastName}
+                      aria-describedby={errors.lastName ? "lastName-error" : undefined}
+                    />
+                    {errors.lastName && (
+                      <p id="lastName-error" className="text-sm text-red-500">
+                        {errors.lastName}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">

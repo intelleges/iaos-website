@@ -1,12 +1,55 @@
 import { SimpleModal } from "./SimpleModal";
+import { useEffect } from "react";
 
 interface DownloadLimitReachedModalProps {
   isOpen: boolean;
   onClose: () => void;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  company?: string;
+  documentTitle?: string;
 }
 
-export function DownloadLimitReachedModal({ isOpen, onClose }: DownloadLimitReachedModalProps) {
-  const calendlyUrl = "https://calendly.com/intelleges/demo";
+export function DownloadLimitReachedModal({ 
+  isOpen, 
+  onClose, 
+  email, 
+  firstName, 
+  lastName, 
+  company,
+  documentTitle 
+}: DownloadLimitReachedModalProps) {
+  // Build Calendly URL with pre-filled parameters
+  const buildCalendlyUrl = () => {
+    const baseUrl = "https://calendly.com/intelleges/demo";
+    const params = new URLSearchParams();
+    
+    // Add user data as query parameters for Calendly pre-fill
+    if (email) params.append('email', email);
+    if (firstName) params.append('first_name', firstName);
+    if (lastName) params.append('last_name', lastName);
+    if (company) params.append('a1', company); // Custom question answer
+    if (documentTitle) params.append('a2', `Requested: ${documentTitle}`); // Custom question answer
+    
+    const queryString = params.toString();
+    return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+  };
+  
+  const calendlyUrl = buildCalendlyUrl();
+  
+  // Track modal appearance with GA4
+  useEffect(() => {
+    if (isOpen && typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'download_limit_reached', {
+        event_category: 'engagement',
+        event_label: documentTitle || 'unknown',
+        user_email: email || 'unknown',
+        user_company: company || 'unknown',
+      });
+      console.log('[Analytics] download_limit_reached event fired');
+    }
+  }, [isOpen, email, company, documentTitle]);
 
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose}>
@@ -52,6 +95,19 @@ export function DownloadLimitReachedModal({ isOpen, onClose }: DownloadLimitReac
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-[#0A3A67] text-white px-8 py-3 rounded-full font-medium text-base hover:bg-[#0A3A67]/90 transition-colors"
+            onClick={() => {
+              // Track Calendly click with GA4
+              if (typeof window !== 'undefined' && (window as any).gtag) {
+                (window as any).gtag('event', 'calendly_click_from_limit_modal', {
+                  event_category: 'conversion',
+                  event_label: documentTitle || 'unknown',
+                  user_email: email || 'unknown',
+                  user_company: company || 'unknown',
+                  calendly_url: calendlyUrl,
+                });
+                console.log('[Analytics] calendly_click_from_limit_modal event fired');
+              }
+            }}
           >
             Schedule a Meeting
           </a>

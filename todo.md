@@ -745,3 +745,31 @@
 - [x] Verify Calendly redirect implementation - Code review CONFIRMED (window.open to https://calendly.com/intelleges-sales/demo)
 - [x] Verify Calendly URL is correct - CONFIRMED (hardcoded in DownloadLimitReachedModal.tsx)
 - [x] Document all test results - DOWNLOAD_LIMIT_TEST_REPORT.md created with comprehensive findings
+
+## Conversion Optimization Enhancements (User Request - Dec 2024)
+
+### Phase 1: Calendly URL Pre-fill
+- [x] Update DownloadLimitReachedModal to accept user data props (email, firstName, lastName, company)
+- [x] Implement Calendly URL builder function with query parameters
+- [x] Pass user data from EmailCaptureModal to DownloadLimitReachedModal
+- [x] Test Calendly form pre-fill with sample data
+- [x] Verify all fields populate correctly in Calendly booking form
+
+### Phase 2: Email Automation Worker Deployment
+- [x] Create email worker script (server/workers/emailWorker.ts)
+- [x] Implement scheduled email processing logic
+- [x] Query scheduledEmails table for pending emails (sendAt <= now)
+- [x] Send emails via SendGrid with personalized content
+- [x] Mark emails as sent in database
+- [x] Add error handling and retry logic
+- [x] Document Railway Scheduled Worker deployment steps
+- [x] Create deployment guide with cron configuration (DEPLOY_EMAIL_WORKER.md)
+
+### Phase 3: Analytics Tracking for Limit Modal
+- [x] Add GA4 event tracking to DownloadLimitReachedModal
+- [x] Fire 'download_limit_reached' event when modal appears
+- [x] Track 'calendly_click_from_limit_modal' event on button click
+- [x] Include event parameters (email, document type, download count)
+- [x] Test analytics events in browser console
+- [x] Verify events appear in GA4 debug view
+- [x] Document analytics implementation for future reference

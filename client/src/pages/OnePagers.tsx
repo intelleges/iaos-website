@@ -21,6 +21,13 @@ export default function OnePagers() {
     serviceKey: string;
     title: string;
   } | null>(null);
+  const [limitUserData, setLimitUserData] = useState<{
+    email: string;
+    firstName: string;
+    lastName: string;
+    company: string;
+    documentTitle: string;
+  } | null>(null);
 
   const handleServiceClick = async (serviceKey: ServiceKey) => {
     const config = serviceDownloads[serviceKey];
@@ -125,7 +132,8 @@ export default function OnePagers() {
           downloadUrl={selectedService.s3Key}
           resourceTitle={selectedService.title}
           documentType="capability"
-          onLimitReached={() => {
+          onLimitReached={(userData: { email: string; firstName: string; lastName: string; company: string; documentTitle: string }) => {
+            setLimitUserData(userData);
             setLimitModalOpen(true);
           }}
         />
@@ -135,6 +143,11 @@ export default function OnePagers() {
       <DownloadLimitReachedModal
         isOpen={limitModalOpen}
         onClose={() => setLimitModalOpen(false)}
+        email={limitUserData?.email}
+        firstName={limitUserData?.firstName}
+        lastName={limitUserData?.lastName}
+        company={limitUserData?.company}
+        documentTitle={limitUserData?.documentTitle}
       />
     </div>
   );
