@@ -377,12 +377,21 @@ $150,000 + (50×$500) + (2,500×$10) + (5×$5,000) + (15×$2,000) + (5×$1,000) 
 
 ## Integration Restriction Tests
 
-### Test: Basic Tier - Integration Restrictions
+### Test: Basic Tier - Integration Restrictions (A.6.1)
 
 **Expected Behavior:**
-- ERP Integration toggle should be disabled/hidden for Basic tier
-- eSRS Support toggle should be disabled/hidden for Basic tier
-- Premium Support toggle IS available for Basic tier
+- ✅ **Premium Support:** Available and functional ($12,000/year)
+- ❌ **ERP Integration:** Disabled/Hidden (restricted to Advanced/Enterprise only)
+- ❌ **eSRS Support:** Disabled/Hidden (restricted to Advanced/Enterprise only)
+
+**Critical Note:** Premium Support ($12,000) is available for **ALL tiers** including Basic. Only ERP and eSRS integrations are restricted to Advanced/Enterprise tiers.
+
+**Manual Testing Checklist:**
+- [ ] Premium Support toggle is visible and clickable
+- [ ] Toggling Premium Support adds $12,000 to annual price
+- [ ] ERP Integration toggle is disabled/hidden
+- [ ] eSRS Support toggle is disabled/hidden
+- [ ] User cannot accidentally enable restricted integrations
 
 **Status:** ⚠️ **REQUIRES MANUAL UI VERIFICATION**
 
@@ -390,29 +399,45 @@ The backend correctly prevents ERP/eSRS pricing for Basic tier, but UI toggle vi
 
 ---
 
-### Test: Professional Tier - Integration Restrictions
+### Test: Professional Tier - Integration Restrictions (A.6.2)
 
 **Expected Behavior:**
-- Same restrictions as Basic tier
-- ERP and eSRS not available
-- Premium Support available
+- ✅ **Premium Support:** Available and functional ($12,000/year)
+- ❌ **ERP Integration:** Disabled/Hidden (restricted to Advanced/Enterprise only)
+- ❌ **eSRS Support:** Disabled/Hidden (restricted to Advanced/Enterprise only)
+
+**Same restrictions as Basic tier:** Premium Support is available, but ERP and eSRS are not.
+
+**Manual Testing Checklist:**
+- [ ] Premium Support toggle is visible and clickable
+- [ ] Toggling Premium Support adds $12,000 to annual price
+- [ ] ERP Integration toggle is disabled/hidden
+- [ ] eSRS Support toggle is disabled/hidden
 
 **Status:** ⚠️ **REQUIRES MANUAL UI VERIFICATION**
 
 ---
 
-### Test: Advanced/Enterprise Tier - All Integrations Available
+### Test: Advanced/Enterprise Tier - All Integrations Available (A.6.3)
 
 **Expected Behavior:**
-- All three integration toggles are functional
-- Toggling each integration updates pricing correctly
+- ✅ **Premium Support:** Available and functional ($12,000/year)
+- ✅ **ERP Integration:** Available and functional ($15,000/year)
+- ✅ **eSRS Support:** Available and functional ($10,000/year)
+
+**All three integration toggles should be functional** for Advanced and Enterprise tiers.
+
+**Manual Testing Checklist:**
+- [ ] All three integration toggles are visible and clickable
+- [ ] Toggling Premium Support adds $12,000 to annual price
+- [ ] Toggling ERP Integration adds $15,000 to annual price
+- [ ] Toggling eSRS Support adds $10,000 to annual price
+- [ ] Toggling updates price in real-time
+- [ ] Price breakdown shows integration line items correctly
 
 **Status:** ✅ **BACKEND VALIDATED** | ⚠️ **UI REQUIRES MANUAL TESTING**
 
-Backend calculations confirmed correct. Manual testers should verify:
-1. All toggles are visible and clickable
-2. Toggling updates price in real-time
-3. Price breakdown shows integration line items
+Backend calculations confirmed correct for all three integrations.
 
 ---
 
@@ -494,10 +519,17 @@ The following items from the test plan require **manual UI testing** and are not
    - Confirm all integrations (ERP + eSRS + Premium) are selectable
    - Verify final price displays as $182,500
 
-2. **Integration Restrictions**
-   - Confirm Basic/Professional tiers **cannot** enable ERP or eSRS
-   - Confirm toggles are disabled/hidden (not just unchecked)
-   - Confirm Advanced/Enterprise tiers **can** enable all integrations
+2. **Integration Restrictions** ⚠️ **CRITICAL CLARIFICATION**
+   - **Premium Support ($12,000):** Available for **ALL tiers** (Basic, Professional, Advanced, Enterprise)
+   - **ERP Integration ($15,000):** Restricted to Advanced/Enterprise only
+   - **eSRS Support ($10,000):** Restricted to Advanced/Enterprise only
+   
+   **Test Checklist:**
+   - [ ] Basic tier: Premium Support toggle visible, ERP/eSRS disabled/hidden
+   - [ ] Professional tier: Premium Support toggle visible, ERP/eSRS disabled/hidden
+   - [ ] Advanced tier: All three toggles visible and functional
+   - [ ] Enterprise tier: All three toggles visible and functional
+   - [ ] Confirm toggles are disabled/hidden (not just unchecked) for restricted integrations
 
 3. **Multi-Year Contracts**
    - Test 3-year contract: verify total = annual × 3 (no discount)

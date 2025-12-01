@@ -779,3 +779,10 @@
 - [x] Test multi-year contract calculations (no discount)
 - [x] Test zero quantities and below-included amounts
 - [x] Generate comprehensive test results report
+
+
+## Test Documentation Corrections
+- [x] Update AUTOMATED_TEST_RESULTS.md to clarify Premium Support availability
+- [x] Clarify that Premium Support ($12,000) is available for ALL tiers
+- [x] Clarify that only ERP and eSRS are restricted to Advanced/Enterprise
+- [x] Update test cases A.6.1 and A.6.2 with correct expectations
