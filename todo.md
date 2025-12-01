@@ -1160,3 +1160,24 @@ QA tester reported that clickable elements don't show hand pointer cursor on hov
 ## Content Correction - How Intelleges Works Section
 
 - [x] Change "Add Suppliers, Buyers & Reviewers" to "Add Suppliers, Buyers & Approvers" in step 3
+
+
+## Email Capture Form Enhancement
+
+- [ ] Add company name field to EmailCaptureModal
+- [ ] Update form validation to include company name
+- [ ] Update form submission to pass company name to backend
+- [ ] Test form with all fields including company name
+
+
+## EmailCaptureModal Test Suite
+
+- [x] Create test file for EmailCaptureModal component (server-side integration tests)
+- [x] Write test for company name required field validation
+- [x] Write test for company name with special characters
+- [x] Write test for company name with numbers and hyphens
+- [x] Write test for optional company name handling
+- [x] Write test for company name tracking across multiple downloads
+- [x] Write test for download limit enforcement
+- [x] Write test for Google Sheets integration with company name
+- [x] Run all tests and verify they pass (7/7 tests passing)
