@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter.js";
 import { downloadsRouter } from "./routers/downloads.js";
 import { qualificationRouter } from "./routers/qualification.js";
+import { emailAnalyticsRouter } from "./routers/emailAnalytics.js";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
@@ -23,6 +24,7 @@ export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   qualification: qualificationRouter,
+  emailAnalytics: emailAnalyticsRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

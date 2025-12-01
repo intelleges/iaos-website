@@ -29,6 +29,13 @@
       "when": 1764548415324,
       "tag": "0003_red_tiger_shark",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1764549975893,
+      "tag": "0004_glamorous_sugar_man",
+      "breakpoints": true
     }
   ]
 }

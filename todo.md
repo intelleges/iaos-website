@@ -893,3 +893,39 @@
 - [x] Include direct sales contact escape hatch (email + phone)
 - [x] Test all CTA links work correctly
 - [x] Verify message tone is helpful, not rejecting
+
+## SendGrid Mission Control - Email Analytics Dashboard
+
+### Phase 1: Database Schema
+- [x] Add emailEvents table to drizzle/schema.ts (id, email, eventType, reason, sgEventId, sgMessageId, timestamp)
+- [x] Add emailStatus table to drizzle/schema.ts (id, email, lastEvent, lastEventAt, bounce, spam, delivered, opened, clicked, unsubscribed)
+- [x] Run pnpm db:push to migrate new tables
+- [x] Verify tables created successfully in database
+
+### Phase 2: TRPC Email Analytics Router
+- [x] Create server/routers/emailAnalytics.ts with admin auth check
+- [x] Implement overview query (total emails, delivered, opened, clicked, bounced, spam, unsubscribed + rates)
+- [x] Implement listStatus query with search, filtering, and pagination
+- [x] Implement getEmailTimeline query for single email event history
+- [x] Wire emailAnalyticsRouter into main appRouter
+
+### Phase 3: Admin Dashboard UI
+- [x] Create client/src/pages/admin/EmailAnalyticsPage.tsx
+- [x] Build KPI cards section (6 stat cards with overview metrics)
+- [x] Create search and filter controls (email search + event type filter)
+- [x] Build email status table with sortable columns
+- [x] Add pagination controls (Previous/Next buttons)
+
+### Phase 4: Email Timeline Drilldown
+- [x] Implement row click handler to select email
+- [x] Build timeline panel showing chronological event history
+- [x] Display event type, timestamp, reason, and SendGrid message ID
+- [x] Add loading and error states for timeline query
+
+### Phase 5: Integration & Testing
+- [x] Add /admin/email-analytics route to App.tsx
+- [ ] Add admin auth guard to protect route (TODO: implement when admin roles are ready)
+- [x] Test overview stats calculation
+- [x] Test search and filtering functionality
+- [x] Test timeline drilldown for sample emails
+- [x] Verify pagination works correctly

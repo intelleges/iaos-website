@@ -23,6 +23,7 @@ import OnePagers from "@/pages/OnePagers";
 import PersonalizedWelcome from "@/pages/PersonalizedWelcome";
 import Login from "@/pages/Login";
 import Demo from "@/pages/Demo";
+import { EmailAnalyticsPage } from "@/pages/admin/EmailAnalyticsPage";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Security from "@/pages/Security";
@@ -54,6 +55,7 @@ function Router() {
           <Route path="/resources" component={Resources} />
           <Route path="/one-pagers" component={OnePagers} />
           <Route path="/welcome" component={PersonalizedWelcome} />
+          <Route path="/admin/email-analytics" component={EmailAnalyticsPage} />
           <Route path="/contact" component={Contact} />
           <Route path="/demo" component={Demo} />
           <Route path="/login" component={Login} />

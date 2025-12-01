@@ -123,3 +123,39 @@ export const leadQualificationAttempts = mysqlTable("leadQualificationAttempts",
 
 export type LeadQualificationAttempt = typeof leadQualificationAttempts.$inferSelect;
 export type InsertLeadQualificationAttempt = typeof leadQualificationAttempts.$inferInsert;
+/**
+ * Email events table for tracking SendGrid webhook events
+ */
+export const emailEvents = mysqlTable("emailEvents", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull(),
+  eventType: varchar("eventType", { length: 50 }).notNull(), // open, bounce, click, delivered, etc.
+  reason: text("reason"),
+  sgEventId: varchar("sgEventId", { length: 255 }),
+  sgMessageId: varchar("sgMessageId", { length: 255 }),
+  timestamp: timestamp("timestamp").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EmailEvent = typeof emailEvents.$inferSelect;
+export type InsertEmailEvent = typeof emailEvents.$inferInsert;
+
+/**
+ * Email status table for aggregated email engagement metrics
+ */
+export const emailStatus = mysqlTable("emailStatus", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  lastEvent: varchar("lastEvent", { length: 50 }),
+  lastEventAt: timestamp("lastEventAt"),
+  bounce: int("bounce").default(0).notNull(),
+  spam: int("spam").default(0).notNull(),
+  delivered: int("delivered").default(0).notNull(),
+  opened: int("opened").default(0).notNull(),
+  clicked: int("clicked").default(0).notNull(),
+  unsubscribed: int("unsubscribed").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EmailStatus = typeof emailStatus.$inferSelect;
+export type InsertEmailStatus = typeof emailStatus.$inferInsert;
