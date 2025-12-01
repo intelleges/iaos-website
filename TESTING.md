@@ -314,3 +314,63 @@ Before deploying changes:
 
 **Last Updated:** December 1, 2025  
 **Maintained By:** Intelleges Development Team
+
+
+---
+
+## CI/CD Integration
+
+### GitHub Actions Workflow
+
+The Playwright tests run automatically in GitHub Actions on every push and pull request to `main` and `develop` branches.
+
+**Workflow file:** `.github/workflows/playwright-tests.yml`
+
+**Status badge:**
+```markdown
+![Playwright Tests](https://github.com/YOUR_ORG/intelleges-marketing-site/actions/workflows/playwright-tests.yml/badge.svg)
+```
+
+### Workflow Features
+
+✅ **Automatic triggers:** Runs on push/PR to main and develop branches  
+✅ **Dependency caching:** pnpm store and Playwright browsers cached for 60-70% faster runs  
+✅ **Artifact uploads:** Test reports (30 days) and failure screenshots (7 days)  
+✅ **PR comments:** Automatic test result summaries on pull requests  
+✅ **Parallel execution:** Tests run in parallel for faster feedback
+
+### Expected CI Runtime
+
+- **First run (no cache):** ~2-3 minutes
+- **Subsequent runs (with cache):** ~30-45 seconds
+
+### Viewing CI Test Results
+
+1. **In GitHub Actions:**
+   - Go to **Actions** tab in your repository
+   - Click on a workflow run
+   - View test output in **Run Playwright tests** step
+   - Download artifacts (reports/screenshots)
+
+2. **In Pull Requests:**
+   - Automatic comment with test results summary
+   - Links to full HTML report
+   - Screenshots of failures (if any)
+
+3. **Locally:**
+   - Run the same tests: `pnpm test:e2e`
+   - View reports: `pnpm test:e2e:report`
+
+### Branch Protection
+
+To enforce tests before merging:
+
+1. Go to **Settings** → **Branches** in GitHub
+2. Add rule for `main` branch:
+   - ✅ Require status checks to pass before merging
+   - ✅ Require branches to be up to date
+   - Select: **Run E2E Tests**
+
+This ensures no code can be merged if tests fail.
+
+See [CI_CD.md](./CI_CD.md) for comprehensive CI/CD documentation.

@@ -799,3 +799,15 @@
 - [x] Run all tests and verify they pass
 - [x] Add test scripts to package.json
 - [x] Document how to run tests in README
+
+## GitHub Actions CI/CD Integration
+- [x] Create .github/workflows directory structure
+- [x] Create playwright-tests.yml workflow file
+- [x] Configure workflow triggers (push, pull_request)
+- [x] Set up Node.js and pnpm in workflow
+- [x] Configure Playwright browser installation
+- [x] Add dependency caching for faster builds
+- [x] Configure test artifact uploads (reports, screenshots)
+- [x] Add workflow status badge to README
+- [x] Document CI/CD workflow in TESTING.md
+- [x] Validate YAML syntax
