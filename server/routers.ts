@@ -10,6 +10,7 @@ import { z } from "zod";
 import { getDb } from "./db";
 import { leads, downloads, documentDownloads, scheduledEmails, emailStatus } from "../drizzle/schema";
 import sgMail from "@sendgrid/mail";
+import { syncLeadToGoogleSheets } from "./lib/googleSheets";
 
 // Initialize SendGrid
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || "";
@@ -221,6 +222,7 @@ export const appRouter = router({
 
         // Record download
         const fullName = `${input.firstName} ${input.lastName}`;
+        const downloadDate = new Date();
         console.log(`[Download] ${input.documentTitle} → ${input.documentUrl} for ${normalizedEmail}`);
         await db.insert(documentDownloads).values({
           email: normalizedEmail,
@@ -230,9 +232,24 @@ export const appRouter = router({
           documentTitle: input.documentTitle,
           documentUrl: input.documentUrl,
           documentType: input.documentType,
-          downloadedAt: new Date(),
+          downloadedAt: downloadDate,
           followUpEmailSent: 0,
           followUpEmailSentAt: null,
+        });
+
+        // Sync to Google Sheets (non-blocking)
+        syncLeadToGoogleSheets({
+          email: normalizedEmail,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          company: input.company || undefined,
+          phone: input.phone || undefined,
+          documentTitle: input.documentTitle,
+          documentType: input.documentType,
+          downloadDate,
+          downloadCount: currentCount + 1,
+        }).catch(err => {
+          console.error('[Google Sheets] Sync failed (non-critical):', err);
         });
 
         // Check if email is suppressed before scheduling follow-up

@@ -1103,3 +1103,30 @@
 - [x] Create launch day runbook (LAUNCH_DAY_MONITORING_GUIDE.md)
 - [x] Document incident response procedures (included in monitoring guide)
 - [x] Set up team communication channels for launch day (alert channels documented)
+
+
+
+## Google Sheets Integration for Lead Data Export
+
+### Setup and Configuration
+- [x] Install googleapis npm package
+- [ ] Create Google Cloud project and enable Sheets API (user action required)
+- [ ] Generate service account credentials (user action required)
+- [ ] Add service account credentials to environment variables (user action required)
+- [ ] Create Google Sheet template with proper columns (user action required)
+- [ ] Share Google Sheet with service account email (user action required)
+
+### Implementation
+- [x] Create Google Sheets API client helper (server/lib/googleSheets.ts)
+- [x] Add function to append row to Google Sheet
+- [x] Integrate with documentDownloads.recordDownload mutation
+- [x] Add error handling for Google Sheets API failures
+- [x] Add logging for successful syncs
+- [x] Add environment variables to server/_core/env.ts
+
+### Testing and Documentation
+- [ ] Test Google Sheets sync with sample data (requires setup completion)
+- [ ] Verify data appears in Google Sheet correctly (requires setup completion)
+- [x] Create setup documentation (GOOGLE_SHEETS_SETUP.md)
+- [x] Document troubleshooting steps
+- [x] Add monitoring for sync failures (via logging)
