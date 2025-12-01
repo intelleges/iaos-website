@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'wouter';
 import { trpc } from '@/lib/trpc';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -14,12 +15,14 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import SEO from '@/components/seo';
+import { Textarea } from '@/components/ui/textarea';
 
 type Tier = 'Basic' | 'Professional' | 'Advanced' | 'Enterprise';
 
 interface PricingConfig {
   tier: Tier;
   customerName: string;
+  customerEmail: string;
   industry: string;
   region: string;
   users: number;
@@ -38,6 +41,7 @@ export default function PricingCalculator() {
   const [config, setConfig] = useState<PricingConfig>({
     tier: 'Advanced',
     customerName: '',
+    customerEmail: '',
     industry: '',
     region: '',
     users: 50,
@@ -76,6 +80,7 @@ export default function PricingCalculator() {
       const result = await calculateMutation.mutateAsync({
         tier: config.tier,
         customerName: config.customerName,
+        customerEmail: config.customerEmail,
         industry: config.industry,
         region: config.region,
         users: config.users,
@@ -102,6 +107,11 @@ export default function PricingCalculator() {
       return;
     }
 
+    if (!config.customerEmail) {
+      toast.error('Please enter a customer email');
+      return;
+    }
+
     try {
       const result = await saveQuoteMutation.mutateAsync({
         ...config,
@@ -120,15 +130,15 @@ export default function PricingCalculator() {
       return;
     }
 
-    if (!config.customerName.includes('@')) {
-      toast.error('Please enter customer email in the name field (temporary)');
+    if (!config.customerEmail) {
+      toast.error('Please enter a customer email');
       return;
     }
 
     try {
       const result = await generateInvoiceMutation.mutateAsync({
         quoteId: savedQuoteId,
-        customerEmail: config.customerName, // TODO: Add separate email field
+        customerEmail: config.customerEmail,
       });
       toast.success(`Invoice created! Invoice #${result.invoiceNumber}`);
       window.open(result.paymentLink, '_blank');
@@ -183,13 +193,20 @@ export default function PricingCalculator() {
       <div className="min-h-screen bg-gradient-to-br from-[#F7F9FA] to-[#E8EEF2] py-8">
         <div className="container max-w-7xl">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-[#111111] mb-2">
-              Pricing Calculator
-            </h1>
-            <p className="text-[#666666]">
-              Internal tool for configuration-based pricing. Generate quotes for enterprise customers.
-            </p>
+          <div className="mb-8 flex items-start justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-[#111111] mb-2">
+                Pricing Calculator
+              </h1>
+              <p className="text-[#666666]">
+                Internal tool for configuration-based pricing. Generate quotes for enterprise customers.
+              </p>
+            </div>
+            <Link href="/admin/quotes">
+              <Button variant="outline">
+                View Quote History
+              </Button>
+            </Link>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8">
@@ -210,6 +227,18 @@ export default function PricingCalculator() {
                         setConfig({ ...config, customerName: e.target.value })
                       }
                       placeholder="e.g., Celestica"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="customerEmail">Customer Email *</Label>
+                    <Input
+                      id="customerEmail"
+                      type="email"
+                      value={config.customerEmail}
+                      onChange={(e) =>
+                        setConfig({ ...config, customerEmail: e.target.value })
+                      }
+                      placeholder="e.g., john@celestica.com"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -306,7 +335,7 @@ export default function PricingCalculator() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div>
                       <Label htmlFor="protocols">Protocols</Label>
                       <Input
@@ -319,7 +348,7 @@ export default function PricingCalculator() {
                         }
                       />
                       <p className="text-xs text-[#666666] mt-1">
-                        Included: {selectedTierDef?.includedProtocols || 0}
+                        Incl: {selectedTierDef?.includedProtocols || 0}
                       </p>
                     </div>
                     <div>
@@ -334,22 +363,24 @@ export default function PricingCalculator() {
                         }
                       />
                       <p className="text-xs text-[#666666] mt-1">
-                        Included: {selectedTierDef?.includedSites || 0}
+                        Incl: {selectedTierDef?.includedSites || 0}
                       </p>
                     </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="partnerTypes">Partner Types</Label>
-                    <Input
-                      id="partnerTypes"
-                      type="number"
-                      min="0"
-                      value={config.partnerTypes}
-                      onChange={(e) =>
-                        setConfig({ ...config, partnerTypes: parseInt(e.target.value) || 0 })
-                      }
-                    />
+                    <div>
+                      <Label htmlFor="partnerTypes">Partner Types</Label>
+                      <Input
+                        id="partnerTypes"
+                        type="number"
+                        min="0"
+                        value={config.partnerTypes}
+                        onChange={(e) =>
+                          setConfig({ ...config, partnerTypes: parseInt(e.target.value) || 0 })
+                        }
+                      />
+                      <p className="text-xs text-[#666666] mt-1">
+                        Incl: {selectedTierDef?.includedPartnerTypes || 0}
+                      </p>
+                    </div>
                   </div>
 
                   <div>
@@ -360,23 +391,24 @@ export default function PricingCalculator() {
                         setConfig({ ...config, termYears: parseInt(value) })
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger id="termYears">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="1">1 Year</SelectItem>
                         <SelectItem value="2">2 Years</SelectItem>
                         <SelectItem value="3">3 Years</SelectItem>
+                        <SelectItem value="5">5 Years</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
               </Card>
 
-              {/* Integrations & Support */}
+              {/* Integrations */}
               <Card className="p-6">
                 <h2 className="text-xl font-semibold text-[#111111] mb-4">
-                  Integrations & Support
+                  Integrations & Add-ons
                 </h2>
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
@@ -384,7 +416,7 @@ export default function PricingCalculator() {
                       id="erpIntegration"
                       checked={config.erpIntegration}
                       onCheckedChange={(checked) =>
-                        setConfig({ ...config, erpIntegration: !!checked })
+                        setConfig({ ...config, erpIntegration: checked as boolean })
                       }
                       disabled={!canUseIntegrations}
                     />
@@ -392,12 +424,8 @@ export default function PricingCalculator() {
                       htmlFor="erpIntegration"
                       className={!canUseIntegrations ? 'text-[#999999]' : ''}
                     >
-                      ERP Integration (+$25,000)
-                      {!canUseIntegrations && (
-                        <span className="text-xs text-[#999999] ml-2">
-                          (Advanced/Enterprise only)
-                        </span>
-                      )}
+                      ERP Integration (+$15K/year)
+                      {!canUseIntegrations && ' (Advanced/Enterprise only)'}
                     </Label>
                   </div>
 
@@ -406,7 +434,7 @@ export default function PricingCalculator() {
                       id="esrsSupport"
                       checked={config.esrsSupport}
                       onCheckedChange={(checked) =>
-                        setConfig({ ...config, esrsSupport: !!checked })
+                        setConfig({ ...config, esrsSupport: checked as boolean })
                       }
                       disabled={!canUseIntegrations}
                     />
@@ -414,12 +442,8 @@ export default function PricingCalculator() {
                       htmlFor="esrsSupport"
                       className={!canUseIntegrations ? 'text-[#999999]' : ''}
                     >
-                      eSRS Support (+$10,000)
-                      {!canUseIntegrations && (
-                        <span className="text-xs text-[#999999] ml-2">
-                          (Advanced/Enterprise only)
-                        </span>
-                      )}
+                      eSRS Support (+$10K/year)
+                      {!canUseIntegrations && ' (Advanced/Enterprise only)'}
                     </Label>
                   </div>
 
@@ -428,11 +452,11 @@ export default function PricingCalculator() {
                       id="supportPremium"
                       checked={config.supportPremium}
                       onCheckedChange={(checked) =>
-                        setConfig({ ...config, supportPremium: !!checked })
+                        setConfig({ ...config, supportPremium: checked as boolean })
                       }
                     />
                     <Label htmlFor="supportPremium">
-                      Premium Support - Weekly Leadership Access (+$10,000)
+                      Premium Support (+$12K/year)
                     </Label>
                   </div>
                 </div>
@@ -443,223 +467,128 @@ export default function PricingCalculator() {
                 <h2 className="text-xl font-semibold text-[#111111] mb-4">
                   Notes
                 </h2>
-                <textarea
-                  className="w-full min-h-[100px] p-3 border border-[#E0E0E0] rounded-lg"
+                <Textarea
+                  placeholder="Add any notes about this quote..."
                   value={config.notes}
                   onChange={(e) => setConfig({ ...config, notes: e.target.value })}
-                  placeholder="Internal notes about this quote..."
+                  rows={4}
                 />
               </Card>
             </div>
 
-            {/* Right Column: Pricing Breakdown */}
+            {/* Right Column: Pricing Display */}
             <div className="space-y-6">
-              {/* Tier Inclusions */}
-              {selectedTierDef && (
-                <Card className="p-6 bg-[#EEF3F7] border-[#0A3A67]">
-                  <h2 className="text-xl font-semibold text-[#111111] mb-4">
-                    {config.tier} Tier Inclusions
-                  </h2>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-[#666666]">Users:</span>
-                      <span className="font-semibold text-[#111111]">
-                        {selectedTierDef.includedUsers === Number.MAX_SAFE_INTEGER
-                          ? 'Unlimited'
-                          : selectedTierDef.includedUsers}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#666666]">Suppliers:</span>
-                      <span className="font-semibold text-[#111111]">
-                        {selectedTierDef.includedSuppliers === Number.MAX_SAFE_INTEGER
-                          ? 'Unlimited'
-                          : selectedTierDef.includedSuppliers.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#666666]">Protocols:</span>
-                      <span className="font-semibold text-[#111111]">
-                        {selectedTierDef.includedProtocols === Number.MAX_SAFE_INTEGER
-                          ? 'Unlimited'
-                          : selectedTierDef.includedProtocols}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#666666]">Sites:</span>
-                      <span className="font-semibold text-[#111111]">
-                        {selectedTierDef.includedSites === Number.MAX_SAFE_INTEGER
-                          ? 'Unlimited'
-                          : selectedTierDef.includedSites}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#666666]">Support:</span>
-                      <span className="font-semibold text-[#111111]">
-                        {selectedTierDef.supportLevel}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#666666]">ERP/eSRS:</span>
-                      <span className="font-semibold text-[#111111]">
-                        {selectedTierDef.allowsERP ? 'Allowed' : 'Not Available'}
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              )}
-
               {/* Pricing Breakdown */}
-              {pricing && (
-                <Card className="p-6">
-                  <h2 className="text-xl font-semibold text-[#111111] mb-4">
-                    Pricing Breakdown
-                  </h2>
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-[#666666]">Base ({config.tier} Tier)</span>
-                      <span className="font-semibold text-[#111111]">
-                        {formatCurrency(pricing.basePrice)}
-                      </span>
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold text-[#111111] mb-4">
+                  Pricing Breakdown
+                </h2>
+                
+                {calculating ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0A3A67] mx-auto"></div>
+                    <p className="mt-2 text-sm text-[#666666]">Calculating...</p>
+                  </div>
+                ) : pricing ? (
+                  <div className="space-y-4">
+                    {/* Line Items */}
+                    <div className="space-y-2">
+                      {pricing.breakdown.map((item: any, index: number) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span className="text-[#666666]">
+                            {item.label}
+                            {item.quantity > 1 && ` (${item.quantity}×)`}
+                          </span>
+                          <span className="font-medium text-[#111111]">
+                            {formatCurrency(item.total)}
+                          </span>
+                        </div>
+                      ))}
                     </div>
 
-                    {pricing.extraUsers > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">
-                          Extra Users ({pricing.extraUsers} × $150)
-                        </span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.usersPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.extraSuppliers > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">
-                          Extra Suppliers ({pricing.extraSuppliers} × $40)
-                        </span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.suppliersPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.extraProtocols > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">
-                          Extra Protocols ({pricing.extraProtocols} × $10,000)
-                        </span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.protocolsPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.extraSites > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">
-                          Extra Sites ({pricing.extraSites} × $5,000)
-                        </span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.sitesPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.partnerTypesPrice > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">
-                          Partner Types ({config.partnerTypes} × $2,500)
-                        </span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.partnerTypesPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.erpIntegrationPrice > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">ERP Integration</span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.erpIntegrationPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.esrsSupportPrice > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">eSRS Support</span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.esrsSupportPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    {pricing.supportPremiumPrice > 0 && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-[#666666]">Premium Support</span>
-                        <span className="font-semibold text-[#111111]">
-                          {formatCurrency(pricing.supportPremiumPrice)}
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="border-t border-[#E0E0E0] pt-3 mt-3">
-                      <div className="flex justify-between">
-                        <span className="text-lg font-semibold text-[#111111]">
-                          Annual Price
-                        </span>
-                        <span className="text-2xl font-bold text-[#0A3A67]">
+                    <div className="border-t pt-4 space-y-2">
+                      <div className="flex justify-between text-lg font-semibold">
+                        <span className="text-[#111111]">Annual Total</span>
+                        <span className="text-[#0A3A67]">
                           {formatCurrency(pricing.annualPrice)}
                         </span>
                       </div>
-                      {pricing.termYears > 1 && (
-                        <div className="flex justify-between mt-2 text-sm">
-                          <span className="text-[#666666]">
-                            Total ({pricing.termYears} years)
+                      
+                      {config.termYears > 1 && (
+                        <div className="flex justify-between text-2xl font-bold">
+                          <span className="text-[#111111]">
+                            Total ({config.termYears} Years)
                           </span>
-                          <span className="font-semibold text-[#111111]">
-                            {formatCurrency(pricing.totalPriceForTerm)}
+                          <span className="text-[#C9A635]">
+                            {formatCurrency(pricing.totalPrice)}
                           </span>
                         </div>
                       )}
                     </div>
                   </div>
-                </Card>
-              )}
+                ) : (
+                  <p className="text-center text-[#666666] py-8">
+                    Configure options to see pricing
+                  </p>
+                )}
+              </Card>
 
               {/* Actions */}
-              <div className="space-y-3">
-                <Button
-                  onClick={handleSaveQuote}
-                  disabled={saveQuoteMutation.isPending || !config.customerName}
-                  className="w-full bg-[#0A3A67] hover:bg-[#0C4474]"
-                  size="lg"
-                >
-                  {saveQuoteMutation.isPending ? 'Saving...' : 'Save Quote'}
-                </Button>
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold text-[#111111] mb-4">
+                  Actions
+                </h2>
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleSaveQuote}
+                    disabled={!pricing || saveQuoteMutation.isLoading}
+                    className="w-full"
+                  >
+                    {saveQuoteMutation.isLoading ? 'Saving...' : 'Save Quote'}
+                  </Button>
 
-                <Button
-                  onClick={handleGenerateInvoice}
-                  disabled={generateInvoiceMutation.isPending || !savedQuoteId}
-                  variant="outline"
-                  className="w-full"
-                  size="lg"
-                >
-                  {generateInvoiceMutation.isPending ? 'Generating...' : 'Generate Stripe Invoice'}
-                </Button>
+                  <Button
+                    onClick={handleGenerateInvoice}
+                    disabled={!savedQuoteId || generateInvoiceMutation.isLoading}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    {generateInvoiceMutation.isLoading ? 'Generating...' : 'Generate Stripe Invoice'}
+                  </Button>
 
-                <Button
-                  onClick={handleExportPDF}
-                  disabled={exportPDFMutation.isPending || !savedQuoteId}
-                  variant="outline"
-                  className="w-full"
-                  size="lg"
-                >
-                  {exportPDFMutation.isPending ? 'Exporting...' : 'Export PDF Proposal'}
-                </Button>
-              </div>
+                  <Button
+                    onClick={handleExportPDF}
+                    disabled={!savedQuoteId || exportPDFMutation.isLoading}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    {exportPDFMutation.isLoading ? 'Exporting...' : 'Export PDF Proposal'}
+                  </Button>
+
+                  {savedQuoteId && (
+                    <p className="text-sm text-center text-[#666666] mt-2">
+                      Quote ID: #{savedQuoteId}
+                    </p>
+                  )}
+                </div>
+              </Card>
+
+              {/* Tier Features */}
+              {selectedTierDef && (
+                <Card className="p-6">
+                  <h2 className="text-xl font-semibold text-[#111111] mb-4">
+                    {config.tier} Tier Features
+                  </h2>
+                  <ul className="space-y-2">
+                    {selectedTierDef.features.map((feature: string, index: number) => (
+                      <li key={index} className="flex items-start text-sm">
+                        <span className="text-[#C9A635] mr-2">✓</span>
+                        <span className="text-[#666666]">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )}
             </div>
           </div>
         </div>

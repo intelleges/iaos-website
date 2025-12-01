@@ -74,13 +74,6 @@ export default function Resources() {
     url: string;
     title: string;
   } | null>(null);
-  const [limitUserData, setLimitUserData] = useState<{
-    email: string;
-    firstName: string;
-    lastName: string;
-    company: string;
-    documentTitle: string;
-  } | null>(null);
 
   const handleFeaturedDownload = (docKey: typeof featuredDocuments[number]["key"]) => {
     const config = serviceDownloads[docKey];
@@ -196,28 +189,7 @@ export default function Resources() {
             </CardContent>
             <CardFooter className="border-t bg-muted/20 pt-4 flex justify-between items-center">
               <span className="text-xs text-muted-foreground font-medium">PDF • {resource.size}</span>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
-                onClick={() => {
-                  // Map resource.id to serviceDownloads key
-                  const downloadKey = resource.id === 'cmmc-guide' ? 'cybersecurity' : 
-                                     resource.id === 'supply-chain-risk' ? 'supplier-risk' :
-                                     resource.id === 'platform-overview' ? 'reps-certs-service' :
-                                     resource.id === 'audit-prep' ? 'quality-systems-service' :
-                                     resource.id === 'compliance-roadmap' ? 'compliance-maturity-model' :
-                                     resource.id === 'vendor-management' ? 'current-compliance-landscape' : null;
-                  
-                  const downloadConfig = downloadKey ? serviceDownloads[downloadKey as keyof typeof serviceDownloads] : null;
-                  
-                  setSelectedDocument({
-                    url: downloadConfig?.cdnUrl || `https://files.manuscdn.com/placeholder-${resource.id}.pdf`,
-                    title: resource.title,
-                  });
-                  setEmailModalOpen(true);
-                }}
-              >
+              <Button variant="ghost" size="sm" className="gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
                 <Download className="w-4 h-4" />
                 Download
               </Button>
@@ -248,8 +220,7 @@ export default function Resources() {
           downloadUrl={selectedDocument.url}
           resourceTitle={selectedDocument.title}
           documentType="whitepaper"
-          onLimitReached={(userData: { email: string; firstName: string; lastName: string; company: string; documentTitle: string }) => {
-            setLimitUserData(userData);
+          onLimitReached={() => {
             setLimitModalOpen(true);
           }}
         />
@@ -259,11 +230,6 @@ export default function Resources() {
       <DownloadLimitReachedModal
         isOpen={limitModalOpen}
         onClose={() => setLimitModalOpen(false)}
-        email={limitUserData?.email}
-        firstName={limitUserData?.firstName}
-        lastName={limitUserData?.lastName}
-        company={limitUserData?.company}
-        documentTitle={limitUserData?.documentTitle}
       />
     </div>
   );

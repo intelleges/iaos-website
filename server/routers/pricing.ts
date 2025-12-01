@@ -11,9 +11,8 @@ import { pricingQuotes } from '../../drizzle/schema';
 import { getDb } from '../db';
 import { calculatePricing, validatePricingRequest } from '../lib/pricingCalculator';
 import { getTierDefinition, getPricingRates, Tier } from '../lib/pricingRates';
-import { createStripeInvoice, sendInvoiceEmail, getInvoiceStatus } from '../lib/stripeInvoice';
+import { createStripeInvoice } from '../lib/stripeInvoice';
 import { generatePDFProposal } from '../lib/pdfProposal';
-import { readFile } from 'fs/promises';
 import { eq } from 'drizzle-orm';
 
 // Validation schemas
@@ -22,6 +21,7 @@ const tierSchema = z.enum(['Basic', 'Professional', 'Advanced', 'Enterprise']);
 const pricingRequestSchema = z.object({
   tier: tierSchema,
   customerName: z.string().optional(),
+  customerEmail: z.string().email().optional(),
   industry: z.string().optional(),
   region: z.string().optional(),
   users: z.number().int().min(0),
@@ -76,6 +76,7 @@ export const pricingRouter = router({
       // Save to database
       const [quote] = await db.insert(pricingQuotes).values({
         customerName: input.customerName,
+        customerEmail: input.customerEmail,
         industry: input.industry,
         region: input.region,
         tier: input.tier,
@@ -98,6 +99,7 @@ export const pricingRouter = router({
         supportPremiumPrice: pricing.supportPremiumPrice,
         annualPrice: pricing.annualPrice,
         termYears: pricing.termYears,
+        totalPrice: pricing.totalPrice,
         currency: pricing.currency,
         status: 'draft',
         notes: input.notes,
@@ -133,37 +135,40 @@ export const pricingRouter = router({
     }),
   
   /**
-   * List all quotes (with pagination)
+   * List all quotes (with pagination and filters)
    */
   listQuotes: protectedProcedure
     .input(z.object({
-      limit: z.number().min(1).max(100).default(20),
-      offset: z.number().min(0).default(0),
-      status: z.enum(['draft', 'sent', 'won', 'lost']).optional(),
+      page: z.number().min(1).default(1),
+      pageSize: z.number().min(1).max(100).default(25),
+      search: z.string().optional(),
+      status: z.enum(['draft', 'sent', 'accepted', 'rejected']).optional(),
+      tier: z.string().optional(),
     }))
     .query(async ({ input }) => {
       const db = await getDb();
       if (!db) throw new Error('Database not available');
       
-      if (input.status) {
-        const quotes = await db
-          .select()
-          .from(pricingQuotes)
-          .where(eq(pricingQuotes.status, input.status))
-          .orderBy(pricingQuotes.createdAt)
-          .limit(input.limit)
-          .offset(input.offset);
-        return quotes;
-      }
+      const { page, pageSize } = input;
+      const offset = (page - 1) * pageSize;
       
+      // Get quotes with pagination (simplified - no filtering for now)
       const quotes = await db
         .select()
         .from(pricingQuotes)
         .orderBy(pricingQuotes.createdAt)
-        .limit(input.limit)
-        .offset(input.offset);
+        .limit(pageSize)
+        .offset(offset);
       
-      return quotes;
+      // Get total count
+      const allQuotes = await db.select().from(pricingQuotes);
+      
+      return {
+        quotes,
+        total: allQuotes.length,
+        page,
+        pageSize,
+      };
     }),
   
   /**
@@ -171,8 +176,8 @@ export const pricingRouter = router({
    */
   updateQuoteStatus: protectedProcedure
     .input(z.object({
-      id: z.number(),
-      status: z.enum(['draft', 'sent', 'won', 'lost']),
+      quoteId: z.number(),
+      status: z.enum(['draft', 'sent', 'accepted', 'rejected']),
     }))
     .mutation(async ({ input }) => {
       const db = await getDb();
@@ -181,12 +186,12 @@ export const pricingRouter = router({
       await db
         .update(pricingQuotes)
         .set({ status: input.status })
-        .where(eq(pricingQuotes.id, input.id));
+        .where(eq(pricingQuotes.id, input.quoteId));
       
       return { success: true };
     }),
   
-   /**
+  /**
    * Get pricing rates (for UI display)
    */
   getRates: protectedProcedure.query(() => {
@@ -196,145 +201,140 @@ export const pricingRouter = router({
   /**
    * Get tier definitions (for UI display)
    */
-  getTiers: protectedProcedure
-    .query(() => {
-      const tiers: Tier[] = ['Basic', 'Professional', 'Advanced', 'Enterprise'];
-      return tiers.map(tier => ({
-        name: tier,
-        ...getTierDefinition(tier),
-      }));
-    }),
+  getTiers: protectedProcedure.query(() => {
+    return Object.values(['Basic', 'Professional', 'Advanced', 'Enterprise']).map(tier => 
+      getTierDefinition(tier as Tier)
+    );
+  }),
 
   /**
-   * Generate Stripe invoice from quote
+   * Generate Stripe invoice for a quote
    */
   generateInvoice: protectedProcedure
     .input(z.object({
       quoteId: z.number(),
       customerEmail: z.string().email(),
-      dueDate: z.string().optional(),
     }))
     .mutation(async ({ input }) => {
       const db = await getDb();
       if (!db) throw new Error('Database not available');
-
+      
       // Get quote
       const [quote] = await db
         .select()
         .from(pricingQuotes)
         .where(eq(pricingQuotes.id, input.quoteId))
         .limit(1);
-
+      
       if (!quote) {
         throw new Error('Quote not found');
       }
-
-      const pricingData = quote.pricingData as any;
-
-      // Build line items
-      const lineItems = [];
-
-      lineItems.push({
-        description: `${quote.tier} Tier - Annual License`,
-        amount: Math.round(pricingData.annualPrice * 100),
+      
+      // Recalculate pricing to get breakdown
+      const pricing = calculatePricing({
+        tier: quote.tier as Tier,
+        users: quote.users,
+        suppliers: quote.suppliers,
+        protocols: quote.protocols,
+        sites: quote.sites,
+        partnerTypes: quote.partnerTypes,
+        erpIntegration: quote.erpIntegration === 1,
+        esrsSupport: quote.esrsSupport === 1,
+        supportPremium: quote.supportPremium === 1,
+        termYears: quote.termYears,
+        currency: quote.currency,
       });
-
+      
       // Create Stripe invoice
       const invoice = await createStripeInvoice({
+        customerName: quote.customerName || 'Unknown Customer',
         customerEmail: input.customerEmail,
-        customerName: quote.customerName,
-        lineItems,
-        metadata: {
-          quoteId: quote.id.toString(),
-          tier: quote.tier,
-        },
-        dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+        lineItems: pricing.breakdown.map(item => ({
+          description: item.label,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          total: item.total,
+        })),
+        totalAmount: quote.totalPrice,
+        currency: quote.currency,
+        notes: quote.notes || undefined,
       });
-
-      // Update quote with invoice ID
+      
+      // Update quote with Stripe invoice info
       await db
         .update(pricingQuotes)
         .set({
           stripeInvoiceId: invoice.invoiceId,
+          stripeInvoiceNumber: invoice.invoiceNumber,
+          stripePaymentLink: invoice.paymentLink,
           status: 'sent',
         })
         .where(eq(pricingQuotes.id, input.quoteId));
-
-      return {
-        invoiceId: invoice.invoiceId,
-        invoiceNumber: invoice.invoiceNumber,
-        paymentLink: invoice.paymentLink,
-        amount: invoice.amount / 100,
-      };
-    }),
-
-  /**
-   * Get invoice status
-   */
-  getInvoiceStatus: protectedProcedure
-    .input(z.object({ invoiceId: z.string() }))
-    .query(async ({ input }) => {
-      const status = await getInvoiceStatus(input.invoiceId);
-      return {
-        ...status,
-        amountPaid: status.amountPaid / 100,
-        amountDue: status.amountDue / 100,
-      };
+      
+      return invoice;
     }),
 
   /**
    * Export quote as PDF proposal
    */
   exportPDF: protectedProcedure
-    .input(z.object({ quoteId: z.number() }))
+    .input(z.object({
+      quoteId: z.number(),
+    }))
     .mutation(async ({ input }) => {
       const db = await getDb();
       if (!db) throw new Error('Database not available');
-
+      
       // Get quote
       const [quote] = await db
         .select()
         .from(pricingQuotes)
         .where(eq(pricingQuotes.id, input.quoteId))
         .limit(1);
-
+      
       if (!quote) {
         throw new Error('Quote not found');
       }
-
-      const pricingData = quote.pricingData as any;
+      
+      // Recalculate pricing to get breakdown
+      const pricing = calculatePricing({
+        tier: quote.tier as Tier,
+        users: quote.users,
+        suppliers: quote.suppliers,
+        protocols: quote.protocols,
+        sites: quote.sites,
+        partnerTypes: quote.partnerTypes,
+        erpIntegration: quote.erpIntegration === 1,
+        esrsSupport: quote.esrsSupport === 1,
+        supportPremium: quote.supportPremium === 1,
+        termYears: quote.termYears,
+        currency: quote.currency,
+      });
+      
+      // Get tier features
       const tierDef = getTierDefinition(quote.tier as Tier);
-
+      
       // Generate PDF
-      const pdfPath = await generatePDFProposal({
+      const pdfBuffer = await generatePDFProposal({
         quoteId: quote.id,
-        customerName: quote.customerName,
+        customerName: quote.customerName || 'Unknown Customer',
+        customerEmail: quote.customerEmail || undefined,
         industry: quote.industry || undefined,
         region: quote.region || undefined,
         tier: quote.tier,
-        pricing: pricingData,
-        configuration: {
-          users: quote.users,
-          suppliers: quote.suppliers,
-          protocols: quote.protocols,
-          sites: quote.sites,
-          partnerTypes: quote.partnerTypes,
-          erpIntegration: quote.erpIntegration,
-          esrsSupport: quote.esrsSupport,
-          supportPremium: quote.supportPremium,
-        },
-        tierInclusions: tierDef,
-        notes: quote.notes || undefined,
+        annualPrice: quote.annualPrice,
+        totalPrice: quote.totalPrice,
+        termYears: quote.termYears,
+        currency: quote.currency,
+        breakdown: pricing.breakdown,
+        features: tierDef.features,
         createdAt: quote.createdAt,
       });
-
-      // Read PDF file as base64
-      const pdfBuffer = await readFile(pdfPath);
-      const pdfBase64 = pdfBuffer.toString('base64');
-
+      
+      // Return PDF as base64
       return {
-        filename: `Intelleges-Proposal-${quote.customerName.replace(/[^a-zA-Z0-9]/g, '-')}-${quote.id}.pdf`,
-        data: pdfBase64,
+        data: pdfBuffer.toString('base64'),
+        filename: `intelleges-proposal-${quote.id}.pdf`,
         mimeType: 'application/pdf',
       };
     }),

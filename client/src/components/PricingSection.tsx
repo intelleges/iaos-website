@@ -2,7 +2,7 @@ import React from "react";
 
 const tiers = [
   {
-    name: "Basic",
+    name: "Bronze",
     tagline: "Essential Coverage",
     description: "For small teams starting their compliance journey",
     price: "$800",
@@ -24,7 +24,7 @@ const tiers = [
     ],
   },
   {
-    name: "Professional",
+    name: "Silver",
     tagline: "Professional Appearance + Editable Templates",
     description: "For teams requiring customization and brand alignment",
     price: "$1,500",
@@ -33,7 +33,7 @@ const tiers = [
     featured: false,
     badge: null,
     highlights: [
-      "Everything in Basic PLUS:",
+      "Everything in Bronze PLUS:",
       "Editable templates",
       "Custom branding (logos, headers, formatting)",
       "Basic automated reminders",
@@ -44,7 +44,7 @@ const tiers = [
     limitations: [],
   },
   {
-    name: "Advanced",
+    name: "Gold",
     tagline: "Enterprise Automation + Supplier Portal + Z-Code Integration",
     description: "For enterprises requiring automation, dashboards, and operational discipline",
     price: "$2,800",
@@ -53,7 +53,7 @@ const tiers = [
     featured: true,
     badge: "Most Popular",
     highlights: [
-      "Everything in Professional PLUS:",
+      "Everything in Silver PLUS:",
       "Supplier Portal (full dashboard)",
       "Website integration",
       "Advanced reminders + routing",
@@ -67,7 +67,7 @@ const tiers = [
     limitations: [],
   },
   {
-    name: "Enterprise",
+    name: "Platinum",
     tagline: "Strategic Co-Managed Operations + SRM + Audit Support",
     description: "For organizations needing Intelleges as a full strategic partner",
     price: "$4,000",
@@ -76,7 +76,7 @@ const tiers = [
     featured: false,
     badge: null,
     highlights: [
-      "Everything in Advanced PLUS:",
+      "Everything in Gold PLUS:",
       "Intelleges SRM (Supplier Relationship Management CRM)",
       "Call center integration",
       "Full audit support (prep + live + defense)",

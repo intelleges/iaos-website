@@ -19,16 +19,15 @@ import FOCICaseStudy from "@/pages/case-studies/FOCI";
 import COOComplianceCaseStudy from "@/pages/case-studies/COOCompliance";
 import CounterfeitPartsCaseStudy from "@/pages/case-studies/CounterfeitParts";
 import Resources from "@/pages/Resources";
-import PricingCalculator from "@/pages/admin/PricingCalculator";
 import OnePagers from "@/pages/OnePagers";
-import PersonalizedWelcome from "@/pages/PersonalizedWelcome";
 import Login from "@/pages/Login";
 import Demo from "@/pages/Demo";
-import { EmailAnalyticsPage } from "@/pages/admin/EmailAnalyticsPage";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Security from "@/pages/Security";
 import NotFound from "@/pages/not-found";
+import PricingCalculator from "@/pages/admin/PricingCalculator";
+import QuoteHistory from "@/pages/admin/QuoteHistory";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import PageTransition from "@/components/PageTransition";
@@ -55,15 +54,14 @@ function Router() {
           <Route path="/pricing" component={Pricing} />
           <Route path="/resources" component={Resources} />
           <Route path="/one-pagers" component={OnePagers} />
-          <Route path="/welcome" component={PersonalizedWelcome} />
-          <Route path="/admin/email-analytics" component={EmailAnalyticsPage} />
-          <Route path="/admin/pricing" component={PricingCalculator} />
           <Route path="/contact" component={Contact} />
           <Route path="/demo" component={Demo} />
           <Route path="/login" component={Login} />
           <Route path="/terms" component={Terms} />
           <Route path="/privacy" component={Privacy} />
           <Route path="/security" component={Security} />
+          <Route path="/admin/pricing" component={PricingCalculator} />
+          <Route path="/admin/quotes" component={QuoteHistory} />
           <Route component={NotFound} />
           </Switch>
         </PageTransition>

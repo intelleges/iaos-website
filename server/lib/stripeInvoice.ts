@@ -1,123 +1,107 @@
-import Stripe from 'stripe';
-import { ENV } from '../_core/env';
+/**
+ * Stripe invoice generation for pricing quotes
+ */
 
-const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-12-18.acacia',
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2025-11-17.clover',
 });
 
 export interface InvoiceLineItem {
   description: string;
-  amount: number; // in cents
-  quantity?: number;
+  quantity: number;
+  unitPrice: number;
+  total: number;
 }
 
-export interface CreateInvoiceParams {
-  customerEmail: string;
+export interface CreateInvoiceRequest {
   customerName: string;
+  customerEmail: string;
   lineItems: InvoiceLineItem[];
-  metadata?: Record<string, string>;
-  dueDate?: Date;
+  totalAmount: number;
+  currency: string;
+  notes?: string;
+}
+
+export interface CreateInvoiceResult {
+  invoiceId: string;
+  invoiceNumber: string;
+  paymentLink: string;
+  hostedInvoiceUrl: string;
 }
 
 /**
- * Create or retrieve a Stripe customer by email
+ * Create a Stripe invoice for a quote
  */
-async function getOrCreateCustomer(email: string, name: string): Promise<Stripe.Customer> {
-  // Search for existing customer
-  const existingCustomers = await stripe.customers.list({
-    email,
+export async function createStripeInvoice(
+  request: CreateInvoiceRequest
+): Promise<CreateInvoiceResult> {
+  // Create or retrieve customer
+  const customers = await stripe.customers.list({
+    email: request.customerEmail,
     limit: 1,
   });
 
-  if (existingCustomers.data.length > 0) {
-    return existingCustomers.data[0];
+  let customer: Stripe.Customer;
+  if (customers.data.length > 0) {
+    customer = customers.data[0];
+  } else {
+    customer = await stripe.customers.create({
+      email: request.customerEmail,
+      name: request.customerName,
+    });
   }
-
-  // Create new customer
-  return await stripe.customers.create({
-    email,
-    name,
-  });
-}
-
-/**
- * Create a Stripe invoice from pricing quote
- * Returns invoice ID and payment link
- */
-export async function createStripeInvoice(params: CreateInvoiceParams): Promise<{
-  invoiceId: string;
-  invoiceNumber: string | null;
-  paymentLink: string;
-  amount: number;
-  status: string;
-}> {
-  // Get or create customer
-  const customer = await getOrCreateCustomer(params.customerEmail, params.customerName);
 
   // Create invoice
   const invoice = await stripe.invoices.create({
     customer: customer.id,
     collection_method: 'send_invoice',
-    days_until_due: params.dueDate
-      ? Math.ceil((params.dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-      : 30,
-    metadata: params.metadata || {},
-    auto_advance: false, // Don't auto-finalize
+    days_until_due: 30,
+    description: request.notes || 'Intelleges Enterprise Compliance Platform',
+    metadata: {
+      source: 'pricing_calculator',
+      customer_name: request.customerName,
+    },
   });
 
   // Add line items to invoice
-  for (const item of params.lineItems) {
+  for (const item of request.lineItems) {
     await stripe.invoiceItems.create({
       customer: customer.id,
       invoice: invoice.id,
-      amount: item.amount,
-      currency: 'usd',
       description: item.description,
-      quantity: item.quantity || 1,
+      amount: Math.round(item.total * 100), // Convert to cents
+      currency: request.currency.toLowerCase(),
     });
   }
 
-  // Finalize the invoice
+  // Finalize invoice
   const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
+
+  // Get hosted invoice URL
+  const hostedInvoiceUrl = finalizedInvoice.hosted_invoice_url || '';
+  const paymentLink = hostedInvoiceUrl;
 
   return {
     invoiceId: finalizedInvoice.id,
-    invoiceNumber: finalizedInvoice.number,
-    paymentLink: finalizedInvoice.hosted_invoice_url || '',
-    amount: finalizedInvoice.amount_due,
-    status: finalizedInvoice.status || 'draft',
+    invoiceNumber: finalizedInvoice.number || '',
+    paymentLink,
+    hostedInvoiceUrl,
   };
 }
 
 /**
- * Get invoice status from Stripe
+ * Get invoice status
  */
-export async function getInvoiceStatus(invoiceId: string): Promise<{
-  status: string;
-  paid: boolean;
-  amountPaid: number;
-  amountDue: number;
-}> {
+export async function getInvoiceStatus(invoiceId: string): Promise<string> {
   const invoice = await stripe.invoices.retrieve(invoiceId);
-
-  return {
-    status: invoice.status || 'draft',
-    paid: invoice.paid,
-    amountPaid: invoice.amount_paid,
-    amountDue: invoice.amount_due,
-  };
+  return invoice.status || 'unknown';
 }
 
 /**
- * Send invoice email to customer
+ * Send invoice email
  */
 export async function sendInvoiceEmail(invoiceId: string): Promise<void> {
   await stripe.invoices.sendInvoice(invoiceId);
-}
-
-/**
- * Void/cancel an invoice
- */
-export async function voidInvoice(invoiceId: string): Promise<void> {
-  await stripe.invoices.voidInvoice(invoiceId);
 }

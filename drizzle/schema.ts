@@ -101,70 +101,6 @@ export type ScheduledEmail = typeof scheduledEmails.$inferSelect;
 export type InsertScheduledEmail = typeof scheduledEmails.$inferInsert;
 
 /**
- * Lead qualification attempts table for tracking Calendly access gating
- */
-export const leadQualificationAttempts = mysqlTable("leadQualificationAttempts", {
-  id: int("id").autoincrement().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 320 }).notNull(),
-  company: varchar("company", { length: 255 }).notNull(),
-  title: varchar("title", { length: 255 }),
-  website: varchar("website", { length: 512 }),
-  country: varchar("country", { length: 128 }),
-  industry: varchar("industry", { length: 255 }),
-  employeeCount: int("employeeCount"),
-  revenueBand: varchar("revenueBand", { length: 128 }),
-  score: int("score").notNull(),
-  qualified: int("qualified").notNull(), // 1 = qualified, 0 = not qualified
-  reasons: text("reasons").notNull(), // JSON-encoded array of strings
-  rawEnrichment: text("rawEnrichment"), // JSON blob of enrichment response (optional)
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type LeadQualificationAttempt = typeof leadQualificationAttempts.$inferSelect;
-export type InsertLeadQualificationAttempt = typeof leadQualificationAttempts.$inferInsert;
-/**
- * Email events table for tracking SendGrid webhook events
- */
-export const emailEvents = mysqlTable("emailEvents", {
-  id: int("id").autoincrement().primaryKey(),
-  email: varchar("email", { length: 320 }).notNull(),
-  eventType: varchar("eventType", { length: 50 }).notNull(), // open, bounce, click, delivered, etc.
-  reason: text("reason"),
-  sgEventId: varchar("sgEventId", { length: 255 }),
-  sgMessageId: varchar("sgMessageId", { length: 255 }),
-  timestamp: timestamp("timestamp").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type EmailEvent = typeof emailEvents.$inferSelect;
-export type InsertEmailEvent = typeof emailEvents.$inferInsert;
-
-/**
- * Email status table for aggregated email engagement metrics
- */
-export const emailStatus = mysqlTable("emailStatus", {
-  id: int("id").autoincrement().primaryKey(),
-  email: varchar("email", { length: 320 }).notNull().unique(),
-  lastEvent: varchar("lastEvent", { length: 50 }),
-  lastEventAt: timestamp("lastEventAt"),
-  bounce: int("bounce").default(0).notNull(),
-  spam: int("spam").default(0).notNull(),
-  delivered: int("delivered").default(0).notNull(),
-  opened: int("opened").default(0).notNull(),
-  clicked: int("clicked").default(0).notNull(),
-  unsubscribed: int("unsubscribed").default(0).notNull(),
-  // Suppression fields for "Do Not Email" system
-  isSuppressed: int("isSuppressed").default(0).notNull(), // 0 = not suppressed, 1 = suppressed
-  suppressionReason: varchar("suppressionReason", { length: 100 }), // 'bounce', 'spam', 'unsubscribe', 'manual'
-  suppressedAt: timestamp("suppressedAt"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type EmailStatus = typeof emailStatus.$inferSelect;
-export type InsertEmailStatus = typeof emailStatus.$inferInsert;
-
-/**
  * Pricing quotes table for internal sales pricing calculator
  * Stores configuration-based pricing quotes for enterprise customers
  */
@@ -173,6 +109,7 @@ export const pricingQuotes = mysqlTable("pricingQuotes", {
   
   // Customer information
   customerName: varchar("customerName", { length: 255 }),
+  customerEmail: varchar("customerEmail", { length: 320 }),
   industry: varchar("industry", { length: 255 }),
   region: varchar("region", { length: 255 }),
   
@@ -203,20 +140,17 @@ export const pricingQuotes = mysqlTable("pricingQuotes", {
   
   // Contract terms
   termYears: int("termYears").default(1).notNull(),
+  totalPrice: int("totalPrice").notNull(),
   currency: varchar("currency", { length: 10 }).default("USD").notNull(),
   
-  // Quote status
-  status: varchar("status", { length: 50 }).default("draft").notNull(), // draft, sent, won, lost
-  
-  // Stripe integration
-  stripeInvoiceId: varchar("stripeInvoiceId", { length: 255 }),
-  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
-  
-  // CRM integration (optional)
-  crmOpportunityId: varchar("crmOpportunityId", { length: 255 }),
-  
-  // Metadata
+  // Status and metadata
+  status: varchar("status", { length: 50 }).default("draft").notNull(), // draft, sent, accepted, rejected
   notes: text("notes"),
+  stripeInvoiceId: varchar("stripeInvoiceId", { length: 255 }),
+  stripeInvoiceNumber: varchar("stripeInvoiceNumber", { length: 255 }),
+  stripePaymentLink: text("stripePaymentLink"),
+  
+  // Audit fields
   createdBy: int("createdBy"), // user ID who created the quote
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

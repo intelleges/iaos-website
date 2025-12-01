@@ -1,101 +1,121 @@
 /**
- * Pricing Rate Table and Tier Definitions
- * 
- * This file contains the authoritative pricing model for Intelleges.
- * Based on configuration-based pricing: users, suppliers, sites, protocols, integrations.
- * 
- * Internal use only - not exposed to public.
+ * Pricing rates and tier definitions for the Intelleges pricing calculator
  */
 
 export type Tier = 'Basic' | 'Professional' | 'Advanced' | 'Enterprise';
 
 export interface TierDefinition {
+  name: Tier;
   basePrice: number;
   includedUsers: number;
   includedSuppliers: number;
   includedProtocols: number;
   includedSites: number;
-  allowsERP: boolean;
-  allowsESRS: boolean;
-  supportLevel: string;
+  includedPartnerTypes: number;
+  features: string[];
+  allowsIntegrations: boolean;
 }
 
 export interface PricingRates {
-  user: number;
-  supplier: number;
-  protocol: number;
-  site: number;
-  partnerType: number;
-  erpIntegration: number;
-  esrsSupport: number;
-  supportPremium: number;
+  // Per-unit pricing (annual)
+  userPrice: number;
+  supplierPrice: number;
+  protocolPrice: number;
+  sitePrice: number;
+  partnerTypePrice: number;
+  
+  // Integration pricing (annual)
+  erpIntegrationPrice: number;
+  esrsSupportPrice: number;
+  supportPremiumPrice: number;
 }
 
 /**
- * Tier Definitions
- * 
- * Basic: $25,000 - Small teams, single-site, email support
- * Professional: $60,000 - Regional orgs, 3 sites, email support
- * Advanced: $100,000 - Complex regulated orgs, 10 sites, phone+email, ERP+eSRS allowed
- * Enterprise: $150,000+ - Global enterprises, unlimited everything, dedicated TAM
+ * Tier definitions with base prices and included quantities
  */
 export const TIER_DEFINITIONS: Record<Tier, TierDefinition> = {
   Basic: {
+    name: 'Basic',
     basePrice: 25000,
     includedUsers: 10,
-    includedSuppliers: 500,
+    includedSuppliers: 100,
     includedProtocols: 1,
     includedSites: 1,
-    allowsERP: false,
-    allowsESRS: false,
-    supportLevel: 'Email only',
+    includedPartnerTypes: 0,
+    features: [
+      'Core compliance protocols',
+      'Basic supplier management',
+      'Standard support',
+      'Email notifications',
+    ],
+    allowsIntegrations: false,
   },
   Professional: {
+    name: 'Professional',
     basePrice: 60000,
     includedUsers: 25,
-    includedSuppliers: 1000,
-    includedProtocols: 1,
-    includedSites: 3,
-    allowsERP: false,
-    allowsESRS: false,
-    supportLevel: 'Email only',
+    includedSuppliers: 500,
+    includedProtocols: 3,
+    includedSites: 5,
+    includedPartnerTypes: 2,
+    features: [
+      'All Basic features',
+      'Advanced protocols',
+      'Multi-site support',
+      'Priority support',
+      'Custom branding',
+    ],
+    allowsIntegrations: false,
   },
   Advanced: {
+    name: 'Advanced',
     basePrice: 100000,
     includedUsers: 50,
     includedSuppliers: 1500,
-    includedProtocols: 1,
+    includedProtocols: 5,
     includedSites: 10,
-    allowsERP: true,
-    allowsESRS: true,
-    supportLevel: 'Phone + Email',
+    includedPartnerTypes: 5,
+    features: [
+      'All Professional features',
+      'ERP integration available',
+      'eSRS support available',
+      'Advanced analytics',
+      'Dedicated account manager',
+    ],
+    allowsIntegrations: true,
   },
   Enterprise: {
+    name: 'Enterprise',
     basePrice: 150000,
-    includedUsers: Number.MAX_SAFE_INTEGER,
-    includedSuppliers: Number.MAX_SAFE_INTEGER,
-    includedProtocols: Number.MAX_SAFE_INTEGER,
-    includedSites: Number.MAX_SAFE_INTEGER,
-    allowsERP: true,
-    allowsESRS: true,
-    supportLevel: 'Dedicated TAM',
+    includedUsers: 100,
+    includedSuppliers: 5000,
+    includedProtocols: 10,
+    includedSites: 25,
+    includedPartnerTypes: 10,
+    features: [
+      'All Advanced features',
+      'Unlimited protocols',
+      'White-label option',
+      'Custom integrations',
+      '24/7 premium support',
+      'SLA guarantees',
+    ],
+    allowsIntegrations: true,
   },
 };
 
 /**
- * Pricing Rates (per unit, annual)
- * 
- * These rates apply to quantities beyond tier inclusions
+ * Per-unit pricing rates (annual)
  */
 export const PRICING_RATES: PricingRates = {
-  user: 150,              // $150 per extra user per year
-  supplier: 40,           // $40 per extra supplier per year
-  protocol: 10000,        // $10,000 per additional protocol
-  site: 5000,             // $5,000 per additional site
-  partnerType: 2500,      // $2,500 per partner type
-  erpIntegration: 25000,  // $25,000 for ERP integration (Advanced/Enterprise only)
-  esrsSupport: 10000,     // $10,000 for eSRS support (Advanced/Enterprise only)
-  supportPremium: 10000,  // $10,000 for weekly leadership support
+  userPrice: 500,
+  supplierPrice: 10,
+  protocolPrice: 5000,
+  sitePrice: 2000,
+  partnerTypePrice: 1000,
+  erpIntegrationPrice: 15000,
+  esrsSupportPrice: 10000,
+  supportPremiumPrice: 12000,
 };
 
 /**
@@ -106,22 +126,8 @@ export function getTierDefinition(tier: Tier): TierDefinition {
 }
 
 /**
- * Get all pricing rates
+ * Get pricing rates
  */
 export function getPricingRates(): PricingRates {
   return PRICING_RATES;
-}
-
-/**
- * Validate if a tier allows a specific integration
- */
-export function tierAllowsIntegration(tier: Tier, integration: 'ERP' | 'eSRS'): boolean {
-  const tierDef = getTierDefinition(tier);
-  if (integration === 'ERP') {
-    return tierDef.allowsERP;
-  }
-  if (integration === 'eSRS') {
-    return tierDef.allowsESRS;
-  }
-  return false;
 }

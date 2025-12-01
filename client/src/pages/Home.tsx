@@ -11,9 +11,7 @@ import { ProtocolCard } from "@/components/ProtocolCard";
 import { protocolCaseStudies } from "@/config/protocolCaseStudies";
 import type { ProtocolCaseStudy } from "@/types/protocol";
 
-import { useState } from 'react';
-import FlowCard from '@/components/FlowCard';
-import { Inbox, Shield, Award } from 'lucide-react';
+import { useState } from "react";
 
 export default function Home() {
 
@@ -97,39 +95,24 @@ export default function Home() {
         <div className="container">
           <div className="max-w-4xl mx-auto space-y-12">
             {/* Visual Flow Diagram */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4">
-              <FlowCard
-                label="Collect"
-                subtitle="Automated Data Gathering"
-                icon={Inbox}
-                content={{
-                  intro: "Stop chasing suppliers for documents.",
-                  description: "Our platform automatically collects certificates, insurance records, compliance questionnaires, and regulatory evidence from your entire supplier network — without your team lifting a finger.",
-                  result: "Result: 80% reduction in manual data collection effort."
-                }}
-              />
-              <div className="hidden md:block text-4xl text-muted-foreground transition-opacity duration-300 hover:opacity-100 opacity-50 animate-pulse">→</div>
-              <FlowCard
-                label="Validate"
-                subtitle="Real-Time Verification"
-                icon={Shield}
-                content={{
-                  intro: "Every document checked. Every requirement mapped.",
-                  description: "Submissions are validated instantly against FAR, DFARS, NIST 800-171, ISO, CMMC, and 80+ regulatory frameworks. Non-compliant items are flagged before they become audit findings.",
-                  result: "Result: Zero surprises. Zero manual cross-checking."
-                }}
-              />
-              <div className="hidden md:block text-4xl text-muted-foreground transition-opacity duration-300 hover:opacity-100 opacity-50 animate-pulse">→</div>
-              <FlowCard
-                label="Comply"
-                subtitle="Audit-Ready, Always"
-                icon={Award}
-                content={{
-                  intro: "Compliance isn't a project. It's a state.",
-                  description: "Continuous monitoring ensures your supplier network stays compliant 24/7. When auditors arrive, generate complete evidence packages in seconds — not weeks.",
-                  result: "Result: Audit confidence. Every time."
-                }}
-              />
+            <div className="flex items-center justify-center gap-4 md:gap-8">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
+                  <span className="text-2xl md:text-3xl font-light">Collect</span>
+                </div>
+              </div>
+              <div className="text-4xl text-muted-foreground">→</div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
+                  <span className="text-2xl md:text-3xl font-light">Validate</span>
+                </div>
+              </div>
+              <div className="text-4xl text-muted-foreground">→</div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg border-2 border-primary/20 bg-primary/5 flex items-center justify-center">
+                  <span className="text-2xl md:text-3xl font-light">Decide</span>
+                </div>
+              </div>
             </div>
 
             {/* The Intelleges Method */}
@@ -139,21 +122,21 @@ export default function Home() {
               </h2>
               
               <div className="grid md:grid-cols-3 gap-8 text-left">
-                <div className="space-y-3 p-6 rounded-lg border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/20 hover:bg-primary/5 cursor-pointer">
+                <div className="space-y-3">
                   <h3 className="text-xl font-normal">Order enables excellence</h3>
                   <p className="text-base text-muted-foreground font-light leading-relaxed">
                     Structured workflows prevent errors before they happen.
                   </p>
                 </div>
                 
-                <div className="space-y-3 p-6 rounded-lg border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/20 hover:bg-primary/5 cursor-pointer">
+                <div className="space-y-3">
                   <h3 className="text-xl font-normal">Form enforces discipline</h3>
                   <p className="text-base text-muted-foreground font-light leading-relaxed">
                     Nothing is missed, skipped, or forgotten.
                   </p>
                 </div>
                 
-                <div className="space-y-3 p-6 rounded-lg border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-primary/20 hover:bg-primary/5 cursor-pointer">
+                <div className="space-y-3">
                   <h3 className="text-xl font-normal">Validation at the point of entry</h3>
                   <p className="text-base text-muted-foreground font-light leading-relaxed">
                     Clean data, no rework, no audit risk.
@@ -309,7 +292,7 @@ export default function Home() {
                 },
                 {
                   step: "Step 3",
-                  title: "Add Suppliers, Buyers & Approvers",
+                  title: "Add Suppliers, Buyers & Reviewers",
                   description: "Upload suppliers via spreadsheet, ERP sync, or manual entry. Assign internal compliance personnel in minutes."
                 },
                 {
@@ -388,7 +371,6 @@ export default function Home() {
           onClose={() => setIsModalOpen(false)}
           downloadUrl={`/case-studies/${selectedProtocol.s3Key}`}
           resourceTitle={selectedProtocol.title}
-          documentType="protocol"
         />
       )}
 
@@ -399,7 +381,6 @@ export default function Home() {
           onClose={() => setIsCapabilityModalOpen(false)}
           downloadUrl={selectedCapability.url}
           resourceTitle={selectedCapability.title}
-          documentType="capability"
         />
       )}
 
@@ -410,7 +391,6 @@ export default function Home() {
           onClose={() => setIsWhitepaperEmailModalOpen(false)}
           downloadUrl={selectedWhitepaper.url}
           resourceTitle={selectedWhitepaper.title}
-          documentType="whitepaper"
         />
       )}
 

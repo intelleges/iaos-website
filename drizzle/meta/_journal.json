@@ -26,29 +26,8 @@
     {
       "idx": 3,
       "version": "5",
-      "when": 1764548415324,
-      "tag": "0003_red_tiger_shark",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1764549975893,
-      "tag": "0004_glamorous_sugar_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1764550936950,
-      "tag": "0005_mighty_grey_gargoyle",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1764561660219,
-      "tag": "0006_rare_iron_patriot",
+      "when": 1764563163167,
+      "tag": "0003_curved_metal_master",
       "breakpoints": true
     }
   ]

@@ -1,9 +1,0 @@
-{
-  "query": "SELECT * FROM downloads WHERE email = 'qa.gate2.test@intelleges-test.com';",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3DoThoLFV6pZU86.ae1b24b81fef --database DYeT6pudYnkTsfmPDdt3og --execute SELECT * FROM downloads WHERE email = 'qa.gate2.test@intelleges-test.com';",
-  "rows": [],
-  "messages": [],
-  "stdout": "",
-  "stderr": "",
-  "execution_time_ms": 57
-}

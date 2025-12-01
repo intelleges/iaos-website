@@ -2,16 +2,12 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter.js";
 import { downloadsRouter } from "./routers/downloads.js";
-import { qualificationRouter } from "./routers/qualification.js";
-import { emailAnalyticsRouter } from "./routers/emailAnalytics.js";
-import { emailSuppressionRouter } from "./routers/emailSuppression.js";
 import { pricingRouter } from "./routers/pricing.js";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
-import { leads, downloads, documentDownloads, scheduledEmails, emailStatus, pricingQuotes, leadQualificationAttempts, emailEvents } from "../drizzle/schema";
+import { leads, downloads, documentDownloads, scheduledEmails } from "../drizzle/schema";
 import sgMail from "@sendgrid/mail";
-import { syncLeadToGoogleSheets } from "./lib/googleSheets";
 
 // Initialize SendGrid
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || "";
@@ -26,9 +22,6 @@ const EMAIL_DELAY_HOURS = 2;
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
-  qualification: qualificationRouter,
-  emailAnalytics: emailAnalyticsRouter,
-  emailSuppression: emailSuppressionRouter,
   pricing: pricingRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -41,8 +34,8 @@ export const appRouter = router({
     }),
   }),
 
-  // Download protection endpoints (rate limiting for case studies)
-  downloadProtection: router({
+  // Download protection endpoints
+  downloads: router({
     // Validate if user can download (check rate limits)
     validate: publicProcedure
       .input(z.object({
@@ -50,8 +43,7 @@ export const appRouter = router({
         resource: z.string().min(1),
       }))
       .query(async ({ input, ctx }) => {
-        const forwarded = ctx.req.headers['x-forwarded-for'];
-        const clientIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : ctx.req.socket.remoteAddress || 'unknown';
+        const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const db = await getDb();
         if (!db) {
@@ -113,8 +105,7 @@ export const appRouter = router({
         resource: z.string().min(1),
       }))
       .mutation(async ({ input, ctx }) => {
-        const forwarded = ctx.req.headers['x-forwarded-for'];
-        const clientIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : ctx.req.socket.remoteAddress || 'unknown';
+        const clientIp = ctx.req.headers['x-forwarded-for'] as string || ctx.req.socket.remoteAddress || 'unknown';
         const db = await getDb();
         if (!db) {
           throw new Error('Database not available');
@@ -194,8 +185,7 @@ export const appRouter = router({
     recordDownload: publicProcedure
       .input(z.object({
         email: z.string().email(),
-        firstName: z.string().min(1),
-        lastName: z.string().min(1),
+        name: z.string().min(1),
         company: z.string().optional(),
         role: z.string().optional(),
         documentTitle: z.string().min(1),
@@ -223,58 +213,30 @@ export const appRouter = router({
         }
 
         // Record download
-        const fullName = `${input.firstName} ${input.lastName}`;
-        const downloadDate = new Date();
-        console.log(`[Download] ${input.documentTitle} → ${input.documentUrl} for ${normalizedEmail}`);
         await db.insert(documentDownloads).values({
           email: normalizedEmail,
-          name: fullName,
+          name: input.name,
           company: input.company || null,
           role: input.role || null,
           documentTitle: input.documentTitle,
           documentUrl: input.documentUrl,
           documentType: input.documentType,
-          downloadedAt: downloadDate,
+          downloadedAt: new Date(),
           followUpEmailSent: 0,
           followUpEmailSentAt: null,
         });
 
-        // Sync to Google Sheets (non-blocking)
-        syncLeadToGoogleSheets({
-          email: normalizedEmail,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          company: input.company || undefined,
-          phone: input.phone || undefined,
-          documentTitle: input.documentTitle,
-          documentType: input.documentType,
-          downloadDate,
-          downloadCount: currentCount + 1,
-        }).catch(err => {
-          console.error('[Google Sheets] Sync failed (non-critical):', err);
-        });
+        // Schedule follow-up email
+        const scheduledFor = new Date();
+        scheduledFor.setHours(scheduledFor.getHours() + EMAIL_DELAY_HOURS);
 
-        // Check if email is suppressed before scheduling follow-up
-        const [suppressionStatus] = await db
-          .select()
-          .from(emailStatus)
-          .where(eq(emailStatus.email, normalizedEmail))
-          .limit(1);
+        const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(input.name)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
+        
+        const htmlContent = generateFollowUpEmail(input.name, input.documentTitle, calendlyUrl);
 
-        const isSuppressed = suppressionStatus && suppressionStatus.isSuppressed === 1;
-
-        if (!isSuppressed) {
-          // Schedule follow-up email only if not suppressed
-          const scheduledFor = new Date();
-          scheduledFor.setHours(scheduledFor.getHours() + EMAIL_DELAY_HOURS);
-
-          const calendlyUrl = `${process.env.CALENDLY_URL || 'https://calendly.com/intelleges/demo'}?email=${encodeURIComponent(normalizedEmail)}&name=${encodeURIComponent(fullName)}&a1=${encodeURIComponent(input.documentTitle)}&a2=${encodeURIComponent(input.documentType)}`;
-          
-          const htmlContent = generateFollowUpEmail(fullName, input.documentTitle, calendlyUrl, normalizedEmail, input.documentType);
-
-          await db.insert(scheduledEmails).values({
+        await db.insert(scheduledEmails).values({
           recipientEmail: normalizedEmail,
-          recipientName: fullName,
+          recipientName: input.name,
           emailType: 'document_followup',
           subject: `Thank you for downloading ${input.documentTitle}`,
           htmlContent,
@@ -286,12 +248,7 @@ export const appRouter = router({
           retryCount: 0,
           metadata: JSON.stringify({ documentTitle: input.documentTitle, documentType: input.documentType }),
           createdAt: new Date(),
-          });
-
-          console.log(`[Email Scheduling] Follow-up email scheduled for ${normalizedEmail}`);
-        } else {
-          console.log(`[Email Scheduling] Skipping follow-up email for suppressed address: ${normalizedEmail} (reason: ${suppressionStatus.suppressionReason})`);
-        }
+        });
 
         return {
           success: true,
@@ -372,20 +329,7 @@ export const appRouter = router({
   }),
 });
 
-function generateFollowUpEmail(userName: string, documentTitle: string, calendlyUrl: string, email?: string, documentType?: string): string {
-  // Build personalized welcome page URL
-  const baseUrl = process.env.FRONTEND_URL || 'https://intelleges.com';
-  const welcomeParams = new URLSearchParams();
-  if (email) welcomeParams.append('email', email);
-  const nameParts = userName.split(' ');
-  if (nameParts.length > 0) welcomeParams.append('firstName', nameParts[0]);
-  if (nameParts.length > 1) welcomeParams.append('lastName', nameParts.slice(1).join(' '));
-  welcomeParams.append('documentTitle', documentTitle);
-  if (documentType) welcomeParams.append('documentType', documentType);
-  welcomeParams.append('utm_source', 'email');
-  welcomeParams.append('utm_medium', 'followup');
-  welcomeParams.append('utm_campaign', 'document_download');
-  const welcomeUrl = `${baseUrl}/welcome?${welcomeParams.toString()}`;
+function generateFollowUpEmail(userName: string, documentTitle: string, calendlyUrl: string): string {
   return `
 <!DOCTYPE html>
 <html>
@@ -406,16 +350,13 @@ function generateFollowUpEmail(userName: string, documentTitle: string, calendly
     This topic is of great interest to our leadership team. Our subject matter experts have helped dozens of enterprises streamline their compliance processes, reduce supplier management overhead, and make confident, risk-aware decisions.
   </p>
   <p style="font-size: 16px; margin-bottom: 30px;">
-    <strong>We've curated additional resources specifically for you based on this download.</strong>
+    <strong>Would you like to discuss how Intelleges can help your organization?</strong>
   </p>
   <div style="text-align: center; margin: 40px 0;">
-    <a href="${welcomeUrl}" style="display: inline-block; background-color: #0A3A67; color: white; padding: 14px 32px; text-decoration: none; border-radius: 25px; font-weight: 500; font-size: 16px;">
-      View Your Personalized Resources
+    <a href="${calendlyUrl}" style="display: inline-block; background-color: #0A3A67; color: white; padding: 14px 32px; text-decoration: none; border-radius: 25px; font-weight: 500; font-size: 16px;">
+      Schedule a Meeting
     </a>
   </div>
-  <p style="font-size: 14px; color: #666; text-align: center; margin-top: 20px;">
-    Or <a href="${calendlyUrl}" style="color: #0A3A67; text-decoration: underline;">schedule a meeting directly</a>
-  </p>
   <p style="font-size: 14px; color: #666; margin-top: 40px;">
     Our team is ready to show you how Intelleges makes data and document collection simple—easy, a no-brainer.
   </p>
