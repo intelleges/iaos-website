@@ -929,3 +929,32 @@
 - [x] Test search and filtering functionality
 - [x] Test timeline drilldown for sample emails
 - [x] Verify pagination works correctly
+
+## SendGrid Webhook Integration
+
+### Phase 1: Webhook Endpoint Setup
+- [x] Create server/webhooks/sendgrid.ts webhook handler
+- [x] Register POST /api/webhooks/sendgrid route in server/_core/index.ts
+- [x] Parse JSON array of SendGrid events from request body
+- [x] Add error handling for malformed payloads
+
+### Phase 2: Event Processing Logic
+- [x] Extract event data (email, eventType, timestamp, reason, sg_event_id, sg_message_id)
+- [x] Insert events into emailEvents table
+- [x] Update emailStatus table with aggregated counters (delivered, opened, clicked, bounce, spam, unsubscribed)
+- [x] Handle upsert logic for emailStatus (create if not exists, update if exists)
+- [x] Add deduplication logic using sg_event_id
+
+### Phase 3: Security & Validation
+- [x] Implement SendGrid signature verification using webhook verification key
+- [x] Add SENDGRID_WEBHOOK_VERIFICATION_KEY to environment variables (documented)
+- [x] Validate event schema before processing
+- [ ] Add rate limiting to prevent abuse (optional enhancement)
+- [x] Log all webhook requests for debugging
+
+### Phase 4: SendGrid Configuration
+- [x] Document webhook URL format (https://yourdomain.com/api/webhooks/sendgrid) - SENDGRID_WEBHOOK_SETUP.md
+- [x] List required event types to enable (delivered, open, click, bounce, dropped, spam_report, unsubscribe)
+- [x] Provide instructions for adding webhook in SendGrid dashboard
+- [x] Create test script to simulate webhook events (test-webhook.mjs)
+- [x] Verify events appear in email analytics dashboard
