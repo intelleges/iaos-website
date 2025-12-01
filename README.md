@@ -3,6 +3,7 @@
 Enterprise compliance management system marketing website with integrated pricing calculator and customer portal.
 
 ![Playwright Tests](https://github.com/YOUR_ORG/intelleges-marketing-site/actions/workflows/playwright-tests.yml/badge.svg)
+![Type Check](https://github.com/YOUR_ORG/intelleges-marketing-site/actions/workflows/type-check.yml/badge.svg)
 
 ---
 
