@@ -144,11 +144,16 @@ export const pricingQuotes = mysqlTable("pricingQuotes", {
   currency: varchar("currency", { length: 10 }).default("USD").notNull(),
   
   // Status and metadata
-  status: varchar("status", { length: 50 }).default("draft").notNull(), // draft, sent, accepted, rejected
+  status: varchar("status", { length: 50 }).default("draft").notNull(), // draft, sent, accepted, rejected, expired
   notes: text("notes"),
   stripeInvoiceId: varchar("stripeInvoiceId", { length: 255 }),
   stripeInvoiceNumber: varchar("stripeInvoiceNumber", { length: 255 }),
   stripePaymentLink: text("stripePaymentLink"),
+  
+  // Expiration tracking
+  expiresAt: timestamp("expiresAt"), // 30 days from creation by default
+  expirationReminderSent: int("expirationReminderSent").default(0).notNull(), // 0 = not sent, 1 = sent
+  expirationEmailSent: int("expirationEmailSent").default(0).notNull(), // 0 = not sent, 1 = sent
   
   // Audit fields
   createdBy: int("createdBy"), // user ID who created the quote

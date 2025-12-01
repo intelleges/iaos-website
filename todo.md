@@ -730,3 +730,36 @@
 - [x] Update updateQuoteStatus endpoint to trigger email on 'sent' status
 - [x] Add email sending confirmation/error handling
 - [x] Test complete email automation workflow
+
+
+## Quote Expiration Tracking System
+
+### Database Schema Updates
+- [x] Add expiresAt field to pricingQuotes table
+- [x] Add isExpired computed field/status
+- [x] Run database migration
+
+### Backend Logic
+- [x] Create expiration calculation logic (30 days from creation)
+- [x] Create background job to check expired quotes
+- [x] Create email reminder system (7 days before expiration, on expiration day)
+- [x] Add API endpoint to manually extend quote expiration
+- [x] Update listQuotes to include expiration status
+
+### Email Templates
+- [x] Create "Quote Expiring Soon" email template (7-day warning)
+- [x] Create "Quote Expired" email template
+- [x] Add expiration date to quote delivery email
+
+### Frontend Updates
+- [x] Display expiration date in pricing calculator
+- [x] Add expiration badge/indicator in quote history
+- [x] Add "Extend Expiration" button for expired quotes
+- [x] Add expiration filter in quote history (Active/Expiring Soon/Expired)
+- [x] Show days remaining prominently
+
+### Testing
+- [x] Test expiration calculation
+- [ ] Test reminder emails
+- [ ] Test UI expiration indicators
+- [ ] Test quote extension functionality

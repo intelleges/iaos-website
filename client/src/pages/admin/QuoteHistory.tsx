@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'wouter';
-import { ArrowLeft, Search, Filter, Eye } from 'lucide-react';
+import { ArrowLeft, Search, Filter, Eye, Clock, AlertCircle, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import SEO from '@/components/seo';
 import { toast } from 'sonner';
 
@@ -50,6 +50,26 @@ export default function QuoteHistory() {
     },
     onError: (error) => {
       toast.error(error.message || 'Failed to update status');
+    },
+  });
+
+  const extendExpirationMutation = trpc.pricing.extendExpiration.useMutation({
+    onSuccess: () => {
+      quotesQuery.refetch();
+      toast.success('Quote expiration extended by 30 days');
+    },
+    onError: () => {
+      toast.error('Failed to extend expiration');
+    },
+  });
+
+  const checkExpiredQuotesMutation = trpc.pricing.checkExpiredQuotes.useMutation({
+    onSuccess: (result) => {
+      quotesQuery.refetch();
+      toast.success(`Sent ${result.remindersSent} reminders and ${result.expirationEmailsSent} expiration emails`);
+    },
+    onError: () => {
+      toast.error('Failed to check expired quotes');
     },
   });
 
@@ -100,6 +120,47 @@ export default function QuoteHistory() {
     }
   };
 
+  const getExpirationStatus = (expiresAt: Date | string | null) => {
+    if (!expiresAt) return { status: 'none', label: 'No expiration', color: 'gray' };
+    
+    const now = new Date();
+    const expiration = new Date(expiresAt);
+    const daysRemaining = Math.ceil((expiration.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (daysRemaining < 0) {
+      return { status: 'expired', label: 'Expired', color: 'red', days: 0 };
+    } else if (daysRemaining <= 7) {
+      return { status: 'expiring_soon', label: `${daysRemaining}d left`, color: 'amber', days: daysRemaining };
+    } else {
+      return { status: 'active', label: `${daysRemaining}d left`, color: 'green', days: daysRemaining };
+    }
+  };
+
+  const getExpirationBadge = (expiresAt: Date | string | null) => {
+    const expStatus = getExpirationStatus(expiresAt);
+    
+    if (expStatus.status === 'none') return null;
+    
+    const icons = {
+      expired: <XCircle className="w-3 h-3" />,
+      expiring_soon: <AlertCircle className="w-3 h-3" />,
+      active: <CheckCircle className="w-3 h-3" />,
+    };
+
+    const colors = {
+      expired: 'bg-red-100 text-red-800 border-red-200',
+      expiring_soon: 'bg-amber-100 text-amber-800 border-amber-200',
+      active: 'bg-green-100 text-green-800 border-green-200',
+    };
+
+    return (
+      <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${colors[expStatus.status as keyof typeof colors]}`}>
+        {icons[expStatus.status as keyof typeof icons]}
+        {expStatus.label}
+      </div>
+    );
+  };
+
   const handleStatusChange = async (quoteId: number, newStatus: QuoteStatus) => {
     await updateStatusMutation.mutateAsync({
       quoteId,
@@ -124,12 +185,24 @@ export default function QuoteHistory() {
                 Back to Calculator
               </Button>
             </Link>
-            <h1 className="text-4xl font-bold text-[#111111] mb-2">
-              Quote History
-            </h1>
-            <p className="text-[#666666]">
-              View and manage all pricing quotes. Total quotes: {quotesQuery.data?.total || 0}
-            </p>
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="text-4xl font-bold text-[#111111] mb-2">
+                  Quote History
+                </h1>
+                <p className="text-[#666666]">
+                  View and manage all pricing quotes. Total quotes: {quotesQuery.data?.total || 0}
+                </p>
+              </div>
+              <Button
+                onClick={() => checkExpiredQuotesMutation.mutate()}
+                disabled={checkExpiredQuotesMutation.isPending}
+                variant="outline"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${checkExpiredQuotesMutation.isPending ? 'animate-spin' : ''}`} />
+                Check Expirations
+              </Button>
+            </div>
           </div>
 
           {/* Filters */}
@@ -233,6 +306,7 @@ export default function QuoteHistory() {
                         <TableHead>Tier</TableHead>
                         <TableHead>Total</TableHead>
                         <TableHead>Status</TableHead>
+                        <TableHead>Expiration</TableHead>
                         <TableHead>Created</TableHead>
                         <TableHead>Actions</TableHead>
                       </TableRow>
@@ -288,6 +362,16 @@ export default function QuoteHistory() {
                               </SelectContent>
                             </Select>
                           </TableCell>
+                          <TableCell>
+                            <div className="flex flex-col gap-1">
+                              {getExpirationBadge(quote.expiresAt)}
+                              {quote.expiresAt && (
+                                <div className="text-xs text-gray-500">
+                                  {formatDate(quote.expiresAt)}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
                           <TableCell className="text-sm text-[#666666]">
                             {formatDate(quote.createdAt)}
                           </TableCell>
@@ -298,6 +382,18 @@ export default function QuoteHistory() {
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </Link>
+                              {getExpirationStatus(quote.expiresAt).status === 'expired' && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => extendExpirationMutation.mutate({ id: quote.id })}
+                                  disabled={extendExpirationMutation.isPending}
+                                  title="Extend expiration by 30 days"
+                                >
+                                  <Clock className="w-3 h-3 mr-1" />
+                                  Extend
+                                </Button>
+                              )}
                             </div>
                           </TableCell>
                         </TableRow>

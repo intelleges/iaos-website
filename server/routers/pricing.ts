@@ -14,6 +14,7 @@ import { getTierDefinition, getPricingRates, Tier } from '../lib/pricingRates';
 import { createStripeInvoice } from '../lib/stripeInvoice';
 import { generatePDFProposal } from '../lib/pdfProposal';
 import { generateQuoteEmail, generateQuoteEmailText } from '../lib/quoteEmailTemplate';
+import { calculateExpirationDate } from '../lib/quoteExpiration';
 import { eq } from 'drizzle-orm';
 import sgMail from '@sendgrid/mail';
 
@@ -81,6 +82,9 @@ export const pricingRouter = router({
       // Calculate pricing
       const pricing = calculatePricing(input);
       
+      // Calculate expiration date (30 days from now)
+      const expiresAt = calculateExpirationDate(new Date());
+      
       // Save to database
       const [quote] = await db.insert(pricingQuotes).values({
         customerName: input.customerName,
@@ -111,6 +115,9 @@ export const pricingRouter = router({
         currency: pricing.currency,
         status: 'draft',
         notes: input.notes,
+        expiresAt: expiresAt,
+        expirationReminderSent: 0,
+        expirationEmailSent: 0,
         createdBy: ctx.user.id,
       });
       
@@ -439,6 +446,174 @@ export const pricingRouter = router({
         data: pdfBuffer.toString('base64'),
         filename: `intelleges-proposal-${quote.id}.pdf`,
         mimeType: 'application/pdf',
+      };
+    }),
+  
+  /**
+   * Extend quote expiration by 30 days
+   */
+  extendExpiration: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+      
+      // Get current quote
+      const [quote] = await db
+        .select()
+        .from(pricingQuotes)
+        .where(eq(pricingQuotes.id, input.id))
+        .limit(1);
+      
+      if (!quote) {
+        throw new Error('Quote not found');
+      }
+      
+      // Calculate new expiration date (30 days from current expiration or now, whichever is later)
+      const { extendExpiration } = await import('../lib/quoteExpiration');
+      const newExpiresAt = extendExpiration(quote.expiresAt);
+      
+      // Update quote
+      await db
+        .update(pricingQuotes)
+        .set({ 
+          expiresAt: newExpiresAt,
+          expirationReminderSent: 0, // Reset reminder flags
+          expirationEmailSent: 0,
+        })
+        .where(eq(pricingQuotes.id, input.id));
+      
+      return {
+        success: true,
+        newExpiresAt,
+      };
+    }),
+  
+  /**
+   * Check for expired quotes and send reminder/expiration emails
+   * This should be called by a cron job or scheduled task
+   */
+  checkExpiredQuotes: protectedProcedure
+    .mutation(async () => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+      
+      const { isQuoteExpiringSoon, isQuoteExpired } = await import('../lib/quoteExpiration');
+      const { 
+        generateExpirationReminderEmail, 
+        generateExpirationReminderText,
+        generateQuoteExpiredEmail,
+        generateQuoteExpiredText 
+      } = await import('../lib/expirationEmailTemplates');
+      
+      // Get all quotes that are not expired or rejected
+      const quotes = await db
+        .select()
+        .from(pricingQuotes)
+        .where(eq(pricingQuotes.status, 'sent'));
+      
+      let remindersSent = 0;
+      let expirationEmailsSent = 0;
+      
+      for (const quote of quotes) {
+        if (!quote.expiresAt || !quote.customerEmail) continue;
+        
+        // Check if quote is expired and email not sent
+        if (isQuoteExpired(quote.expiresAt) && quote.expirationEmailSent === 0) {
+          try {
+            const htmlContent = generateQuoteExpiredEmail({
+              customerName: quote.customerName || 'Valued Customer',
+              quoteId: quote.id,
+              tier: quote.tier,
+              totalPrice: quote.totalPrice,
+              currency: quote.currency,
+              expiresAt: quote.expiresAt,
+              daysRemaining: 0,
+            });
+            
+            const textContent = generateQuoteExpiredText({
+              customerName: quote.customerName || 'Valued Customer',
+              quoteId: quote.id,
+              tier: quote.tier,
+              totalPrice: quote.totalPrice,
+              currency: quote.currency,
+              expiresAt: quote.expiresAt,
+              daysRemaining: 0,
+            });
+            
+            await sgMail.send({
+              to: quote.customerEmail,
+              from: process.env.SENDGRID_FROM_EMAIL || 'sales@intelleges.com',
+              subject: `Your Intelleges Quote Has Expired - #${quote.id}`,
+              html: htmlContent,
+              text: textContent,
+            });
+            
+            // Mark as expired and email sent
+            await db
+              .update(pricingQuotes)
+              .set({ 
+                status: 'expired',
+                expirationEmailSent: 1,
+              })
+              .where(eq(pricingQuotes.id, quote.id));
+            
+            expirationEmailsSent++;
+          } catch (error) {
+            console.error(`Failed to send expiration email for quote ${quote.id}:`, error);
+          }
+        }
+        // Check if quote is expiring soon and reminder not sent
+        else if (isQuoteExpiringSoon(quote.expiresAt) && quote.expirationReminderSent === 0) {
+          try {
+            const { getDaysRemaining } = await import('../lib/quoteExpiration');
+            const daysRemaining = getDaysRemaining(quote.expiresAt);
+            
+            const htmlContent = generateExpirationReminderEmail({
+              customerName: quote.customerName || 'Valued Customer',
+              quoteId: quote.id,
+              tier: quote.tier,
+              totalPrice: quote.totalPrice,
+              currency: quote.currency,
+              expiresAt: quote.expiresAt,
+              daysRemaining,
+            });
+            
+            const textContent = generateExpirationReminderText({
+              customerName: quote.customerName || 'Valued Customer',
+              quoteId: quote.id,
+              tier: quote.tier,
+              totalPrice: quote.totalPrice,
+              currency: quote.currency,
+              expiresAt: quote.expiresAt,
+              daysRemaining,
+            });
+            
+            await sgMail.send({
+              to: quote.customerEmail,
+              from: process.env.SENDGRID_FROM_EMAIL || 'sales@intelleges.com',
+              subject: `Your Intelleges Quote Expires in ${daysRemaining} ${daysRemaining === 1 ? 'Day' : 'Days'} - #${quote.id}`,
+              html: htmlContent,
+              text: textContent,
+            });
+            
+            // Mark reminder as sent
+            await db
+              .update(pricingQuotes)
+              .set({ expirationReminderSent: 1 })
+              .where(eq(pricingQuotes.id, quote.id));
+            
+            remindersSent++;
+          } catch (error) {
+            console.error(`Failed to send reminder email for quote ${quote.id}:`, error);
+          }
+        }
+      }
+      
+      return {
+        success: true,
+        remindersSent,
+        expirationEmailsSent,
       };
     }),
 });
