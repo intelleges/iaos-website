@@ -11,6 +11,9 @@ import { pricingQuotes } from '../../drizzle/schema';
 import { getDb } from '../db';
 import { calculatePricing, validatePricingRequest } from '../lib/pricingCalculator';
 import { getTierDefinition, getPricingRates, Tier } from '../lib/pricingRates';
+import { createStripeInvoice, sendInvoiceEmail, getInvoiceStatus } from '../lib/stripeInvoice';
+import { generatePDFProposal } from '../lib/pdfProposal';
+import { readFile } from 'fs/promises';
 import { eq } from 'drizzle-orm';
 
 // Validation schemas
@@ -183,14 +186,13 @@ export const pricingRouter = router({
       return { success: true };
     }),
   
-  /**
+   /**
    * Get pricing rates (for UI display)
    */
-  getRates: protectedProcedure
-    .query(() => {
-      return getPricingRates();
-    }),
-  
+  getRates: protectedProcedure.query(() => {
+    return getPricingRates();
+  }),
+
   /**
    * Get tier definitions (for UI display)
    */
@@ -201,5 +203,139 @@ export const pricingRouter = router({
         name: tier,
         ...getTierDefinition(tier),
       }));
+    }),
+
+  /**
+   * Generate Stripe invoice from quote
+   */
+  generateInvoice: protectedProcedure
+    .input(z.object({
+      quoteId: z.number(),
+      customerEmail: z.string().email(),
+      dueDate: z.string().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+
+      // Get quote
+      const [quote] = await db
+        .select()
+        .from(pricingQuotes)
+        .where(eq(pricingQuotes.id, input.quoteId))
+        .limit(1);
+
+      if (!quote) {
+        throw new Error('Quote not found');
+      }
+
+      const pricingData = quote.pricingData as any;
+
+      // Build line items
+      const lineItems = [];
+
+      lineItems.push({
+        description: `${quote.tier} Tier - Annual License`,
+        amount: Math.round(pricingData.annualPrice * 100),
+      });
+
+      // Create Stripe invoice
+      const invoice = await createStripeInvoice({
+        customerEmail: input.customerEmail,
+        customerName: quote.customerName,
+        lineItems,
+        metadata: {
+          quoteId: quote.id.toString(),
+          tier: quote.tier,
+        },
+        dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+      });
+
+      // Update quote with invoice ID
+      await db
+        .update(pricingQuotes)
+        .set({
+          stripeInvoiceId: invoice.invoiceId,
+          status: 'sent',
+        })
+        .where(eq(pricingQuotes.id, input.quoteId));
+
+      return {
+        invoiceId: invoice.invoiceId,
+        invoiceNumber: invoice.invoiceNumber,
+        paymentLink: invoice.paymentLink,
+        amount: invoice.amount / 100,
+      };
+    }),
+
+  /**
+   * Get invoice status
+   */
+  getInvoiceStatus: protectedProcedure
+    .input(z.object({ invoiceId: z.string() }))
+    .query(async ({ input }) => {
+      const status = await getInvoiceStatus(input.invoiceId);
+      return {
+        ...status,
+        amountPaid: status.amountPaid / 100,
+        amountDue: status.amountDue / 100,
+      };
+    }),
+
+  /**
+   * Export quote as PDF proposal
+   */
+  exportPDF: protectedProcedure
+    .input(z.object({ quoteId: z.number() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+
+      // Get quote
+      const [quote] = await db
+        .select()
+        .from(pricingQuotes)
+        .where(eq(pricingQuotes.id, input.quoteId))
+        .limit(1);
+
+      if (!quote) {
+        throw new Error('Quote not found');
+      }
+
+      const pricingData = quote.pricingData as any;
+      const tierDef = getTierDefinition(quote.tier as Tier);
+
+      // Generate PDF
+      const pdfPath = await generatePDFProposal({
+        quoteId: quote.id,
+        customerName: quote.customerName,
+        industry: quote.industry || undefined,
+        region: quote.region || undefined,
+        tier: quote.tier,
+        pricing: pricingData,
+        configuration: {
+          users: quote.users,
+          suppliers: quote.suppliers,
+          protocols: quote.protocols,
+          sites: quote.sites,
+          partnerTypes: quote.partnerTypes,
+          erpIntegration: quote.erpIntegration,
+          esrsSupport: quote.esrsSupport,
+          supportPremium: quote.supportPremium,
+        },
+        tierInclusions: tierDef,
+        notes: quote.notes || undefined,
+        createdAt: quote.createdAt,
+      });
+
+      // Read PDF file as base64
+      const pdfBuffer = await readFile(pdfPath);
+      const pdfBase64 = pdfBuffer.toString('base64');
+
+      return {
+        filename: `Intelleges-Proposal-${quote.customerName.replace(/[^a-zA-Z0-9]/g, '-')}-${quote.id}.pdf`,
+        data: pdfBase64,
+        mimeType: 'application/pdf',
+      };
     }),
 });

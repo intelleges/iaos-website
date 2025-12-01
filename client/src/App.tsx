@@ -19,6 +19,7 @@ import FOCICaseStudy from "@/pages/case-studies/FOCI";
 import COOComplianceCaseStudy from "@/pages/case-studies/COOCompliance";
 import CounterfeitPartsCaseStudy from "@/pages/case-studies/CounterfeitParts";
 import Resources from "@/pages/Resources";
+import PricingCalculator from "@/pages/admin/PricingCalculator";
 import OnePagers from "@/pages/OnePagers";
 import PersonalizedWelcome from "@/pages/PersonalizedWelcome";
 import Login from "@/pages/Login";
@@ -56,6 +57,7 @@ function Router() {
           <Route path="/one-pagers" component={OnePagers} />
           <Route path="/welcome" component={PersonalizedWelcome} />
           <Route path="/admin/email-analytics" component={EmailAnalyticsPage} />
+          <Route path="/admin/pricing" component={PricingCalculator} />
           <Route path="/contact" component={Contact} />
           <Route path="/demo" component={Demo} />
           <Route path="/login" component={Login} />

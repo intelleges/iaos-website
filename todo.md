@@ -1226,3 +1226,60 @@ QA tester reported that clickable elements don't show hand pointer cursor on hov
 - [x] Change Silver → Professional
 - [x] Change Gold → Advanced
 - [x] Change Platinum → Enterprise
+
+
+## Admin Pricing Calculator UI Implementation
+- [ ] Create /admin/pricing route and page component
+- [ ] Build customer profile input section (name, industry, region)
+- [ ] Add tier selection radio buttons (Basic, Professional, Advanced, Enterprise)
+- [ ] Create configuration input form (users, suppliers, protocols, sites, partner types)
+- [ ] Add integration toggles (ERP, eSRS, Support Premium)
+- [ ] Display tier inclusions panel (what's included in selected tier)
+- [ ] Build real-time pricing breakdown display
+- [ ] Add quote save functionality
+- [ ] Create quote history/list view
+- [ ] Add admin route protection (require authentication)
+- [ ] Test calculator with Celestica configuration
+
+
+## Complete Pricing Calculator System
+
+### Admin UI Implementation
+- [x] Create /admin/pricing route and page component
+- [x] Build customer profile input section (name, industry, region)
+- [x] Add tier selection with visual cards (Basic, Professional, Advanced, Enterprise)
+- [x] Create configuration input form (users, suppliers, protocols, sites, partner types)
+- [x] Add integration toggles (ERP, eSRS, Support Premium) with tier restrictions
+- [x] Display tier inclusions panel (what's included in selected tier)
+- [x] Build real-time pricing breakdown display with line items
+- [x] Add quote save functionality with notes
+- [ ] Create quote history/list view with status filters (future enhancement)
+- [ ] Add admin route protection (require authentication) (future enhancement)
+
+### Stripe Invoice Integration
+- [x] Install stripe package
+- [x] Create Stripe invoice generation API endpoint
+- [x] Implement customer creation/lookup in Stripe
+- [x] Generate invoice with line items from quote
+- [x] Create payment link for invoice
+- [x] Add invoice ID tracking to quotes table
+- [x] Wire up Generate Invoice button in UI
+- [ ] Handle invoice payment webhooks (future enhancement)
+- [ ] Update quote status when invoice is paid (future enhancement)
+
+### PDF Proposal Export
+- [x] Create PDF generation API endpoint
+- [x] Design professional proposal template
+- [x] Include pricing breakdown in PDF
+- [x] Add tier features and inclusions
+- [x] Include contract terms and conditions
+- [x] Add company branding (logo, colors)
+- [x] Generate downloadable PDF from quote
+- [x] Wire up Export PDF button in UI
+
+### Testing
+- [ ] Test calculator with Celestica configuration ($129K)
+- [ ] Test Stripe invoice generation in test mode
+- [ ] Test PDF export with sample quote
+- [ ] Verify quote save/load functionality
+- [ ] Test admin authentication and access control
