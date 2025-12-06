@@ -31,6 +31,7 @@ import QuoteHistory from "@/pages/admin/QuoteHistory";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import PageTransition from "@/components/PageTransition";
+import { UmamiAnalytics } from "@/components/Analytics/Umami";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -76,6 +77,7 @@ function App() {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider delayDuration={200}>
+          <UmamiAnalytics />
           <Router />
           <Toaster />
         </TooltipProvider>

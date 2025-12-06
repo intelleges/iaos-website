@@ -4,9 +4,22 @@
 
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-11-17.clover',
-});
+let _stripe: Stripe | null = null;
+
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const apiKey = process.env.STRIPE_SECRET_KEY;
+    if (!apiKey) {
+      throw new Error(
+        'STRIPE_SECRET_KEY is not configured. Set STRIPE_SECRET_KEY environment variable to use Stripe invoice functionality.'
+      );
+    }
+    _stripe = new Stripe(apiKey, {
+      apiVersion: '2025-11-17.clover',
+    });
+  }
+  return _stripe;
+}
 
 export interface InvoiceLineItem {
   description: string;
@@ -37,6 +50,7 @@ export interface CreateInvoiceResult {
 export async function createStripeInvoice(
   request: CreateInvoiceRequest
 ): Promise<CreateInvoiceResult> {
+  const stripe = getStripe();
   // Create or retrieve customer
   const customers = await stripe.customers.list({
     email: request.customerEmail,
@@ -95,6 +109,7 @@ export async function createStripeInvoice(
  * Get invoice status
  */
 export async function getInvoiceStatus(invoiceId: string): Promise<string> {
+  const stripe = getStripe();
   const invoice = await stripe.invoices.retrieve(invoiceId);
   return invoice.status || 'unknown';
 }
@@ -103,5 +118,6 @@ export async function getInvoiceStatus(invoiceId: string): Promise<string> {
  * Send invoice email
  */
 export async function sendInvoiceEmail(invoiceId: string): Promise<void> {
+  const stripe = getStripe();
   await stripe.invoices.sendInvoice(invoiceId);
 }
