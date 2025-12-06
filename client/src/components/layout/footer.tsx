@@ -103,7 +103,7 @@ export default function Footer() {
             <h3 className="text-base font-normal">Access</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/login" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="https://app.intelleges.com/login" target="_self" className="text-base font-light text-muted-foreground hover:text-foreground transition-colors">
                   Client Login
                 </Link>
               </li>
