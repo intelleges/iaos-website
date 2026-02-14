@@ -19,9 +19,9 @@ export default function SEO({
   keywords,
   schema
 }: SEOProps) {
-  const siteTitle = "Intelleges - Federal Compliance Management System";
+  const siteTitle = "Intelleges - Enterprise Compliance Automation Platform | Supplier Data Management";
   const fullTitle = title === "Home" ? siteTitle : `${title} | Intelleges`;
-  const siteUrl = "https://intelleges.com";
+  const siteUrl = "https://www.intelleges.com";
   const currentUrl = canonical || siteUrl;
 
   // Organization Schema (for all pages)
@@ -109,7 +109,7 @@ export default function SEO({
       <meta name="robots" content="index, follow" />
       <meta name="googlebot" content="index, follow" />
       <meta name="author" content="Intelleges" />
-      <meta name="language" content="English" />
+      <meta name="language" content="en" />
       <meta name="revisit-after" content="7 days" />
 
       {/* Structured Data - Organization (Always Include) */}

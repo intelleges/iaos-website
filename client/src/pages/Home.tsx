@@ -50,8 +50,9 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <SEO 
-        title="Intelleges | Enterprise Compliance Automation Platform" 
+        title="Home" 
         description="Automated supplier data collection, validation, and audit-ready documentation for aerospace, defense, healthcare, and manufacturing. 25 years of proven compliance expertise."
+        keywords="enterprise compliance, supplier compliance, compliance automation, supplier data management, audit-ready documentation, federal compliance, FCMS, compliance management system, supplier verification, regulatory compliance, aerospace compliance, defense compliance, healthcare compliance, manufacturing compliance, ISO 27001, ITAR, EAR, Buy America Act, ESG compliance, sustainability reporting"
       />
       
       {/* Hero Section */}

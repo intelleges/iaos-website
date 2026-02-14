@@ -163,3 +163,14 @@ export const pricingQuotes = mysqlTable("pricingQuotes", {
 
 export type PricingQuote = typeof pricingQuotes.$inferSelect;
 export type InsertPricingQuote = typeof pricingQuotes.$inferInsert;
+
+/**
+ * Enterprise Plan Configurator - Proposal tracking tables
+ * Imported from proposalSchema.ts
+ */
+export {
+  enterpriseProposals,
+  proposalEvents,
+  enterpriseProposalsRelations,
+  proposalEventsRelations,
+} from "./proposalSchema";

@@ -110,3 +110,6 @@ temp/
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Uploads
+uploads/proposals/*.pdf

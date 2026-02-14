@@ -95,11 +95,11 @@ export default function PricingSection() {
     <section className="w-full bg-[#F7F9FA] py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-2xl">
+        <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#111111]">
             Plans & Pricing
           </h2>
-          <p className="mt-4 text-[17px] leading-relaxed text-[#444444]">
+          <p className="mt-4 text-[17px] leading-relaxed text-[#444444] max-w-3xl mx-auto">
             Choose the level of automation and strategic support your compliance
             program needs. All plans are built on the same Intelleges
             protocols and templates used by leading enterprises.
