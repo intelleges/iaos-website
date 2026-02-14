@@ -369,7 +369,7 @@ export default function EnterprisePlanConfigurator() {
                     <ul className="space-y-1">
                       {recommendation.warnings.map((warning, index) => (
                         <li key={index} className="text-sm text-amber-800 dark:text-amber-200">
-                          • {warning}
+                          â€¢ {warning}
                         </li>
                       ))}
                     </ul>
@@ -502,17 +502,17 @@ export default function EnterprisePlanConfigurator() {
                     <div>
                       <h4 className="font-semibold text-card-foreground mb-3">Capacity</h4>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li>• Users: {tier.maxUsers.toLocaleString()}</li>
+                        <li>â€¢ Users: {tier.maxUsers.toLocaleString()}</li>
                         <li>
-                          • Suppliers:{" "}
+                          â€¢ Suppliers:{" "}
                           {tier.maxSuppliers === 999999 ? "Unlimited" : tier.maxSuppliers.toLocaleString()}
                         </li>
                         <li>
-                          • Groups/Sites:{" "}
+                          â€¢ Groups/Sites:{" "}
                           {tier.maxGroups === 999999 ? "Unlimited" : tier.maxGroups.toLocaleString()}
                         </li>
                         <li>
-                          • Protocols: {tier.maxProtocols === 999999 ? "Unlimited" : tier.maxProtocols}
+                          â€¢ Protocols: {tier.maxProtocols === 999999 ? "Unlimited" : tier.maxProtocols}
                         </li>
                       </ul>
                     </div>
@@ -520,7 +520,7 @@ export default function EnterprisePlanConfigurator() {
                       <h4 className="font-semibold text-card-foreground mb-3">Features</h4>
                       <ul className="space-y-2 text-sm text-muted-foreground">
                         {tier.features.map((feature, index) => (
-                          <li key={index}>• {feature}</li>
+                          <li key={index}>â€¢ {feature}</li>
                         ))}
                       </ul>
                     </div>
