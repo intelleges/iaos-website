@@ -13,8 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Check, X, FileDown, Send } from "lucide-react";
 import { pricingConfig, type Protocol } from "@/lib/pricingConfig";
-import { recommendTier, type RecommendationResult } from "@/lib/recommendationEngine";
-import ProposalModal from "@/components/ProposalModal";
+import { getRecommendation, type RecommendationResult } from "@/lib/recommendationEngine";
+import { ProposalModal } from "@/components/ProposalModal";
 
 export default function EnterprisePlanConfigurator() {
   const [users, setUsers] = useState<number>(3);
@@ -29,7 +29,7 @@ export default function EnterprisePlanConfigurator() {
 
   // Update recommendation when inputs change
   useEffect(() => {
-    const result = recommendTier({
+    const result = getRecommendation({
       users,
       suppliers,
       groups,

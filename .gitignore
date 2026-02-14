@@ -113,3 +113,6 @@ playwright/.cache/
 
 # Uploads
 uploads/proposals/*.pdf
+
+.vercel
+.env*.local
