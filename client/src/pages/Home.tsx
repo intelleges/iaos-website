@@ -452,7 +452,7 @@ export default function Home() {
               Is Your Organization Ready?
             </p>
             <p className="text-base text-muted-foreground font-light">
-              Government audits are changing. Find out whether your organization is ready.
+              Government audits are changing.
             </p>
             <div className="pt-2">
               <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={scrollToBriefing}>
