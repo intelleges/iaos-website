@@ -21,9 +21,13 @@ interface LibraryDoc {
   file?: string; // path under client/public; omit when the PDF doesn't exist yet
 }
 
+// The Auditor whitepaper — FINAL version placed 2026-06-05.
+const AUDITOR_PDF_FILE = "/proof/intelleges-auditor-ai-upgrade.pdf";
+
 const DEFAULT_BRIEFING: LibraryDoc = {
   title: "The Auditor Is Getting an Upgrade",
   type: "whitepaper",
+  file: AUDITOR_PDF_FILE,
 };
 
 const LIBRARY: { category: string; docs: LibraryDoc[] }[] = [
@@ -166,6 +170,7 @@ export default function Home() {
     selection: AUDITOR_PDF,
     mode: "document",
     requestMode: "document",
+    downloadHref: AUDITOR_PDF_FILE,
     nonce: 0,
   });
   const [openCategory, setOpenCategory] = useState<string | null>(null);
@@ -192,7 +197,7 @@ export default function Home() {
   // The four hero/section CTAs all request the Auditor briefing PDF —
   // overwriting any stale selection and resetting the card to S1.
   // NOTE: the briefing PDF itself is not in the repo yet — placeholder payoff.
-  const requestAuditorPdf = () => requestGate(AUDITOR_PDF, "document");
+  const requestAuditorPdf = () => requestGate(AUDITOR_PDF, "document", { downloadHref: AUDITOR_PDF_FILE });
 
   // Action handoffs: demo → real Calendly; trial → placeholder (no signup
   // flow exists yet — flagged for decision).
@@ -245,7 +250,7 @@ export default function Home() {
             </Link>
             <nav className="hidden lg:flex items-center gap-6 text-sm">
               <a href={PHONE_TEL} className="text-foreground/80 hover:text-foreground whitespace-nowrap">{PHONE_DISPLAY}</a>
-              <button onClick={scrollToBriefing} className="text-foreground/80 hover:text-foreground">Executive Briefing</button>
+              <button onClick={requestAuditorPdf} className="text-foreground/80 hover:text-foreground">Executive Briefing</button>
               <a href="mailto:info@intelleges.com" className="text-foreground/80 hover:text-foreground">Contact Us</a>
             </nav>
           </div>
@@ -267,7 +272,7 @@ export default function Home() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-border/50 bg-background px-6 py-4 flex flex-col gap-3 text-sm">
             <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
-            <button onClick={() => { setMobileMenuOpen(false); scrollToBriefing(); }} className="text-left">Executive Briefing</button>
+            <button onClick={requestAuditorPdf} className="text-left">Executive Briefing</button>
             <a href="mailto:info@intelleges.com">Contact Us</a>
             <button onClick={() => requestDemo()} className="text-left">Book a Demo</button>
             <button onClick={() => requestTrial()} className="text-left">Start Free Trial</button>
