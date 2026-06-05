@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { queryClient } from "./lib/queryClient";
@@ -34,9 +34,13 @@ import PageTransition from "@/components/PageTransition";
 import { UmamiAnalytics } from "@/components/Analytics/Umami";
 function Router() {
   // make sure to consider if you need authentication for certain routes
+  const [location] = useLocation();
+  // The campaign homepage ships its own header/footer (Home.tsx); all other
+  // routes keep the shared site chrome.
+  const isCampaignHome = location === "/";
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans antialiased">
-      <Header />
+      {!isCampaignHome && <Header />}
       <main className="flex-1">
         <PageTransition>
           <Switch>
@@ -67,7 +71,7 @@ function Router() {
           </Switch>
         </PageTransition>
       </main>
-      <Footer />
+      {!isCampaignHome && <Footer />}
     </div>
   );
 }

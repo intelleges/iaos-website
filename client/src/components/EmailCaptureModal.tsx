@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SimpleModal } from "./SimpleModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,23 +16,37 @@ export interface EmailCaptureModalProps {
   onLimitReached?: () => void;
   isCaseStudy?: boolean;
   onCaseStudySubmit?: (email: string, name: string) => void;
+  /** Prefill the email field (e.g., from an inline capture form). */
+  initialEmail?: string;
+  /** Record the request + schedule follow-up email, but skip the immediate
+   *  file download (for documents delivered by email / not yet published). */
+  skipAutoDownload?: boolean;
 }
 
-export default function EmailCaptureModal({ 
-  isOpen, 
-  onClose, 
-  downloadUrl, 
+export default function EmailCaptureModal({
+  isOpen,
+  onClose,
+  downloadUrl,
   resourceTitle,
   documentType = 'capability',
   onLimitReached,
   isCaseStudy = false,
-  onCaseStudySubmit
+  onCaseStudySubmit,
+  initialEmail,
+  skipAutoDownload = false
 }: EmailCaptureModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
   });
+
+  // Prefill email when opened from an inline capture form
+  useEffect(() => {
+    if (isOpen && initialEmail) {
+      setFormData(prev => (prev.email ? prev : { ...prev, email: initialEmail }));
+    }
+  }, [isOpen, initialEmail]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -104,7 +118,6 @@ export default function EmailCaptureModal({
       // Regular Document Download Flow
       // Check download limit first
       console.log('[EmailCaptureModal] About to call checkLimit query');
-      const utils = trpc.useUtils();
       const limitCheck = await utils.documentDownloads.checkLimit.fetch({
         email: formData.email,
       });
@@ -139,19 +152,23 @@ export default function EmailCaptureModal({
         documentType: documentType as 'capability' | 'protocol' | 'whitepaper' | 'case_study',
       });
 
-      // Trigger the actual file download
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = downloadUrl.split("/").pop() || "download.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Trigger the actual file download (skipped for email-delivered documents)
+      if (!skipAutoDownload) {
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = downloadUrl.split("/").pop() || "download.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
 
       setIsSubmitting(false);
       setIsSubmitted(true);
 
       // Show success toast
-      toast.success(`Download started! Check your email in 2 hours for a follow-up message.`);
+      toast.success(skipAutoDownload
+        ? `Request received! Access instructions will be sent to your email address.`
+        : `Download started! Check your email in 2 hours for a follow-up message.`);
 
       // Close modal after 2 seconds
       setTimeout(() => {
@@ -186,12 +203,18 @@ export default function EmailCaptureModal({
           <>
             <div className="p-6 border-b">
               <h2 className="text-2xl font-light mb-2">
-                {isCaseStudy ? `Schedule Discovery Call` : `Download ${resourceTitle}`}
+                {isCaseStudy
+                  ? `Schedule Discovery Call`
+                  : skipAutoDownload
+                    ? `Request Access — ${resourceTitle}`
+                    : `Download ${resourceTitle}`}
               </h2>
               <p className="text-base text-muted-foreground">
-                {isCaseStudy 
+                {isCaseStudy
                   ? `Provide your information to schedule a discovery call. We'll share the full case study during your meeting.`
-                  : `Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.`
+                  : skipAutoDownload
+                    ? `Provide your information to request access. Access instructions will be sent to your email address.`
+                    : `Please provide your information to access this resource. We'll send you a copy and keep you updated on compliance best practices.`
                 }
               </p>
             </div>
@@ -274,6 +297,11 @@ export default function EmailCaptureModal({
                           <Calendar className="mr-2 h-4 w-4" />
                           Schedule Discovery Call
                         </>
+                      ) : skipAutoDownload ? (
+                        <>
+                          <Check className="mr-2 h-4 w-4" />
+                          Request Access
+                        </>
                       ) : (
                         <>
                           <Download className="mr-2 h-4 w-4" />
@@ -298,9 +326,11 @@ export default function EmailCaptureModal({
                 <Check className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <h2 className="text-2xl font-light">Download Started!</h2>
+            <h2 className="text-2xl font-light">{skipAutoDownload ? "Request Received!" : "Download Started!"}</h2>
             <p className="text-base text-muted-foreground">
-              Your document is downloading now. Check your email in 2 hours for a personalized follow-up.
+              {skipAutoDownload
+                ? "Access instructions will be sent to your email address."
+                : "Your document is downloading now. Check your email in 2 hours for a personalized follow-up."}
             </p>
           </div>
         )}
