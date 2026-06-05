@@ -1,8 +1,7 @@
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import LogoCarousel from "@/components/LogoCarousel";
-import EmailCaptureModal from "@/components/EmailCaptureModal";
+import RequestAccessGate from "@/components/RequestAccessGate";
 import { Link } from "wouter";
 import { useRef, useState } from "react";
 import { Check, ChevronRight, Menu, X } from "lucide-react";
@@ -114,8 +113,6 @@ const SHIFT_ROWS = [
 // Open (un-gated) credibility artifacts — direct downloads, never routed
 // through EmailCaptureModal / documentDownloads.
 const BATTELLE_PRESS_RELEASE = "/proof/battelle-supplier-of-the-year-2023.pdf";
-const CAPABILITY_STATEMENT = "/proof/intelleges-capability-statement.pdf";
-const BROCHURE = "/proof/intelleges-brochure.pdf";
 
 const WHY_CARDS: { title: string; body: string; link?: { label: string; href: string } }[] = [
   { title: "Audit Ready", body: "Create defensible compliance records supported by complete documentation and audit trails." },
@@ -137,45 +134,30 @@ const ECCP_QUESTIONS = [
   "Is there an imbalance where revenue-generating functions have advanced technology while compliance remains manual?",
 ];
 
-const CALENDLY_URL = "https://calendly.com/intelleges/intelleges-introduction";
 const PHONE_DISPLAY = "+1 855 383 8744";
 const PHONE_TEL = "tel:+18553838744";
 
 export default function Home() {
-  const [selectedDoc, setSelectedDoc] = useState<LibraryDoc | null>(null);
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Gate target: every gated asset routes here — the REQUEST ACCESS card
+  // scrolls into view and references the selected collateral by name.
+  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action" }>({
+    selection: "Executive Briefing",
+    mode: "document",
+  });
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const briefingRef = useRef<HTMLDivElement>(null);
   const whyRef = useRef<HTMLDivElement>(null);
-  const emailInputRef = useRef<HTMLInputElement>(null);
-
-  const activeDoc = selectedDoc ?? DEFAULT_BRIEFING;
 
   const scrollToBriefing = () => {
     briefingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Footer library drilldown: scroll-in-place to the form and retarget its label.
-  const requestDoc = (doc: LibraryDoc) => {
-    setSelectedDoc(doc);
+  const requestGate = (selection: string, mode: "document" | "action") => {
+    setGateTarget({ selection, mode });
+    setMobileMenuOpen(false);
     scrollToBriefing();
-    setTimeout(() => emailInputRef.current?.focus(), 500);
-  };
-
-  const handleRequestAccess = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError("Please enter a valid business email address");
-      return;
-    }
-    setEmailError("");
-    // Hand off to the existing email-gate mechanism (same modal + tRPC flow
-    // used by the capability and protocol cards). Email is prefilled.
-    setIsModalOpen(true);
   };
 
   return (
@@ -215,13 +197,8 @@ export default function Home() {
             </nav>
           </div>
           <div className="hidden md:flex items-center gap-3">
-            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
-              <Button size="sm" className="rounded-full px-5">Book a Demo</Button>
-            </a>
-            {/* NOTE: campaign design calls for a /free_trial destination; route does not exist yet, pointing at /contact until it does */}
-            <Link href="/contact">
-              <Button size="sm" className="rounded-full px-5 bg-green-600 hover:bg-green-700 text-white">Start Free Trial</Button>
-            </Link>
+            <Button size="sm" className="rounded-full px-5" onClick={() => requestGate("Book a Demo", "action")}>Book a Demo</Button>
+            <Button size="sm" className="rounded-full px-5 bg-green-600 hover:bg-green-700 text-white" onClick={() => requestGate("Free Trial", "action")}>Start Free Trial</Button>
             <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer">
               <Button size="sm" variant="outline" className="rounded-full px-5">Client Login</Button>
             </a>
@@ -239,8 +216,8 @@ export default function Home() {
             <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
             <button onClick={() => { setMobileMenuOpen(false); scrollToBriefing(); }} className="text-left">Executive Briefing</button>
             <a href="mailto:info@intelleges.com">Contact Us</a>
-            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">Book a Demo</a>
-            <Link href="/contact">Start Free Trial</Link>
+            <button onClick={() => requestGate("Book a Demo", "action")} className="text-left">Book a Demo</button>
+            <button onClick={() => requestGate("Free Trial", "action")} className="text-left">Start Free Trial</button>
             <a href="https://app.intelleges.com/login">Client Login</a>
           </div>
         )}
@@ -422,45 +399,13 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-card text-card-foreground rounded-xl shadow-2xl p-8">
-              <form onSubmit={handleRequestAccess} noValidate>
-                <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-muted-foreground mb-1">
-                  Request Access
-                  {selectedDoc && (
-                    <span className="font-bold ml-2 text-foreground">— TO: {selectedDoc.title}</span>
-                  )}
-                </p>
-                {selectedDoc && (
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Enter your business email to receive access instructions.
-                  </p>
-                )}
-                <div className="mt-4 mb-6 space-y-2">
-                  <label htmlFor="briefing-email" className="block text-sm font-semibold">
-                    Business Email <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    ref={emailInputRef}
-                    id="briefing-email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="you@company.com"
-                    value={email}
-                    onChange={(e) => { setEmail(e.target.value); setEmailError(""); }}
-                    className={selectedDoc
-                      ? "border-2 border-amber-400 ring-2 ring-amber-400/20"
-                      : emailError ? "border-red-500" : ""}
-                  />
-                  {emailError && <p className="text-sm text-red-500">{emailError}</p>}
-                </div>
-                <Button type="submit" className="w-full rounded-full tracking-wide" size="lg">
-                  REQUEST ACCESS
-                </Button>
-                <p className="text-xs text-muted-foreground text-center mt-3">
-                  Access instructions will be sent to your email address.
-                </p>
-              </form>
-            </div>
+            {/* The gate — every gated asset routes here; key remounts the card
+                so a new selection always restarts at the capture state. */}
+            <RequestAccessGate
+              key={`${gateTarget.selection}|${gateTarget.mode}`}
+              selection={gateTarget.selection}
+              mode={gateTarget.mode}
+            />
           </div>
         </div>
       </section>
@@ -513,8 +458,8 @@ export default function Home() {
 
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Get Help</p>
-              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="block hover:text-white">Book a Demo</a>
-              <Link href="/contact" className="block hover:text-white">Start Free Trial</Link>
+              <button onClick={() => requestGate("Book a Demo", "action")} className="block text-left hover:text-white">Book a Demo</button>
+              <button onClick={() => requestGate("Free Trial", "action")} className="block text-left hover:text-white">Start Free Trial</button>
               <a href="https://app.intelleges.com/login" className="block hover:text-white">Client Login</a>
               <a href="mailto:info@intelleges.com" className="block hover:text-white">Contact Us</a>
             </div>
@@ -522,7 +467,7 @@ export default function Home() {
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Executive Briefings</p>
               {LIBRARY[0].docs.map((doc) => (
-                <button key={doc.title} onClick={() => requestDoc(doc)} className="block text-left hover:text-white">
+                <button key={doc.title} onClick={() => requestGate(doc.title, "document")} className="block text-left hover:text-white">
                   {doc.title}
                 </button>
               ))}
@@ -530,9 +475,9 @@ export default function Home() {
 
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Solutions</p>
-              <button onClick={() => whyRef.current?.scrollIntoView({ behavior: "smooth" })} className="block text-left hover:text-white">Audit Ready Compliance</button>
-              <button onClick={() => whyRef.current?.scrollIntoView({ behavior: "smooth" })} className="block text-left hover:text-white">Automated Data Harmonized</button>
-              <button onClick={() => whyRef.current?.scrollIntoView({ behavior: "smooth" })} className="block text-left hover:text-white">Supply Chain Connected</button>
+              <button onClick={() => requestGate("Audit Ready Compliance", "document")} className="block text-left hover:text-white">Audit Ready Compliance</button>
+              <button onClick={() => requestGate("Automated Data Harmonized", "document")} className="block text-left hover:text-white">Automated Data Harmonized</button>
+              <button onClick={() => requestGate("Supply Chain Connected", "document")} className="block text-left hover:text-white">Supply Chain Connected</button>
             </div>
 
             <div className="space-y-4">
@@ -558,24 +503,12 @@ export default function Home() {
                 <Link href="/about" className="block hover:text-white">About</Link>
                 <Link href="/security" className="block hover:text-white">Security</Link>
                 <Link href="/privacy" className="block hover:text-white">Privacy</Link>
-                <a
-                  href={CAPABILITY_STATEMENT}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
-                  className="block hover:text-white"
-                >
+                <button onClick={() => requestGate("Capability Statement", "document")} className="block text-left hover:text-white">
                   Capability Statement
-                </a>
-                <a
-                  href={BROCHURE}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
-                  className="block hover:text-white"
-                >
+                </button>
+                <button onClick={() => requestGate("Intelleges Brochure", "document")} className="block text-left hover:text-white">
                   Intelleges Brochure
-                </a>
+                </button>
               </div>
             </div>
 
@@ -597,7 +530,7 @@ export default function Home() {
                       {docs.map((doc) => (
                         <button
                           key={doc.title}
-                          onClick={() => requestDoc(doc)}
+                          onClick={() => requestGate(doc.title, "document")}
                           className="flex items-center gap-1.5 text-left text-neutral-400 hover:text-white"
                         >
                           <ChevronRight className="h-3 w-3 shrink-0" />
@@ -630,19 +563,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Existing email-gate mechanism — same modal + tRPC flow as the
-          capability/protocol cards. Email prefilled from the inline form;
-          docs without a published PDF skip the auto-download (access request
-          is still recorded and the follow-up email still goes out). */}
-      <EmailCaptureModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        downloadUrl={activeDoc.file ?? `/library/${activeDoc.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.pdf`}
-        resourceTitle={activeDoc.title}
-        documentType={activeDoc.type}
-        initialEmail={email}
-        skipAutoDownload={!activeDoc.file}
-      />
     </div>
   );
 }
