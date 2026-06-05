@@ -186,7 +186,17 @@ export default function Home() {
 
       {/* Top trust bar */}
       <div className="bg-primary text-primary-foreground text-center text-[11px] md:text-xs font-medium tracking-[0.15em] uppercase py-2 px-4">
-        ISO 27001 Certified&nbsp;&nbsp;|&nbsp;&nbsp;Battelle Supplier of the Year&nbsp;&nbsp;|&nbsp;&nbsp;25 Years of Compliance Experience
+        ISO 27001 Certified&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a
+          href={BATTELLE_PRESS_RELEASE}
+          target="_blank"
+          rel="noopener noreferrer"
+          download
+          className="underline underline-offset-2 decoration-primary-foreground/40 hover:decoration-primary-foreground"
+        >
+          Battelle Supplier of the Year
+        </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;25 Years of Compliance Experience
       </div>
 
       {/* Campaign header */}
@@ -583,7 +593,19 @@ export default function Home() {
 
           <div className="border-t border-neutral-800 mt-12 pt-6 space-y-2 text-xs text-neutral-500">
             <p>© 2026 Intelleges</p>
-            <p>ISO 27001 Certified&nbsp; | &nbsp;Battelle Supplier of the Year&nbsp; | &nbsp;25 Years of Compliance Experience</p>
+            <p>
+              ISO 27001 Certified&nbsp; | &nbsp;
+              <a
+                href={BATTELLE_PRESS_RELEASE}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="hover:text-white underline underline-offset-2 decoration-neutral-700"
+              >
+                Battelle Supplier of the Year
+              </a>
+              &nbsp; | &nbsp;25 Years of Compliance Experience
+            </p>
           </div>
         </div>
       </footer>
