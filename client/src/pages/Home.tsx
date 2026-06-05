@@ -137,12 +137,22 @@ const ECCP_QUESTIONS = [
 const PHONE_DISPLAY = "+1 855 383 8744";
 const PHONE_TEL = "tel:+18553838744";
 
+// Gate selection labels — full label (asset + qualifier) renders in brand
+// blue, all-caps via the gate header's `uppercase` style.
+const AUDITOR_PDF = "The Auditor Is Getting an Upgrade (PDF Download)";
+const BOOK_A_DEMO = "Book a Demo (To Schedule a Zoom Meeting)";
+const START_FREE_TRIAL = "Start Free Trial (To Setup New Account)";
+const pdfLabel = (title: string) => `${title} (PDF Download)`;
+
 export default function Home() {
   // Gate target: every gated asset routes here — the REQUEST ACCESS card
   // scrolls into view and references the selected collateral by name.
-  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action" }>({
-    selection: "Executive Briefing",
+  // `nonce` forces a card remount (reset to S1, fields cleared) on EVERY
+  // selection — including re-selecting the same asset.
+  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action"; nonce: number }>({
+    selection: AUDITOR_PDF,
     mode: "document",
+    nonce: 0,
   });
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -155,10 +165,14 @@ export default function Home() {
   };
 
   const requestGate = (selection: string, mode: "document" | "action") => {
-    setGateTarget({ selection, mode });
+    setGateTarget(prev => ({ selection, mode, nonce: prev.nonce + 1 }));
     setMobileMenuOpen(false);
     scrollToBriefing();
   };
+
+  // The four hero/section CTAs all request the Auditor briefing PDF —
+  // overwriting any stale selection and resetting the card to S1.
+  const requestAuditorPdf = () => requestGate(AUDITOR_PDF, "document");
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -197,8 +211,8 @@ export default function Home() {
             </nav>
           </div>
           <div className="hidden md:flex items-center gap-3">
-            <Button size="sm" className="rounded-full px-5" onClick={() => requestGate("Book a Demo", "action")}>Book a Demo</Button>
-            <Button size="sm" className="rounded-full px-5 bg-green-600 hover:bg-green-700 text-white" onClick={() => requestGate("Free Trial", "action")}>Start Free Trial</Button>
+            <Button size="sm" className="rounded-full px-5" onClick={() => requestGate(BOOK_A_DEMO, "action")}>Book a Demo</Button>
+            <Button size="sm" className="rounded-full px-5 bg-green-600 hover:bg-green-700 text-white" onClick={() => requestGate(START_FREE_TRIAL, "action")}>Start Free Trial</Button>
             <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer">
               <Button size="sm" variant="outline" className="rounded-full px-5">Client Login</Button>
             </a>
@@ -216,8 +230,8 @@ export default function Home() {
             <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
             <button onClick={() => { setMobileMenuOpen(false); scrollToBriefing(); }} className="text-left">Executive Briefing</button>
             <a href="mailto:info@intelleges.com">Contact Us</a>
-            <button onClick={() => requestGate("Book a Demo", "action")} className="text-left">Book a Demo</button>
-            <button onClick={() => requestGate("Free Trial", "action")} className="text-left">Start Free Trial</button>
+            <button onClick={() => requestGate(BOOK_A_DEMO, "action")} className="text-left">Book a Demo</button>
+            <button onClick={() => requestGate(START_FREE_TRIAL, "action")} className="text-left">Start Free Trial</button>
             <a href="https://app.intelleges.com/login">Client Login</a>
           </div>
         )}
@@ -245,7 +259,7 @@ export default function Home() {
               </p>
             </div>
             <div className="pt-4">
-              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={scrollToBriefing}>
+              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={requestAuditorPdf}>
                 SEE WHAT'S CHANGING
               </Button>
             </div>
@@ -301,7 +315,7 @@ export default function Home() {
             </div>
 
             <div className="text-center">
-              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={scrollToBriefing}>
+              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={requestAuditorPdf}>
                 SEE IF YOUR ORGANIZATION IS KEEPING UP
               </Button>
             </div>
@@ -355,7 +369,7 @@ export default function Home() {
             </div>
 
             <div className="text-center">
-              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={scrollToBriefing}>
+              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={requestAuditorPdf}>
                 SEE HOW LEADING ORGANIZATIONS ARE RESPONDING
               </Button>
             </div>
@@ -402,7 +416,7 @@ export default function Home() {
             {/* The gate — every gated asset routes here; key remounts the card
                 so a new selection always restarts at the capture state. */}
             <RequestAccessGate
-              key={`${gateTarget.selection}|${gateTarget.mode}`}
+              key={`${gateTarget.selection}|${gateTarget.mode}|${gateTarget.nonce}`}
               selection={gateTarget.selection}
               mode={gateTarget.mode}
             />
@@ -436,7 +450,7 @@ export default function Home() {
               Government audits are changing.
             </p>
             <div className="pt-2">
-              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={scrollToBriefing}>
+              <Button size="lg" className="rounded-full px-8 tracking-wide" onClick={requestAuditorPdf}>
                 FIND OUT WHETHER YOUR COMPANY IS READY
               </Button>
             </div>
@@ -458,8 +472,8 @@ export default function Home() {
 
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Get Help</p>
-              <button onClick={() => requestGate("Book a Demo", "action")} className="block text-left hover:text-white">Book a Demo</button>
-              <button onClick={() => requestGate("Free Trial", "action")} className="block text-left hover:text-white">Start Free Trial</button>
+              <button onClick={() => requestGate(BOOK_A_DEMO, "action")} className="block text-left hover:text-white">Book a Demo</button>
+              <button onClick={() => requestGate(START_FREE_TRIAL, "action")} className="block text-left hover:text-white">Start Free Trial</button>
               <a href="https://app.intelleges.com/login" className="block hover:text-white">Client Login</a>
               <a href="mailto:info@intelleges.com" className="block hover:text-white">Contact Us</a>
             </div>
@@ -467,7 +481,7 @@ export default function Home() {
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Executive Briefings</p>
               {LIBRARY[0].docs.map((doc) => (
-                <button key={doc.title} onClick={() => requestGate(doc.title, "document")} className="block text-left hover:text-white">
+                <button key={doc.title} onClick={() => requestGate(pdfLabel(doc.title), "document")} className="block text-left hover:text-white">
                   {doc.title}
                 </button>
               ))}
@@ -475,9 +489,9 @@ export default function Home() {
 
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Solutions</p>
-              <button onClick={() => requestGate("Audit Ready Compliance", "document")} className="block text-left hover:text-white">Audit Ready Compliance</button>
-              <button onClick={() => requestGate("Automated Data Harmonized", "document")} className="block text-left hover:text-white">Automated Data Harmonized</button>
-              <button onClick={() => requestGate("Supply Chain Connected", "document")} className="block text-left hover:text-white">Supply Chain Connected</button>
+              <button onClick={() => requestGate(pdfLabel("Audit Ready Compliance"), "document")} className="block text-left hover:text-white">Audit Ready Compliance</button>
+              <button onClick={() => requestGate(pdfLabel("Automated Data Harmonized"), "document")} className="block text-left hover:text-white">Automated Data Harmonized</button>
+              <button onClick={() => requestGate(pdfLabel("Supply Chain Connected"), "document")} className="block text-left hover:text-white">Supply Chain Connected</button>
             </div>
 
             <div className="space-y-4">
@@ -503,10 +517,10 @@ export default function Home() {
                 <Link href="/about" className="block hover:text-white">About</Link>
                 <Link href="/security" className="block hover:text-white">Security</Link>
                 <Link href="/privacy" className="block hover:text-white">Privacy</Link>
-                <button onClick={() => requestGate("Capability Statement", "document")} className="block text-left hover:text-white">
+                <button onClick={() => requestGate(pdfLabel("Capability Statement"), "document")} className="block text-left hover:text-white">
                   Capability Statement
                 </button>
-                <button onClick={() => requestGate("Intelleges Brochure", "document")} className="block text-left hover:text-white">
+                <button onClick={() => requestGate(pdfLabel("Brochure"), "document")} className="block text-left hover:text-white">
                   Intelleges Brochure
                 </button>
               </div>
@@ -530,7 +544,7 @@ export default function Home() {
                       {docs.map((doc) => (
                         <button
                           key={doc.title}
-                          onClick={() => requestGate(doc.title, "document")}
+                          onClick={() => requestGate(pdfLabel(doc.title), "document")}
                           className="flex items-center gap-1.5 text-left text-neutral-400 hover:text-white"
                         >
                           <ChevronRight className="h-3 w-3 shrink-0" />
