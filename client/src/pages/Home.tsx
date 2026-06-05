@@ -242,7 +242,7 @@ export default function Home() {
                 Organizations that continue to rely on spreadsheets, email chains, disconnected systems,
                 shared drives, and manual compliance processes may find themselves increasingly exposed.
               </p>
-              <p className="text-primary">
+              <p className="text-brand-blue">
                 Intelleges provides an Audit-Ready Compliance Management platform for organizations with
                 government reporting requirements.
               </p>

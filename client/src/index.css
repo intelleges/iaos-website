@@ -20,6 +20,9 @@
   --spacing-xl: 48px;
   --spacing-2xl: 64px;
   
+  /* Brand Colors */
+  --color-brand-blue: #1779FF; /* Intelleges logo blue — rgb(23, 121, 255) */
+
   /* Content Width for Readability */
   --content-width: 700px;
   
