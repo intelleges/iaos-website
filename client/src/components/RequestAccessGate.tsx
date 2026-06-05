@@ -3,15 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 /**
- * REQUEST ACCESS gate — front-end-only UI component. All submit/verify MOCKED:
- * no backend, no API, no DB, zero network calls. Three states in one card.
+ * REQUEST ACCESS gate — live FCMS-backed (INT-WWW-GATE-FCMS-01).
  *
- * S1 CAPTURE → S2 REDEEM (test code 012345; anything else = error state)
- * → S3 DELIVER (document: download link / action: continue handoff)
+ * S1 CAPTURE  → FCMS gate.requestAccess (creates partner/engagement/code,
+ *               emails the code — short email for documents/trial, full
+ *               template invitation for demo)
+ * S2 REDEEM   → FCMS supplier.validateAccessCode (existing public procedure)
+ * S3 DELIVER  → document: real PDF link / action: continue handoff
+ *
+ * The website never writes FCMS tables directly and holds no parallel
+ * access-code system; both calls go to public FCMS tRPC procedures.
  */
 export interface RequestAccessGateProps {
   selection: string;
   mode: "document" | "action";
+  /** FCMS request mode — documents email a short code; demo sends the full
+   *  invitation; trial is the placeholder path. */
+  requestMode: "document" | "demo" | "trial";
   /** S3 document payoff target — real PDF path when it exists in the repo,
    *  placeholder "#" otherwise. */
   downloadHref?: string;
@@ -25,13 +33,29 @@ type GateState = "capture" | "redeem" | "deliver";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// TEST MODE: the one accepted access code — makes both the success path
-// (012345) and the failure path (anything else → "Invalid code") testable.
-const TEST_ACCESS_CODE = "012345";
+const FCMS_URL = (import.meta as any).env?.VITE_FCMS_URL || "https://app.intelleges.com";
+
+/** Minimal tRPC-over-HTTP client (superjson envelope) for the two public
+ *  gate procedures — no FCMS types or sessions on the website. */
+async function fcmsMutate(procedure: string, input: unknown): Promise<any> {
+  const res = await fetch(`${FCMS_URL}/api/trpc/${procedure}`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ json: input }),
+  });
+  const body = await res.json().catch(() => null);
+  if (!res.ok || body?.error) {
+    const message =
+      body?.error?.json?.message || `Request failed (HTTP ${res.status})`;
+    throw new Error(message);
+  }
+  return body?.result?.data?.json;
+}
 
 export default function RequestAccessGate({
   selection,
   mode,
+  requestMode,
   downloadHref,
   continueHref,
   continueLabel,
@@ -42,7 +66,8 @@ export default function RequestAccessGate({
   const [code, setCode] = useState("");
   const [emailError, setEmailError] = useState("");
   const [codeError, setCodeError] = useState("");
-  const [resent, setResent] = useState(false);
+  const [notice, setNotice] = useState("");
+  const [busy, setBusy] = useState(false);
 
   const docHref = downloadHref ?? "#";
   const actionHref = continueHref ?? "#";
@@ -54,33 +79,69 @@ export default function RequestAccessGate({
     setCode("");
     setEmailError("");
     setCodeError("");
-    setResent(false);
+    setNotice("");
+    setBusy(false);
   };
 
-  // S1 submit (mock): validate email format → S2
-  const handleCapture = (e: React.FormEvent) => {
+  // S1 submit: live FCMS request — partner/engagement/code created, code emailed.
+  const handleCapture = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!EMAIL_RE.test(email)) {
       setEmailError("Please enter a valid business email address");
       return;
     }
     setEmailError("");
-    setState("redeem");
+    setBusy(true);
+    try {
+      await fcmsMutate("gate.requestAccess", {
+        email: email.trim(),
+        assetKey: selection,
+        mode: requestMode,
+      });
+      setNotice("");
+      setState("redeem");
+    } catch (err: any) {
+      setEmailError(err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   };
 
-  // S2 submit (mock): TEST_ACCESS_CODE → S3; anything else → error state
-  const handleVerify = (e: React.FormEvent) => {
+  // Resend: same FCMS call (server voids the old code, throttles 60s / 5 per hour).
+  const handleResend = async () => {
+    setBusy(true);
+    setCodeError("");
+    try {
+      await fcmsMutate("gate.requestAccess", {
+        email: email.trim(),
+        assetKey: selection,
+        mode: requestMode,
+      });
+      setNotice("A new code has been sent.");
+    } catch (err: any) {
+      setNotice(err?.message || "Could not resend the code. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  // S2 verify: existing public FCMS procedure — wrong/expired codes rejected server-side.
+  const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!code.trim()) {
       setCodeError("Please enter your access code");
       return;
     }
-    if (code.trim() !== TEST_ACCESS_CODE) {
-      setCodeError("Invalid code");
-      return;
+    setBusy(true);
+    try {
+      await fcmsMutate("supplier.validateAccessCode", { accessCode: code.trim() });
+      setCodeError("");
+      setState("deliver");
+    } catch (err: any) {
+      setCodeError(err?.message || "Invalid code");
+    } finally {
+      setBusy(false);
     }
-    setCodeError("");
-    setState("deliver");
   };
 
   return (
@@ -108,8 +169,8 @@ export default function RequestAccessGate({
             />
             {emailError && <p className="text-sm text-red-500">{emailError}</p>}
           </div>
-          <Button type="submit" className="w-full rounded-full tracking-wide" size="lg">
-            REQUEST ACCESS
+          <Button type="submit" className="w-full rounded-full tracking-wide" size="lg" disabled={busy}>
+            {busy ? "SENDING..." : "REQUEST ACCESS"}
           </Button>
           <p className="text-xs text-muted-foreground text-center mt-3">
             Access instructions will be sent to your email address.
@@ -136,14 +197,15 @@ export default function RequestAccessGate({
             />
             {codeError && <p className="text-sm text-red-500">{codeError}</p>}
           </div>
-          <Button type="submit" className="w-full rounded-full tracking-wide" size="lg">
-            VERIFY
+          <Button type="submit" className="w-full rounded-full tracking-wide" size="lg" disabled={busy}>
+            {busy ? "VERIFYING..." : "VERIFY"}
           </Button>
           <div className="flex items-center justify-center gap-2 mt-3 text-sm">
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground underline underline-offset-2"
-              onClick={() => setResent(true)}
+              className="text-muted-foreground hover:text-foreground underline underline-offset-2 disabled:opacity-50"
+              onClick={handleResend}
+              disabled={busy}
             >
               Resend
             </button>
@@ -156,8 +218,8 @@ export default function RequestAccessGate({
               Start over
             </button>
           </div>
-          {resent && (
-            <p className="text-xs text-muted-foreground text-center mt-2">Code re-sent.</p>
+          {notice && (
+            <p className="text-xs text-muted-foreground text-center mt-2">{notice}</p>
           )}
         </form>
       )}

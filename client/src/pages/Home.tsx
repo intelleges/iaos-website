@@ -162,9 +162,10 @@ export default function Home() {
   // scrolls into view and references the selected collateral by name.
   // `nonce` forces a card remount (reset to S1, fields cleared) on EVERY
   // selection — including re-selecting the same asset.
-  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action"; nonce: number } & GatePayoff>({
+  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action"; requestMode: "document" | "demo" | "trial"; nonce: number } & GatePayoff>({
     selection: AUDITOR_PDF,
     mode: "document",
+    requestMode: "document",
     nonce: 0,
   });
   const [openCategory, setOpenCategory] = useState<string | null>(null);
@@ -177,8 +178,13 @@ export default function Home() {
     briefingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const requestGate = (selection: string, mode: "document" | "action", payoff: GatePayoff = {}) => {
-    setGateTarget(prev => ({ selection, mode, nonce: prev.nonce + 1, ...payoff }));
+  const requestGate = (
+    selection: string,
+    mode: "document" | "action",
+    payoff: GatePayoff = {},
+    requestMode: "document" | "demo" | "trial" = mode === "document" ? "document" : "demo"
+  ) => {
+    setGateTarget(prev => ({ selection, mode, requestMode, nonce: prev.nonce + 1, ...payoff }));
     setMobileMenuOpen(false);
     scrollToBriefing();
   };
@@ -197,10 +203,15 @@ export default function Home() {
       continueNote: "Continue to schedule your Zoom meeting.",
     });
   const requestTrial = () =>
-    requestGate(START_FREE_TRIAL, "action", {
-      continueLabel: "Continue to Account Setup",
-      continueNote: "Continue to set up your new account.",
-    });
+    requestGate(
+      START_FREE_TRIAL,
+      "action",
+      {
+        continueLabel: "Continue to Account Setup",
+        continueNote: "Continue to set up your new account.",
+      },
+      "trial"
+    );
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -447,6 +458,7 @@ export default function Home() {
               key={`${gateTarget.selection}|${gateTarget.mode}|${gateTarget.nonce}`}
               selection={gateTarget.selection}
               mode={gateTarget.mode}
+              requestMode={gateTarget.requestMode}
               downloadHref={gateTarget.downloadHref}
               continueHref={gateTarget.continueHref}
               continueLabel={gateTarget.continueLabel}

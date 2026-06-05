@@ -13,13 +13,13 @@ export default function GatePreview() {
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-foreground/70">
               Fixture 1 — document
             </p>
-            <RequestAccessGate selection="Executive Briefings" mode="document" />
+            <RequestAccessGate selection="Executive Briefings" mode="document" requestMode="document" />
           </div>
           <div className="space-y-3">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-foreground/70">
               Fixture 2 — action
             </p>
-            <RequestAccessGate selection="Book a Demo" mode="action" />
+            <RequestAccessGate selection="Book a Demo" mode="action" requestMode="demo" />
           </div>
         </div>
       </div>
