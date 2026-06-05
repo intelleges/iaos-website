@@ -6,24 +6,47 @@ import { Input } from "@/components/ui/input";
  * REQUEST ACCESS gate — front-end-only UI component. All submit/verify MOCKED:
  * no backend, no API, no DB, zero network calls. Three states in one card.
  *
- * S1 CAPTURE → S2 REDEEM → S3 DELIVER (document: download link / action: continue)
+ * S1 CAPTURE → S2 REDEEM (test code 012345; anything else = error state)
+ * → S3 DELIVER (document: download link / action: continue handoff)
  */
 export interface RequestAccessGateProps {
   selection: string;
   mode: "document" | "action";
+  /** S3 document payoff target — real PDF path when it exists in the repo,
+   *  placeholder "#" otherwise. */
+  downloadHref?: string;
+  /** S3 action payoff — handoff destination, label, and note. */
+  continueHref?: string;
+  continueLabel?: string;
+  continueNote?: string;
 }
 
 type GateState = "capture" | "redeem" | "deliver";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function RequestAccessGate({ selection, mode }: RequestAccessGateProps) {
+// TEST MODE: the one accepted access code — makes both the success path
+// (012345) and the failure path (anything else → "Invalid code") testable.
+const TEST_ACCESS_CODE = "012345";
+
+export default function RequestAccessGate({
+  selection,
+  mode,
+  downloadHref,
+  continueHref,
+  continueLabel,
+  continueNote,
+}: RequestAccessGateProps) {
   const [state, setState] = useState<GateState>("capture");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [emailError, setEmailError] = useState("");
   const [codeError, setCodeError] = useState("");
   const [resent, setResent] = useState(false);
+
+  const docHref = downloadHref ?? "#";
+  const actionHref = continueHref ?? "#";
+  const isExternal = (href: string) => /^https?:\/\//.test(href);
 
   const startOver = () => {
     setState("capture");
@@ -45,11 +68,15 @@ export default function RequestAccessGate({ selection, mode }: RequestAccessGate
     setState("redeem");
   };
 
-  // S2 submit (mock): any non-empty code → S3
+  // S2 submit (mock): TEST_ACCESS_CODE → S3; anything else → error state
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (!code.trim()) {
       setCodeError("Please enter your access code");
+      return;
+    }
+    if (code.trim() !== TEST_ACCESS_CODE) {
+      setCodeError("Invalid code");
       return;
     }
     setCodeError("");
@@ -142,7 +169,8 @@ export default function RequestAccessGate({ selection, mode }: RequestAccessGate
           </p>
           {mode === "document" ? (
             <a
-              href="#"
+              href={docHref}
+              {...(docHref !== "#" ? { target: "_blank", rel: "noopener noreferrer", download: true } : {})}
               className="block text-brand-blue font-medium underline underline-offset-2 hover:opacity-80"
             >
               Click Link for Secure Download
@@ -150,11 +178,15 @@ export default function RequestAccessGate({ selection, mode }: RequestAccessGate
           ) : (
             <>
               <p className="text-sm text-muted-foreground mb-4">
-                Continue to complete a short questionnaire.
+                {continueNote ?? "Continue to complete a short questionnaire."}
               </p>
-              <a href="#" className="block">
+              <a
+                href={actionHref}
+                {...(isExternal(actionHref) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="block"
+              >
                 <Button className="w-full rounded-full tracking-wide" size="lg">
-                  CONTINUE
+                  {(continueLabel ?? "Continue").toUpperCase()}
                 </Button>
               </a>
             </>

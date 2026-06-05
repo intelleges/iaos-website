@@ -144,12 +144,25 @@ const BOOK_A_DEMO = "Book a Demo (To Schedule a Zoom Meeting)";
 const START_FREE_TRIAL = "Start Free Trial (To Setup New Account)";
 const pdfLabel = (title: string) => `${title} (PDF Download)`;
 
+// S3 payoff destinations (mock-stage: real PDFs where they exist in the
+// repo, real Calendly for demo, placeholder for trial until signup exists).
+const CALENDLY_URL = "https://calendly.com/intelleges/intelleges-introduction";
+const CAPABILITY_STATEMENT_PDF = "/proof/intelleges-capability-statement.pdf";
+const BROCHURE_PDF = "/proof/intelleges-brochure.pdf";
+
+type GatePayoff = {
+  downloadHref?: string;
+  continueHref?: string;
+  continueLabel?: string;
+  continueNote?: string;
+};
+
 export default function Home() {
   // Gate target: every gated asset routes here — the REQUEST ACCESS card
   // scrolls into view and references the selected collateral by name.
   // `nonce` forces a card remount (reset to S1, fields cleared) on EVERY
   // selection — including re-selecting the same asset.
-  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action"; nonce: number }>({
+  const [gateTarget, setGateTarget] = useState<{ selection: string; mode: "document" | "action"; nonce: number } & GatePayoff>({
     selection: AUDITOR_PDF,
     mode: "document",
     nonce: 0,
@@ -164,15 +177,30 @@ export default function Home() {
     briefingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const requestGate = (selection: string, mode: "document" | "action") => {
-    setGateTarget(prev => ({ selection, mode, nonce: prev.nonce + 1 }));
+  const requestGate = (selection: string, mode: "document" | "action", payoff: GatePayoff = {}) => {
+    setGateTarget(prev => ({ selection, mode, nonce: prev.nonce + 1, ...payoff }));
     setMobileMenuOpen(false);
     scrollToBriefing();
   };
 
   // The four hero/section CTAs all request the Auditor briefing PDF —
   // overwriting any stale selection and resetting the card to S1.
+  // NOTE: the briefing PDF itself is not in the repo yet — placeholder payoff.
   const requestAuditorPdf = () => requestGate(AUDITOR_PDF, "document");
+
+  // Action handoffs: demo → real Calendly; trial → placeholder (no signup
+  // flow exists yet — flagged for decision).
+  const requestDemo = () =>
+    requestGate(BOOK_A_DEMO, "action", {
+      continueHref: CALENDLY_URL,
+      continueLabel: "Continue to Scheduling",
+      continueNote: "Continue to schedule your Zoom meeting.",
+    });
+  const requestTrial = () =>
+    requestGate(START_FREE_TRIAL, "action", {
+      continueLabel: "Continue to Account Setup",
+      continueNote: "Continue to set up your new account.",
+    });
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -211,8 +239,8 @@ export default function Home() {
             </nav>
           </div>
           <div className="hidden md:flex items-center gap-3">
-            <Button size="sm" className="rounded-full px-5" onClick={() => requestGate(BOOK_A_DEMO, "action")}>Book a Demo</Button>
-            <Button size="sm" className="rounded-full px-5 bg-green-600 hover:bg-green-700 text-white" onClick={() => requestGate(START_FREE_TRIAL, "action")}>Start Free Trial</Button>
+            <Button size="sm" className="rounded-full px-5" onClick={() => requestDemo()}>Book a Demo</Button>
+            <Button size="sm" className="rounded-full px-5 bg-green-600 hover:bg-green-700 text-white" onClick={() => requestTrial()}>Start Free Trial</Button>
             <a href="https://app.intelleges.com/login" target="_blank" rel="noopener noreferrer">
               <Button size="sm" variant="outline" className="rounded-full px-5">Client Login</Button>
             </a>
@@ -230,8 +258,8 @@ export default function Home() {
             <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
             <button onClick={() => { setMobileMenuOpen(false); scrollToBriefing(); }} className="text-left">Executive Briefing</button>
             <a href="mailto:info@intelleges.com">Contact Us</a>
-            <button onClick={() => requestGate(BOOK_A_DEMO, "action")} className="text-left">Book a Demo</button>
-            <button onClick={() => requestGate(START_FREE_TRIAL, "action")} className="text-left">Start Free Trial</button>
+            <button onClick={() => requestDemo()} className="text-left">Book a Demo</button>
+            <button onClick={() => requestTrial()} className="text-left">Start Free Trial</button>
             <a href="https://app.intelleges.com/login">Client Login</a>
           </div>
         )}
@@ -419,6 +447,10 @@ export default function Home() {
               key={`${gateTarget.selection}|${gateTarget.mode}|${gateTarget.nonce}`}
               selection={gateTarget.selection}
               mode={gateTarget.mode}
+              downloadHref={gateTarget.downloadHref}
+              continueHref={gateTarget.continueHref}
+              continueLabel={gateTarget.continueLabel}
+              continueNote={gateTarget.continueNote}
             />
           </div>
         </div>
@@ -472,8 +504,8 @@ export default function Home() {
 
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Get Help</p>
-              <button onClick={() => requestGate(BOOK_A_DEMO, "action")} className="block text-left hover:text-white">Book a Demo</button>
-              <button onClick={() => requestGate(START_FREE_TRIAL, "action")} className="block text-left hover:text-white">Start Free Trial</button>
+              <button onClick={() => requestDemo()} className="block text-left hover:text-white">Book a Demo</button>
+              <button onClick={() => requestTrial()} className="block text-left hover:text-white">Start Free Trial</button>
               <a href="https://app.intelleges.com/login" className="block hover:text-white">Client Login</a>
               <a href="mailto:info@intelleges.com" className="block hover:text-white">Contact Us</a>
             </div>
@@ -481,7 +513,7 @@ export default function Home() {
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Executive Briefings</p>
               {LIBRARY[0].docs.map((doc) => (
-                <button key={doc.title} onClick={() => requestGate(pdfLabel(doc.title), "document")} className="block text-left hover:text-white">
+                <button key={doc.title} onClick={() => requestGate(pdfLabel(doc.title), "document", { downloadHref: doc.file })} className="block text-left hover:text-white">
                   {doc.title}
                 </button>
               ))}
@@ -517,10 +549,10 @@ export default function Home() {
                 <Link href="/about" className="block hover:text-white">About</Link>
                 <Link href="/security" className="block hover:text-white">Security</Link>
                 <Link href="/privacy" className="block hover:text-white">Privacy</Link>
-                <button onClick={() => requestGate(pdfLabel("Capability Statement"), "document")} className="block text-left hover:text-white">
+                <button onClick={() => requestGate(pdfLabel("Capability Statement"), "document", { downloadHref: CAPABILITY_STATEMENT_PDF })} className="block text-left hover:text-white">
                   Capability Statement
                 </button>
-                <button onClick={() => requestGate(pdfLabel("Brochure"), "document")} className="block text-left hover:text-white">
+                <button onClick={() => requestGate(pdfLabel("Brochure"), "document", { downloadHref: BROCHURE_PDF })} className="block text-left hover:text-white">
                   Intelleges Brochure
                 </button>
               </div>
@@ -544,7 +576,7 @@ export default function Home() {
                       {docs.map((doc) => (
                         <button
                           key={doc.title}
-                          onClick={() => requestGate(pdfLabel(doc.title), "document")}
+                          onClick={() => requestGate(pdfLabel(doc.title), "document", { downloadHref: doc.file })}
                           className="flex items-center gap-1.5 text-left text-neutral-400 hover:text-white"
                         >
                           <ChevronRight className="h-3 w-3 shrink-0" />
