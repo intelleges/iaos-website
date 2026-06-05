@@ -449,7 +449,7 @@ export default function FOCI() {
       <EmailCaptureModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        downloadUrl="/documents/Intelleges_Federal_Capability_Statement.pdf"
+        downloadUrl="/proof/intelleges-capability-statement.pdf"
         resourceTitle="Federal Capability Statement"
         documentType="case_study"
       />
