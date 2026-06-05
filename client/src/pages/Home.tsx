@@ -111,13 +111,21 @@ const SHIFT_ROWS = [
   { from: "Outdated Systems", to: "Continuous Monitoring" },
 ];
 
-const WHY_CARDS = [
+// Open (un-gated) credibility artifact — direct download, never routed
+// through EmailCaptureModal / documentDownloads.
+const BATTELLE_PRESS_RELEASE = "/proof/battelle-supplier-of-the-year-2023.pdf";
+
+const WHY_CARDS: { title: string; body: string; link?: { label: string; href: string } }[] = [
   { title: "Audit Ready", body: "Create defensible compliance records supported by complete documentation and audit trails." },
   { title: "Compliance Automated", body: "Reduce manual collection, reminders, follow-ups, and administrative effort." },
   { title: "Data Harmonized", body: "Transform fragmented information into structured, validated, usable data." },
   { title: "Supply Chain Connected", body: "Collect information across suppliers, contractors, and third parties." },
   { title: "Enterprise Integrated", body: "Work alongside existing systems and organizational workflows." },
-  { title: "Battle Tested", body: "25 Years of Compliance Experience. Battelle Supplier of the Year." },
+  {
+    title: "Battle Tested",
+    body: "25 Years of Compliance Experience.",
+    link: { label: "Battelle Supplier of the Year.", href: BATTELLE_PRESS_RELEASE },
+  },
 ];
 
 const ECCP_QUESTIONS = [
@@ -331,7 +339,23 @@ export default function Home() {
                   <h3 className="text-sm font-semibold tracking-[0.12em] uppercase text-primary">
                     {card.title}
                   </h3>
-                  <p className="text-base text-muted-foreground font-light leading-relaxed">{card.body}</p>
+                  <p className="text-base text-muted-foreground font-light leading-relaxed">
+                    {card.body}
+                    {card.link && (
+                      <>
+                        {" "}
+                        <a
+                          href={card.link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download
+                          className="text-brand-blue underline underline-offset-2 hover:opacity-80"
+                        >
+                          {card.link.label}
+                        </a>
+                      </>
+                    )}
+                  </p>
                 </div>
               ))}
             </div>
@@ -502,7 +526,18 @@ export default function Home() {
             <div className="space-y-4">
               <div className="space-y-3">
                 <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Proof</p>
-                <p><span className="text-amber-500 mr-2">★</span>Battelle Supplier of the Year</p>
+                <p>
+                  <span className="text-amber-500 mr-2">★</span>
+                  <a
+                    href={BATTELLE_PRESS_RELEASE}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className="hover:text-white underline underline-offset-2 decoration-neutral-600"
+                  >
+                    Battelle Supplier of the Year
+                  </a>
+                </p>
                 <p><span className="text-amber-500 mr-2">◆</span>25 Years of Compliance Experience</p>
                 <p><span className="text-amber-500 mr-2">✓</span>ISO 27001 Certified</p>
               </div>
