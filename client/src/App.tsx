@@ -26,6 +26,7 @@ import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Security from "@/pages/Security";
 import NotFound from "@/pages/not-found";
+import GatePreview from "@/pages/preview/GatePreview";
 import PricingCalculator from "@/pages/admin/PricingCalculator";
 import QuoteHistory from "@/pages/admin/QuoteHistory";
 import Header from "@/components/layout/header";
@@ -65,6 +66,7 @@ function Router() {
           <Route path="/terms" component={Terms} />
           <Route path="/privacy" component={Privacy} />
           <Route path="/security" component={Security} />
+          <Route path="/preview/gate" component={GatePreview} />
           <Route path="/admin/pricing" component={PricingCalculator} />
           <Route path="/admin/quotes" component={QuoteHistory} />
           <Route component={NotFound} />
