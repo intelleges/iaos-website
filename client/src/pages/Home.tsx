@@ -111,9 +111,11 @@ const SHIFT_ROWS = [
   { from: "Outdated Systems", to: "Continuous Monitoring" },
 ];
 
-// Open (un-gated) credibility artifact — direct download, never routed
+// Open (un-gated) credibility artifacts — direct downloads, never routed
 // through EmailCaptureModal / documentDownloads.
 const BATTELLE_PRESS_RELEASE = "/proof/battelle-supplier-of-the-year-2023.pdf";
+const CAPABILITY_STATEMENT = "/proof/intelleges-capability-statement.pdf";
+const BROCHURE = "/proof/intelleges-brochure.pdf";
 
 const WHY_CARDS: { title: string; body: string; link?: { label: string; href: string } }[] = [
   { title: "Audit Ready", body: "Create defensible compliance records supported by complete documentation and audit trails." },
@@ -556,6 +558,24 @@ export default function Home() {
                 <Link href="/about" className="block hover:text-white">About</Link>
                 <Link href="/security" className="block hover:text-white">Security</Link>
                 <Link href="/privacy" className="block hover:text-white">Privacy</Link>
+                <a
+                  href={CAPABILITY_STATEMENT}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="block hover:text-white"
+                >
+                  Capability Statement
+                </a>
+                <a
+                  href={BROCHURE}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="block hover:text-white"
+                >
+                  Intelleges Brochure
+                </a>
               </div>
             </div>
 
