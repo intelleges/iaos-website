@@ -118,7 +118,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-6">
             <p className="text-base font-light text-muted-foreground">
-              ISO 27001 Certified
+              ISO 27001 (certification pending)
             </p>
             <p className="text-base font-light text-muted-foreground">
               Battelle Supplier of the Year

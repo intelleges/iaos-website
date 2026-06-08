@@ -3,7 +3,7 @@ import { Shield, Lock, Eye, FileCheck, Server, Users, AlertTriangle, CheckCircle
 
 export default function Security() {
   const certifications = [
-    { name: "ISO 27001", description: "Information Security Management" },
+    { name: "ISO 27001 (certification pending)", description: "Information Security Management" },
     { name: "NIST 800-171", description: "Controlled Unclassified Information" },
   ];
 
@@ -44,7 +44,7 @@ export default function Security() {
     <div className="flex flex-col min-h-screen">
       <SEO 
         title="Security" 
-        description="Intelleges Security Statement - ISO 27001 Certified Information Security Management"
+        description="Intelleges Security Statement - ISO 27001 (certification pending) Information Security Management"
       />
       
       {/* Hero */}
@@ -166,7 +166,7 @@ export default function Security() {
             <div>
               <h3 className="text-2xl font-medium mb-4">6. Compliance & Governance</h3>
               <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li><strong>ISO 27001:</strong> Certified Information Security Management System</li>
+                <li><strong>ISO 27001:</strong> Information Security Management System (certification pending)</li>
 
                 <li><strong>GDPR Compliance:</strong> Full compliance with EU data protection regulations</li>
                 <li><strong>CCPA Compliance:</strong> California Consumer Privacy Act compliance</li>

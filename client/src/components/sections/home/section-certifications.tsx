@@ -2,7 +2,7 @@ import { Shield } from "lucide-react";
 
 const certifications = [
   "SOC 2 Type II",
-  "ISO 27001",
+  "ISO 27001 (certification pending)",
   "CMMC Level 2 Ready",
   "NIST 800-171",
   "GDPR Compliant",

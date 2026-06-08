@@ -228,7 +228,7 @@ export default function Home() {
 
       {/* Top trust bar */}
       <div className="bg-primary text-primary-foreground text-center text-[11px] md:text-xs font-medium tracking-[0.15em] uppercase py-2 px-4">
-        ISO 27001 Certified&nbsp;&nbsp;|&nbsp;&nbsp;
+        ISO 27001 (certification pending)&nbsp;&nbsp;|&nbsp;&nbsp;
         <a
           href={BATTELLE_PRESS_RELEASE}
           target="_blank"
@@ -477,7 +477,7 @@ export default function Home() {
       <section className="py-10 border-b border-border/50">
         <div className="container text-center space-y-3">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-            ISO 27001 Certified&nbsp;&nbsp;|&nbsp;&nbsp;25 Years of Compliance Experience&nbsp;&nbsp;|&nbsp;&nbsp;Battelle Supplier of the Year
+            ISO 27001 (certification pending)&nbsp;&nbsp;|&nbsp;&nbsp;25 Years of Compliance Experience&nbsp;&nbsp;|&nbsp;&nbsp;Battelle Supplier of the Year
           </p>
           <p className="text-base text-muted-foreground font-light">
             Built for highly regulated environments where compliance failures have real consequences.
@@ -559,7 +559,7 @@ export default function Home() {
                   </a>
                 </p>
                 <p><span className="text-amber-500 mr-2">◆</span>25 Years of Compliance Experience</p>
-                <p><span className="text-amber-500 mr-2">✓</span>ISO 27001 Certified</p>
+                <p><span className="text-amber-500 mr-2">✓</span>ISO 27001 (certification pending)</p>
               </div>
               <div className="space-y-3">
                 <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Company</p>
@@ -610,7 +610,7 @@ export default function Home() {
           <div className="border-t border-neutral-800 mt-12 pt-6 space-y-2 text-xs text-neutral-500">
             <p>© 2026 Intelleges</p>
             <p>
-              ISO 27001 Certified&nbsp; | &nbsp;
+              ISO 27001 (certification pending)&nbsp; | &nbsp;
               <a
                 href={BATTELLE_PRESS_RELEASE}
                 target="_blank"

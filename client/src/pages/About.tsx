@@ -80,7 +80,7 @@ export default function About() {
                 Honeywell Aerospace, Battelle, Celestica, Con Edison, Becton Dickinson, Memorial Sloan Kettering, Sanofi-Aventis, Hoffmann-La Roche, JP Morgan Chase, and the U.S. Department of Defense.
               </p>
               <p className="text-lg text-muted-foreground font-light leading-relaxed pt-4">
-                We are <strong className="font-normal text-foreground">ISO 27001 certified</strong> and recognized as <a href="/proof/battelle-supplier-of-the-year-2023.pdf" target="_blank" rel="noopener noreferrer" download><strong className="font-normal text-foreground underline underline-offset-2">Battelle Supplier of the Year</strong></a>.
+                We are <strong className="font-normal text-foreground">ISO 27001 (certification pending)</strong> and recognized as <a href="/proof/battelle-supplier-of-the-year-2023.pdf" target="_blank" rel="noopener noreferrer" download><strong className="font-normal text-foreground underline underline-offset-2">Battelle Supplier of the Year</strong></a>.
               </p>
             </div>
           </div>

@@ -369,7 +369,7 @@ function generateFollowUpEmail(userName: string, documentTitle: string, calendly
   </p>
   <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #E0E0E0; font-size: 12px; color: #999; text-align: center;">
     <p>
-      Intelleges | ISO 27001 Certified | Battelle Supplier of the Year<br>
+      Intelleges | ISO 27001 (certification pending) | Battelle Supplier of the Year<br>
       <a href="https://intelleges.com" style="color: #0A3A67; text-decoration: none;">intelleges.com</a>
     </p>
   </div>

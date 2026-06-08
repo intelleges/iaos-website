@@ -251,7 +251,7 @@ export function generateQuoteEmail(data: QuoteEmailData): string {
         <a href="https://intelleges.com" class="footer-link">intelleges.com</a>
       </div>
       <div class="trust-badges">
-        ISO 27001 Certified | Battelle Supplier of the Year
+        ISO 27001 (certification pending) | Battelle Supplier of the Year
       </div>
       <div class="footer-text" style="margin-top: 20px; font-size: 12px;">
         © ${new Date().getFullYear()} Intelleges. All rights reserved.
@@ -309,7 +309,7 @@ sales@intelleges.com
 +1-917-818-0225
 
 ---
-ISO 27001 Certified | Battelle Supplier of the Year
+ISO 27001 (certification pending) | Battelle Supplier of the Year
 © ${new Date().getFullYear()} Intelleges. All rights reserved.
   `.trim();
 }

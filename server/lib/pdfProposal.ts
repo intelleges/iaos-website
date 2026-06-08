@@ -288,7 +288,7 @@ function generateProposalHTML(data: ProposalData): string {
 
   <div class="footer">
     <p>Intelleges | Enterprise Compliance Management</p>
-    <p>ISO 27001 Certified | Battelle Supplier of the Year</p>
+    <p>ISO 27001 (certification pending) | Battelle Supplier of the Year</p>
     <p>For questions, contact: sales@intelleges.com</p>
   </div>
 </body>

@@ -118,7 +118,7 @@ export default function Privacy() {
               We implement industry-standard security measures to protect your data:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              <li><strong>ISO 27001 Certification:</strong> Our information security management system is certified</li>
+              <li><strong>ISO 27001 (certification pending):</strong> Our information security management system certification is in progress</li>
               <li><strong>Encryption:</strong> Data is encrypted in transit (TLS/SSL) and at rest (AES-256)</li>
               <li><strong>Access Controls:</strong> Role-based access and multi-factor authentication</li>
               <li><strong>Regular Audits:</strong> Security assessments and penetration testing</li>

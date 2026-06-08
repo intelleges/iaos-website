@@ -54,7 +54,7 @@ export default function Header() {
         {/* Trust Markers & CTA */}
         <div className="hidden xl:flex items-center gap-8">
           <div className="text-base font-semibold text-primary tracking-wide whitespace-nowrap">
-            ISO 27001 Certified · Battelle Supplier of the Year
+            ISO 27001 (certification pending) · Battelle Supplier of the Year
           </div>
           <a href="https://app.intelleges.com/login" target="_self" rel="noopener noreferrer">
             <Button size="sm" className="text-base font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white rounded-full px-6 transition-all duration-300 hover:scale-105 hover:shadow-lg">
@@ -96,7 +96,7 @@ export default function Header() {
               );
             })}
             <div className="text-base font-semibold text-primary tracking-wide py-2 border-t border-border/20 mt-2 pt-4">
-              ISO 27001 Certified · Battelle Supplier of the Year
+              ISO 27001 (certification pending) · Battelle Supplier of the Year
             </div>
             <a href="https://app.intelleges.com/login" target="_self" rel="noopener noreferrer">
               <Button className="w-full rounded-full font-light bg-[#0A3A67] hover:bg-[#0A3A67]/90 text-white transition-all duration-300 hover:scale-105" onClick={() => setIsMenuOpen(false)}>
