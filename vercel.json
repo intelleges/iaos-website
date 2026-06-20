@@ -15,6 +15,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/supplier-readiness",
+      "destination": "https://d6dcesvv5llpt.cloudfront.net/whitepapers/supplier-readiness.pdf"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
