@@ -564,6 +564,7 @@ export default function Home() {
               <div className="space-y-3">
                 <p className="text-xs font-semibold tracking-[0.15em] uppercase text-neutral-500">Company</p>
                 <Link href="/about" className="block hover:text-white">About</Link>
+                <Link href="/founders-story" className="block hover:text-white">Founder's Story</Link>
                 <Link href="/security" className="block hover:text-white">Security</Link>
                 <Link href="/privacy" className="block hover:text-white">Privacy</Link>
                 <button onClick={() => requestGate(pdfLabel("Capability Statement"), "document", { downloadHref: CAPABILITY_STATEMENT_PDF })} className="block text-left hover:text-white">
