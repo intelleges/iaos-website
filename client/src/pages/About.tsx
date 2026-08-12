@@ -1,7 +1,7 @@
 import SEO from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Target, Eye, Award, Globe, Shield, Building } from "lucide-react";
+import { Target, Eye, Award, Globe, Shield, Building, ArrowRight } from "lucide-react";
 
 export default function About() {
   const differentiators = [
@@ -55,6 +55,29 @@ export default function About() {
               25 Years of Building the Compliance Systems that Protect America's Largest Enterprises
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* From our founder — entry point to the long-read at /founders-story */}
+      <section className="pb-20">
+        <div className="container">
+          <Link href="/founders-story" className="block max-w-4xl mx-auto group">
+            <div className="p-8 md:p-10 rounded-lg border border-border/40 space-y-6 transition-colors group-hover:border-border">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                From our founder
+              </p>
+              <p className="text-2xl md:text-3xl font-light leading-snug">
+                The question was no longer <em>how do we build this program?</em> It became <em>what is the true structure of the problem?</em>
+              </p>
+              <p className="text-base text-muted-foreground font-light leading-relaxed">
+                Twenty-five years inside federal compliance taught one lesson, over and over. How the model was built, how it was stress-tested, and why this is the moment it finally scales.
+              </p>
+              <p className="text-base font-normal inline-flex items-center gap-2">
+                Read the founder's story
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </p>
+            </div>
+          </Link>
         </div>
       </section>
 
