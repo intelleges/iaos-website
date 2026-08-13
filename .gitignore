@@ -116,3 +116,10 @@ uploads/proposals/*.pdf
 .env*.local
 config.bat
 .env
+
+# Local Vercel configuration
+.vercel/
+.env.local
+node_modules/
+dist/
+test-results/
